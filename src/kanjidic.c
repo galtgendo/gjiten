@@ -350,7 +350,7 @@ void knode_add(struct knode **llist, gunichar kanji) {
     if ((currnode->kanji) == kanji) return;
     prevnode = currnode;
     currnode = prevnode->next;
-    }
+  }
   currnode = g_malloc(sizeof(struct knode));
   if (currnode == NULL) gjiten_abort_with_msg("Malloc failed (in knode_add).\n");
   if (*llist == NULL) *llist = currnode;
@@ -1231,6 +1231,7 @@ KanjiDic *kanjidic_create() {
   kanjiDic->kanji_results_view = gtk_text_view_new();
   kanjiDic->kanji_results_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(kanjiDic->kanji_results_view));
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), GTK_WRAP_CHAR);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), FALSE);
   gtk_widget_show(kanjiDic->kanji_results_view);
   gtk_container_add(GTK_CONTAINER(scrolledwin_kresults), kanjiDic->kanji_results_view);
   gtk_widget_set_size_request(kanjiDic->kanji_results_view, -1, 66);
@@ -1241,6 +1242,7 @@ KanjiDic *kanjidic_create() {
   kanjiDic->text_kanjinfo_view = gtk_text_view_new();
   kanjiDic->text_kanjinfo_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(kanjiDic->text_kanjinfo_view));
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(kanjiDic->text_kanjinfo_view), GTK_WRAP_WORD);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(kanjiDic->text_kanjinfo_view), FALSE);
   gtk_widget_show(kanjiDic->text_kanjinfo_view);
 
   frame_kinfo = gtk_frame_new(_("Kanji Info :"));
@@ -1258,7 +1260,7 @@ KanjiDic *kanjidic_create() {
 
   scrolledwin_history = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwin_history),
-				 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+																 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_widget_show(scrolledwin_history);
 
   kanjiDic->vbox_history = gtk_vbox_new(FALSE, 0);

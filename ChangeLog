@@ -1,3 +1,9 @@
+v2.3 ()
+    - Fixed segv when kanjipad entry is NULL.
+    - Made search result textviews non-editable.
+    - Segv after dicfile preferences change fixed.
+    - Added Show/Hide search options button to the toolbar
+
 v2.2 (06/13/2004)
     - Search hiragana on katakana input and vice versa.
     - Major code cleanup.

@@ -137,6 +137,8 @@ static void set_dic_name_cb(GnomeFileEntry *fileentry, GtkEntry *entry) {
   gchar *filename, *dictf, *old;
 	const gchar *entrytext;
 
+	GJITEN_DEBUG("set_dic_name_cb()\n");
+
   filename = gnome_file_entry_get_full_path(fileentry, TRUE);
   old = dictf = strtok(filename, "/");
   while (dictf != NULL) {
@@ -145,6 +147,7 @@ static void set_dic_name_cb(GnomeFileEntry *fileentry, GtkEntry *entry) {
   }
 
 	entrytext = gtk_entry_get_text(entry);
+	printf("Dicname old: %s, new: %s\n", entrytext, old);
 	if ((entrytext == NULL) || (strlen(entrytext) == 0)) gtk_entry_set_text(entry, old);
 }
 
@@ -152,6 +155,7 @@ static void add_dict() {
 	GtkWidget *fileselector;
 	GtkWidget *nameentry;
 
+	GJITEN_DEBUG("add_dict()\n");
 	if (dialog_add_dic != NULL) {
 		gtk_widget_hide(dialog_add_dic);
 		gtk_widget_show_all(dialog_add_dic);
@@ -351,6 +355,7 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
   valid = gtk_tree_model_get_iter_first(model, &iter);
   while (valid == TRUE) {
 		dicfile = g_new0(GjitenDicfile, 1);
+		dicfile->status = DICFILE_NOT_INITIALIZED;
     gtk_tree_model_get(model, &iter, COL_DICPATH, &dicfile->path, COL_DICNAME, &dicfile->name, -1);
 		gjitenApp->conf->dicfile_list = g_slist_append(gjitenApp->conf->dicfile_list, dicfile);
     valid = gtk_tree_model_iter_next(model, &iter);
@@ -358,9 +363,11 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
 
   conf_save(gjitenApp->conf);
 
+	worddic_update_dic_menu();
+	/*
 	if (dicfile_check_all(gjitenApp->conf->dicfile_list) == TRUE) {
-		worddic_update_dic_menu();
 	}
+	*/
 	worddic_apply_fonts();
 	kanjidic_apply_fonts();
 
@@ -451,7 +458,9 @@ void create_dialog_preferences() {
 	//	gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
 	tmpwidget = gnome_file_entry_new(NULL, _("Select KanjiDic"));
 	entry_kanjidic = gnome_file_entry_gnome_entry(GNOME_FILE_ENTRY(tmpwidget));
-	gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjidic->path);
+	if (gjitenApp->conf->kanjidic && gjitenApp->conf->kanjidic->path) {
+		gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjidic->path);
+	}
   gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjidicfile")), tmpwidget, TRUE, TRUE, 0);
 
   tmpwidget = GETWIDGET("table_kanji_info");
@@ -513,7 +522,9 @@ void create_dialog_preferences() {
 
 	tmpwidget = gnome_file_entry_new(NULL, _("Select KanjiPad"));
 	entry_kanjipad = gnome_file_entry_gnome_entry(GNOME_FILE_ENTRY(tmpwidget));
-	gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjipad);
+	if (gjitenApp->conf->kanjipad != NULL) {
+		gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjipad);
+	}
   gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjipadfile")), tmpwidget, TRUE, TRUE, 0);
 
 

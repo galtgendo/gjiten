@@ -50,12 +50,12 @@ static void parse_an_arg(poptContext state,
 
 gchar *clipboard_text = NULL;
 
-//FIXME: GConfEnumPair also in kanjidic.h
+/* FIXME: GConfEnumPair also in kanjidic.h */
 gchar *kanjidicstrg[] = { "kanji", "radical", "strokes", "reading", "korean", 
-			  "pinyin", "english", "bushu", "classic", "freq", "jouyou",
-			  "deroo", "skip", "fourc", "hindex", "nindex", "vindex",
-			  "iindex", "mnindex", "mpindex", "eindex", "kindex", 
-			  "lindex", "oindex", "cref", "missc", "unicode", "jisascii" };
+													"pinyin", "english", "bushu", "classic", "freq", "jouyou",
+													"deroo", "skip", "fourc", "hindex", "nindex", "vindex",
+													"iindex", "mnindex", "mpindex", "eindex", "kindex", 
+													"lindex", "oindex", "cref", "missc", "unicode", "jisascii" };
 
 
 enum {
@@ -153,7 +153,7 @@ void gjiten_start_kanjipad() {
     kpad_cmd = g_malloc(strlen(gjitenApp->conf->kanjipad) + 2);
     strcpy(kpad_cmd, gjitenApp->conf->kanjipad);
     strcat(kpad_cmd, "&");
-    system(kpad_cmd); //FIXME
+    system(kpad_cmd); /* FIXME */
     g_free(kpad_cmd);
   }
 }
@@ -247,7 +247,7 @@ int main (int argc, char **argv) {
 	if (gjitenApp->conf->envvar_override == TRUE) {
 		if (gjitenApp->conf->gdk_use_xft == TRUE) putenv("GDK_USE_XFT=1");
 		else putenv("GDK_USE_XFT=0");
-		//if (gjitenApp->conf->force_ja_JP == TRUE) putenv("LC_CTYPE=ja_JP");
+		/* if (gjitenApp->conf->force_ja_JP == TRUE) putenv("LC_CTYPE=ja_JP"); */
 		if (gjitenApp->conf->force_ja_JP == TRUE) putenv("LC_ALL=ja_JP");
 		if (gjitenApp->conf->force_language_c == TRUE) putenv("LANGUAGE=C");
 	}
@@ -273,7 +273,7 @@ int main (int argc, char **argv) {
     gnome_window_icon_set_default_from_file(icon_path);
   }
 
-  if (gjitenApp->conf->version) { // if gjiten was run before
+  if (gjitenApp->conf->version) { /* if gjiten was run before */
     if (strcmp(gjitenApp->conf->version, VERSION)) {
 			gjiten_add_errormsg(_("Config file has a different version.\n Please update your Preferences!"));
 		}
@@ -281,7 +281,7 @@ int main (int argc, char **argv) {
   else gjiten_add_errormsg(_("Welcome to Gjiten.\n Please set your Preferences!"));
 
  
-  // the following is for clipboard lookup.
+  /* the following is for clipboard lookup. */
   if ((gjitenApp->conf->clip_kanji_lookup == TRUE) || (gjitenApp->conf->clip_word_lookup == TRUE)) {
     if (gjitenApp->conf->clip_word_lookup) {
       gjitenApp->worddic = worddic_create();
@@ -291,8 +291,8 @@ int main (int argc, char **argv) {
     else {
       if (gjitenApp->conf->clip_kanji_lookup){
 				clipboard_text = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_SELECTION_PRIMARY));
-				//validate	
-				//FIXME: try to convert EUC-JP to UTF8 if it's non-utf8
+				/* validate	*/
+				/* FIXME: try to convert EUC-JP to UTF8 if it's non-utf8 */
 				if (g_utf8_validate(clipboard_text, -1, NULL) == FALSE) {
 					gjiten_print_error(_("Unable to look up kanji: NON-UTF8 string received from clipboard!\n"));
 					exit(0);
@@ -304,7 +304,7 @@ int main (int argc, char **argv) {
 				else {
 					if (gjitenApp->kanjidic == NULL) kanjidic_create();
 					print_kanjinfo(g_utf8_get_char(clipboard_text));
-					//if (clipboard_text !	= NULL) gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo_entry)->entry), clipboard_text);
+					/* if (clipboard_text !	= NULL) gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combo_entry)->entry), clipboard_text); */
 				}
       }
     }
@@ -323,11 +323,11 @@ int main (int argc, char **argv) {
       else if (gjitenApp->conf->kanji_to_lookup != NULL) {
 				if (g_utf8_validate(gjitenApp->conf->kanji_to_lookup, -1, NULL) == FALSE) {
 					gjiten_print_error(_("Unable to look up kanji: NON-UTF8 string received from clipboard!\n"));
-					exit(0); //FIXME
+					exit(0); /* FIXME */
 				}
 				else if (isKanjiChar(g_utf8_get_char(gjitenApp->conf->kanji_to_lookup)) == FALSE) {
 					gjiten_print_error(_("Non-kanji string received from clipboard: %s\n"), gjitenApp->conf->kanji_to_lookup);
-					exit(0); //FIXME
+					exit(0); /* FIXME */
 				}
 				else {
 					if (gjitenApp->kanjidic == NULL) kanjidic_create();

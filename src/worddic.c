@@ -776,6 +776,14 @@ static void worddic_close() {
 
 }
 
+static void worddic_show_hide_options() {
+	GJITEN_DEBUG("worddic_show_hide_options()\n");
+	if (GTK_WIDGET_VISIBLE(wordDic->hbox_options) == TRUE) {
+		gtk_widget_hide(wordDic->hbox_options);
+	}
+	else gtk_widget_show(wordDic->hbox_options);
+}
+
 void worddic_update_dic_menu() {
 	GSList *dicfile_node;
   GtkWidget *menu_dictfiles_item;
@@ -783,7 +791,8 @@ void worddic_update_dic_menu() {
 
 	if (wordDic == NULL) return;
 
-	GJITEN_DEBUG("UPDATE MENU\n");
+	GJITEN_DEBUG("worddic_update_dic_menu()\n");
+
 	/*
 	if (GTK_IS_WIDGET(wordDic->menu_selectdic)) {
 		gtk_option_menu_remove_menu(GTK_OPTION_MENU(wordDic->dicselection_menu));
@@ -806,6 +815,7 @@ void worddic_update_dic_menu() {
 	}
   gtk_widget_show(wordDic->dicselection_menu);
 	gtk_option_menu_set_menu(GTK_OPTION_MENU(wordDic->dicselection_menu), wordDic->menu_selectdic);
+	if (gjitenApp->conf->dicfile_list != NULL) gjitenApp->conf->selected_dic = gjitenApp->conf->dicfile_list->data;
 }
 
 void worddic_apply_fonts() {
@@ -848,7 +858,6 @@ WordDic *worddic_create() {
   GtkWidget *button_srch;
   //  GtkWidget *button_copy;
   //  GtkWidget *button_paste;
-  GtkWidget *hbox_options;
   GtkWidget *frame_japopt;
   GtkWidget *vbox_japopt;
   GSList *vbox_japopt_group = NULL;
@@ -933,6 +942,14 @@ WordDic *worddic_create() {
 																					 _("Search"), "Search", 
 																					 on_text_entered, NULL, -1);
 
+		/*
+		gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_NO, 
+														 _("Show/Hide options"), "Show/Hide options",
+														 G_CALLBACK(worddic_show_hide_options), NULL, -1);
+		*/
+		gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Show/Hide\noptions"),
+														_("Show/Hide options"), "Show/Hide options", NULL,
+														G_CALLBACK(worddic_show_hide_options), NULL);
 
     /*
     button_srch = gtk_toolbar_insert_item(GTK_TOOLBAR(toolbar), _("Search"), "Search", "Search", 
@@ -966,13 +983,13 @@ WordDic *worddic_create() {
   gtk_widget_show(vbox_main);
   gnome_app_set_contents(GNOME_APP(wordDic->window), vbox_main);
 
-  hbox_options = gtk_hbox_new(FALSE, 0);
-  gtk_widget_show(hbox_options);
-  gtk_box_pack_start(GTK_BOX(vbox_main), hbox_options, FALSE, TRUE, 0);
+  wordDic->hbox_options = gtk_hbox_new(FALSE, 0);
+  gtk_widget_show(wordDic->hbox_options);
+  gtk_box_pack_start(GTK_BOX(vbox_main), wordDic->hbox_options, FALSE, TRUE, 0);
 
   frame_japopt = gtk_frame_new(_("Japanese Search Options: "));
   gtk_widget_show(frame_japopt);
-  gtk_box_pack_start(GTK_BOX(hbox_options), frame_japopt, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_japopt, TRUE, TRUE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(frame_japopt), 5);
 
   vbox_japopt = gtk_vbox_new(FALSE, 0);
@@ -1009,7 +1026,7 @@ WordDic *worddic_create() {
   
   frame_engopt = gtk_frame_new(_("English Search Options: "));
   gtk_widget_show(frame_engopt);
-  gtk_box_pack_start(GTK_BOX(hbox_options), frame_engopt, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_engopt, TRUE, TRUE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(frame_engopt), 5);
 
   vbox_engopt = gtk_vbox_new(FALSE, 0);
@@ -1033,7 +1050,7 @@ WordDic *worddic_create() {
 
   frame_gopt = gtk_frame_new(_("General Options: "));
   gtk_widget_show(frame_gopt);
-  gtk_box_pack_start(GTK_BOX(hbox_options), frame_gopt, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_gopt, TRUE, TRUE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(frame_gopt), 5);
 
   table_gopt = gtk_table_new(3, 2, FALSE);
@@ -1156,7 +1173,7 @@ WordDic *worddic_create() {
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(wordDic->text_results_view), GTK_WRAP_WORD);
 
   gtk_widget_show(wordDic->text_results_view);
-  //FIXME  gtk_text_set_editable(GTK_TEXT_BUFFER(wordDic->text_results_view), FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(wordDic->text_results_view), FALSE);
   
   //set up fonts and tags
   gtk_text_buffer_create_tag(wordDic->text_results_buffer, "blue_foreground", "foreground", "blue", NULL);  

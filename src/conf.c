@@ -100,6 +100,7 @@ GjitenConfig *conf_load() {
 	}
 
   conf->kanjipad = gconf_client_get_string(gconf_client, "/apps/gjiten/general/kanjipad", NULL);
+	if (conf->kanjipad == NULL) conf->kanjipad = "";
 
   conf->numofdics = gconf_client_get_int(gconf_client, "/apps/gjiten/general/numofdics", NULL);
 
@@ -198,6 +199,7 @@ void conf_save(GjitenConfig *conf) {
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/toolbar", conf->toolbar, NULL);
   gconf_client_set_string(gconf_client, "/apps/gjiten/general/dictpath", conf->dictpath, NULL);
   gconf_client_set_string(gconf_client, "/apps/gjiten/kanjidic/kanjidicfile", conf->kanjidic->path, NULL);
+	if (conf->kanjipad == NULL) conf->kanjipad = "";
   gconf_client_set_string(gconf_client, "/apps/gjiten/general/kanjipad", conf->kanjipad, NULL);
 
 	//Deprecated dictionary file number, zero it out.

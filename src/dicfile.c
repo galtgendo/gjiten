@@ -36,21 +36,25 @@
 gboolean dicfile_check_all(GSList *dicfile_list) {
 	GSList *node;
 	GjitenDicfile *dicfile;
+	gboolean retval = TRUE;
+
+	GJITEN_DEBUG("dicfile_check_all()\n");
 
 	node = dicfile_list;
 	while (node != NULL) {
 		if (node->data != NULL) {
 			dicfile = node->data;
-			if (dicfile_init(dicfile) == FALSE) return FALSE;
+			if (dicfile_init(dicfile) == FALSE) retval = FALSE;
 			if (dicfile_is_utf8(dicfile) == FALSE) {
 				dicfile_close(dicfile);
-				return FALSE;
+				retval = FALSE;
 			}
 			dicfile_close(dicfile);
 		}
 		node = g_slist_next(node);
 	}
-	return TRUE;
+	GJITEN_DEBUG(" retval: %d\n", retval);
+	return retval;
 }
 
 gboolean dicfile_is_utf8(GjitenDicfile *dicfile) {
@@ -90,11 +94,10 @@ gboolean dicfile_init(GjitenDicfile *dicfile) {
 				dicfile->size = dicfile->stat.st_size;
 			}
 		}
+		dicfile->status = DICFILE_OK;
+		return TRUE;
 	}
 	else return TRUE;
-	
-	dicfile->status = DICFILE_OK;
-	return TRUE;
 }
 
 void dicfile_close(GjitenDicfile *dicfile) {

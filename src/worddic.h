@@ -26,6 +26,7 @@ typedef struct _WordDic WordDic;
 
 struct _WordDic {
 /* GTK variables */
+  GtkWidget *hbox_options;
 	GtkWidget *window;
 	GtkWidget *combo_entry;
 	GtkWidget *text_results_view;
@@ -55,7 +56,7 @@ struct _WordDic {
 };
 
 
-//verb deinflection
+/* verb deinflection */
 struct vinfl_struct {
   gchar *conj;
   gchar *infl;
