@@ -913,33 +913,33 @@ WordDic *worddic_create() {
     gnome_app_set_toolbar(GNOME_APP(wordDic->window), GTK_TOOLBAR(toolbar));
     
     button_exit = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_CLOSE,
-																					 _("Close"), "Close", NULL, NULL, -1);
+																					 _("Close Gjiten"), "Close", NULL, NULL, -1);
 		g_signal_connect_swapped(G_OBJECT(button_exit), "clicked", 
 														 G_CALLBACK(gtk_widget_destroy), wordDic->window);
 
     wordDic->button_back = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_BACK,
-																										_("Back"), "Back", 
+																										_("Previous search result"), "Back", 
 																										on_back_clicked, NULL, -1);
     gtk_widget_set_sensitive(wordDic->button_back, FALSE);
 
     wordDic->button_forward = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_FORWARD,
-																											 _("Forward"), "Forward", 
+																											 _("Next search result"), "Forward", 
 																											 on_forward_clicked, NULL, -1);
     gtk_widget_set_sensitive(wordDic->button_forward, FALSE);
 
 
     tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjidic.png");
     button_kanjidic = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiDic"),
-																							_("KanjiDic"), "KanjiDic", tmpimage,
+																							_("Launch KanjiDic"), "KanjiDic", tmpimage,
 																							G_CALLBACK(kanjidic_create), NULL);
 
     tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
     button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiPad"),
-																							_("KanjiPad"), "KanjiPad", tmpimage,
+																							_("Launch KanjiPad"), "KanjiPad", tmpimage,
 																							G_CALLBACK(gjiten_start_kanjipad), NULL);
 
     button_srch = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_FIND,
-																					 _("Search"), "Search", 
+																					 _("Search for entered expression"), "Search", 
 																					 on_text_entered, NULL, -1);
 
 		/*

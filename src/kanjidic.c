@@ -1107,23 +1107,23 @@ KanjiDic *kanjidic_create() {
     gnome_app_set_toolbar(GNOME_APP(kanjiDic->window), GTK_TOOLBAR(toolbar_kanji));
     
     button_closek = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar_kanji), GTK_STOCK_CLOSE,
-																						 _("Close"), "Close", 
+																						 _("Close KanjiDic"), "Close", 
 																						 NULL, NULL, -1);
 		g_signal_connect_swapped(G_OBJECT(button_closek), "clicked", 
 														 G_CALLBACK(gtk_widget_destroy), kanjiDic->window);
 
     tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjidic.png");
     button_worddic = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar_kanji), _("WordDic"),
-																						 _("WordDic"), "WordDic", tmpimage,
+																						 _("Launch WordDic"), "WordDic", tmpimage,
 																						 G_CALLBACK(worddic_create), NULL);
 
     tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
     button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar_kanji), _("KanjiPad"),
-					      _("KanjiPad"), "KanjiPad", tmpimage,
+					      _("Launch KanjiPad"), "KanjiPad", tmpimage,
 					      GTK_SIGNAL_FUNC(gjiten_start_kanjipad), NULL);
     
     button_searchk = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar_kanji), GTK_STOCK_FIND,
-					      _("Search"), "Search", 
+					      _("Search entered Kanji"), "Search", 
 					      on_kanji_search, NULL, -1);
   }
   
