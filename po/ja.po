@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gjiten 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-13 21:59+0900\n"
+"POT-Creation-Date: 2004-06-13 17:04+0900\n"
 "PO-Revision-Date: 2003-10-13 22:12+0900\n"
 "Last-Translator: Botond Botyanszki <boti@rocketmail.com>\n"
 "Language-Team:  <boti@rocketmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: data/gjiten-settings.glade.h:1
 msgid "*"
@@ -69,13 +69,13 @@ msgstr "Gjitenの設定"
 msgid "Kanji info"
 msgstr "漢字情報"
 
-#: data/gjiten-settings.glade.h:14 src/worddic.c:88 src/worddic.c:912
-#: src/worddic.c:913
+#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:923
+#: src/worddic.c:924
 msgid "KanjiDic"
 msgstr "漢和辞典"
 
 #: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1118
-#: src/kanjidic.c:1119 src/worddic.c:92 src/worddic.c:917 src/worddic.c:918
+#: src/kanjidic.c:1119 src/worddic.c:95 src/worddic.c:928 src/worddic.c:929
 msgid "KanjiPad"
 msgstr "漢字パッド"
 
@@ -185,9 +185,9 @@ msgstr "ヘルプを表示できません:%s"
 
 #: src/gjiten.c:193
 msgid "TRANSLATORS! PUT YOUR NAME HERE"
-msgstr "Botond Botyanszki <boti@rocketmail.com>"
-"Yamagata Hiroo <hiyori13@alum.mit.edu>"
-"Takeshi Aihana <aihana@gnome.gr.jp>"
+msgstr ""
+"Botond Botyanszki <boti@rocketmail.com>Yamagata Hiroo <hiyori13@alum.mit."
+"edu>Takeshi Aihana <aihana@gnome.gr.jp>"
 
 #: src/gjiten.c:223
 msgid "gjiten is a Japanese dictionary for Gnome"
@@ -215,7 +215,8 @@ msgstr ""
 
 #: src/gjiten.c:297 src/gjiten.c:325
 msgid "Unable to look up kanji: NON-UTF8 string received from clipboard!\n"
-msgstr "検索出来ません。クリップボードから受信したデータはUTF8ではありません。\n"
+msgstr ""
+"検索出来ません。クリップボードから受信したデータはUTF8ではありません。\n"
 
 #: src/gjiten.c:301 src/gjiten.c:329
 #, c-format
@@ -355,7 +356,7 @@ msgstr "辞書ファイルのパス"
 msgid "Dictionary name"
 msgstr "辞書ファイル名"
 
-#. 	gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
+#. gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
 #: src/pref.c:452
 msgid "Select KanjiDic"
 msgstr "漢字辞典ファイルを選択して下さい"
@@ -364,7 +365,7 @@ msgstr "漢字辞典ファイルを選択して下さい"
 msgid "Select KanjiPad"
 msgstr "漢字パッドを選択して下さい"
 
-#: src/kanjidic.c:116 src/kanjidic.c:117 src/worddic.c:118 src/worddic.c:119
+#: src/kanjidic.c:116 src/kanjidic.c:117 src/worddic.c:122
 msgid "Tools"
 msgstr "ツール"
 
@@ -390,7 +391,7 @@ msgstr "無効な部首！\n"
 msgid "I don't seem to recognize this radical: '%s' !!!\n"
 msgstr "「%s」部首を確認できません！！\n"
 
-#: src/kanjidic.c:531 src/worddic.c:679
+#: src/kanjidic.c:531 src/worddic.c:682
 msgid "Searching..."
 msgstr "検索中..."
 
@@ -419,7 +420,7 @@ msgstr "マッチするものはありませんでした。"
 msgid "Kanji found: %d"
 msgstr "マッチする漢字の数は %d です。"
 
-#: src/kanjidic.c:828 src/worddic.c:184
+#: src/kanjidic.c:828 src/worddic.c:187
 #, c-format
 msgid ""
 "Error opening %s.\n"
@@ -428,11 +429,11 @@ msgstr ""
 "%sを開けませんでした。\n"
 "設定を確認するかドキュメンテーションを読んで下さい！"
 
-#: src/kanjidic.c:1107 src/worddic.c:896
+#: src/kanjidic.c:1107 src/worddic.c:907
 msgid "Close"
 msgstr "閉じる"
 
-#: src/kanjidic.c:1123 src/worddic.c:922 src/worddic.c:1121
+#: src/kanjidic.c:1123 src/worddic.c:933 src/worddic.c:1132
 msgid "Search"
 msgstr "検索"
 
@@ -478,7 +479,8 @@ msgstr "Gconf Clientの初期化は失敗しました。\n"
 msgid ""
 "Dictionary file is non-UTF: %s\n"
 "Please convert it to UTF-8. See the docs for more."
-msgstr "この辞書ファイルはUTF8ではありません:%s\n"
+msgstr ""
+"この辞書ファイルはUTF8ではありません:%s\n"
 "UTF8に変換して下さい。詳しくはドキュメンテーションを参照して下さい。"
 
 #: src/dicfile.c:79
@@ -490,133 +492,139 @@ msgstr ""
 "辞書ファイル %s を開けませんでした。\n"
 "設定を確認して下さい。"
 
-#: src/worddic.c:100
+#: src/worddic.c:103
 msgid "_Manual"
 msgstr "マニュアル(_M)"
 
-#: src/worddic.c:100
+#: src/worddic.c:103
 msgid "Display the Gjiten Manual"
 msgstr "Gjitenマニュアルを表示する"
 
-#: src/worddic.c:106
+#: src/worddic.c:109
 msgid "_About"
 msgstr "情報(_A)"
 
-#: src/worddic.c:106
+#: src/worddic.c:109
 msgid "Information about the program"
 msgstr "Gjiten似ついて"
 
-#: src/worddic.c:307 src/worddic.c:520
+#: src/worddic.c:121
+#, fuzzy
+msgid "_Tools"
+msgstr "ツール"
+
+#: src/worddic.c:310 src/worddic.c:523
 msgid "Matches in "
 msgstr "マッチ"
 
-#: src/worddic.c:314
+#: src/worddic.c:317
 msgid "Possible inflected verb or adjective: "
 msgstr "動詞活用形または形容詞の候補： "
 
-#: src/worddic.c:532
+#: src/worddic.c:535
 msgid "Results truncated"
 msgstr "結果(切捨)"
 
-#: src/worddic.c:599
+#: src/worddic.c:602
+#, c-format
 msgid "No dicfiles specified! Set your preferences first."
 msgstr "辞書ファイル数はゼロです。まず設定をして下さい。"
 
-#: src/worddic.c:637
+#: src/worddic.c:640
 #, c-format
 msgid "Matches found (truncated): %d"
 msgstr "マッチするものの数(切捨)： %d"
 
-#: src/worddic.c:638
+#: src/worddic.c:641
 #, c-format
 msgid "Matches found: %d"
 msgstr "マッチするものの数： %d"
 
-#: src/worddic.c:641
+#: src/worddic.c:644
 msgid "No match found!"
 msgstr "マッチするものはありませんでした。"
 
-#: src/worddic.c:649
+#: src/worddic.c:652
 msgid "Invalid input: non-utf8\n"
 msgstr "不正入力:UTF8ではありません\n"
 
-#: src/worddic.c:901
+#: src/worddic.c:912
 msgid "Back"
 msgstr "戻る"
 
-#: src/worddic.c:906
+#: src/worddic.c:917
 msgid "Forward"
 msgstr "進む"
 
-#: src/worddic.c:962
+#: src/worddic.c:973
 msgid "Japanese Search Options: "
 msgstr "日本語検索オプション： "
 
-#: src/worddic.c:971
+#: src/worddic.c:982
 msgid "E_xact Matches"
 msgstr "厳密なマッチ(_x)"
 
-#: src/worddic.c:976
+#: src/worddic.c:987
 msgid "_Start With Expression"
 msgstr "以下から始まるもの(_S)"
 
-#: src/worddic.c:981
+#: src/worddic.c:992
 msgid "E_nd With Expression"
 msgstr "以下で終わるもの(_N)"
 
-#: src/worddic.c:986
+#: src/worddic.c:997
 msgid "_Any Matches"
 msgstr "全てのマッチ(_A)"
 
-#: src/worddic.c:991
+#: src/worddic.c:1002
 msgid "_Verb Deinflection"
 msgstr "動詞を終止形で(_V)"
 
-#: src/worddic.c:999
+#: src/worddic.c:1010
 msgid "English Search Options: "
 msgstr "英語検索オプション： "
 
-#: src/worddic.c:1008
+#: src/worddic.c:1019
 msgid "Wh_ole Expressions"
 msgstr "表現全体(_O)"
 
-#: src/worddic.c:1013
+#: src/worddic.c:1024
 msgid "_Whole Words"
 msgstr "単語全体(_W)"
 
-#: src/worddic.c:1018
+#: src/worddic.c:1029
 msgid "Any _Matches"
 msgstr "全てのマッチ(_M)"
 
-#: src/worddic.c:1023
+#: src/worddic.c:1034
 msgid "General Options: "
 msgstr "一般的オプション： "
 
-#: src/worddic.c:1032
+#: src/worddic.c:1043
 msgid "Search _Dic:"
 msgstr "辞典ファイルの検索(_D)："
 
-#: src/worddic.c:1050
+#: src/worddic.c:1061
 msgid "Sea_rch All Dictionaries"
 msgstr "全ての辞典ファイルの検索(_R)"
 
-#: src/worddic.c:1059
+#: src/worddic.c:1070
 msgid "A_uto Adjust Options"
 msgstr "検索オプションの自動選択(_U)"
 
-#: src/worddic.c:1075
+#: src/worddic.c:1086
 msgid "_Limit Results:"
 msgstr "最大のマッチ数(_L):"
 
-#: src/worddic.c:1096
+#: src/worddic.c:1107
 msgid "Enter expression :"
 msgstr "表現を入力して下さい： "
 
-#: src/worddic.c:1126
+#: src/worddic.c:1137
 msgid "_Clear"
 msgstr "消去(_C)"
 
-#: src/worddic.c:1133
+#: src/worddic.c:1144
 msgid "Search results :"
 msgstr "検索の結果： "
 

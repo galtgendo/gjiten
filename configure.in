@@ -2,7 +2,7 @@ AC_PREREQ(2.52)
 
 GJITEN_VERSION=2.2
 
-AC_INIT(gjiten, http://sourceforge.net/tracker/?group_id=4881&atid=104881)
+AC_INIT(gjiten, 2.2)
 AC_CONFIG_SRCDIR(src/gjiten.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 

@@ -1,12 +1,12 @@
-v2.2 ()
+v2.2 (06/13/2004)
     - Search hiragana on katakana input and vice versa.
-    - Major code cleanup
-    - Fix 'whole expression' matching with newer edict files (ignore metadata in parenthesis)
-    - Search entry receives focus (and input) on keypress if in focus
-    - Accelerator keys
+    - Major code cleanup.
+    - Fix 'whole expression' matching with newer edict files (ignore metadata in parenthesis).
+    - Search entry receives focus (and input) on keypress if in focus.
+    - Accelerator keys.
     - Preferences rewritten, is now glade based.
-    - Unlimited number of dictionary files
-    - radkfile updated
+    - Unlimited number of dictionary files.
+    - radkfile updated.
 
 v2.1 (05/05/2003)
     - GConf crash fixed.
