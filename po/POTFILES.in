@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 
 data/gjiten-settings.glade
+gnome/gjiten.desktop.in
 src/gjiten.c
 src/pref.c
 src/kanjidic.c
