@@ -1,9 +1,12 @@
 #! /bin/sh
 case "$1" in
     configure)
-	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/kanjidic -o /usr/share/gjiten/kanjidic
-	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/edict -o /usr/share/gjiten/edict
-	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/compdic -o /usr/share/gjiten/compdic
+ 	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/kanjidic -o /usr/share/gjiten/dics/kanjidic
+	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/edict -o /usr/share/gjiten/dics/edict
+	iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/compdic -o /usr/share/gjiten/dics/compdic
+	if [ -f /usr/share/edict/enamdict ]; then 
+	    iconv -c -f EUC-JP -t UTF-8 /usr/share/edict/enamdict -o /usr/share/gjiten/dics/enamdict
+	fi
     ;;
     
     abort-upgrade|abort-remove|abort-deconfigure)

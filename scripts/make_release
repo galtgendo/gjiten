@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ -z $1 ]; then  
+    VERSION=`cat ../configure.in |grep "GJITEN_VERSION=" |sed s/GJITEN_VERSION=//`
+elif [ $1 = 'CVS' ]; then
+    VERSION=CVS-`date +%Y%m%d%H%M`
+fi
+
+SCRIPTDIR=`pwd`
+if [ -z $VERSION ]; then 
+    exit 1
+fi
+cd ../..
+BUILDDIR=`pwd`/gjiten-build
+TARGET=$BUILDDIR/gjiten-${VERSION}
+mkdirhier $BUILDDIR
+rm -rf $TARGET
+cd $SCRIPTDIR/..
+cp -r . $TARGET
+cd $TARGET
+if [ -f Makefile ]; then make distclean
+fi
+rm -f po/.intltool-merge-cache
+rm -f po/Makefile.in.in.orig
+rm -f po/Makefile.in.in.rej
+rm -f configure-stamp
+rm -f do_release
+rm -rf scripts
+rm -rf autom4te.cache
+rm -f build-stamp
+find -type d -name CVS -exec rm -rf {} \; 2>/dev/null
+find -type f -name core -exec rm -rf {} \; 2>/dev/null
+find -name "*~" -exec rm -f {} \; 2>/dev/null
+find -name "#*#" -exec rm -f {} \; 2>/dev/null
+find -name .cvsignore -exec rm -f {} \; 2>/dev/null
+find -name .deps -exec rm -rf {} \; 2>/dev/null
+find -name .libs -exec rm -rf {} \; 2>/dev/null
+
+cd ..
+tar -c gjiten-${VERSION} |gzip >gjiten-${VERSION}.tar.gz
+
+echo $PWD/gjiten-${VERSION}.tar.gz created
+cd $SCRIPTDIR

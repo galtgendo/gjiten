@@ -1,0 +1,52 @@
+#!/bin/bash
+
+SCRIPTDIR=`pwd`
+
+if [ -z $1 ]; then  
+    VERSION=`cat ../configure.in |grep "GJITEN_VERSION=" |sed s/GJITEN_VERSION=//`
+    CVS=false
+    ./make_release
+elif [ $1 = 'CVS' ]; then
+    VERSION=CVS-`date +%Y%m%d%k%M`
+    ./make_release CVS
+    CVS=true
+fi
+    PRE_VERSION=`cat ../configure.in |grep "GJITEN_VERSION=" |sed s/GJITEN_VERSION=//`
+
+if [ -z $VERSION ]; then 
+	echo Please cd to the script directory.
+    exit
+fi
+cd ../..
+BUILDDIR=`pwd`/gjiten-build/debian
+rm -rf ${BUILDDIR}
+mkdirhier ${BUILDDIR}
+rm -rf ${BUILDDIR}/gjiten-${VERSION}.orig
+cd ${BUILDDIR}/..
+cp -R gjiten-${VERSION} ${BUILDDIR}/gjiten-${VERSION}.orig
+cp -R gjiten-${VERSION} ${BUILDDIR}/
+
+if [ $CVS = 'true' ]; then
+    echo "gjiten ($PRE_VERSION-$VERSION) unstable; urgency=low" > ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    echo "  * upstream CVS snapshot package." >> ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    echo "" >> ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    echo " -- Botond Botyanszki <boti@users.sourceforge.net> "  `date -R` >> ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    echo "" >> ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    cat  ${BUILDDIR}/gjiten-${VERSION}/debian/changelog >> ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new
+    rm ${BUILDDIR}/gjiten-${VERSION}/debian/changelog
+    mv ${BUILDDIR}/gjiten-${VERSION}/debian/changelog.new ${BUILDDIR}/gjiten-${VERSION}/debian/changelog
+fi
+
+rm -rf ${BUILDDIR}/gjiten-${VERSION}.orig/debian
+cd ${BUILDDIR}
+dpkg-source -b gjiten-${VERSION} gjiten-${VERSION}.orig
+cd gjiten-${VERSION}
+dpkg-buildpackage -rfakeroot
+cd ..
+dpkg-scanpackages . /dev/null '' >Packages
+dpkg-scanpackages . /dev/null '' |gzip >Packages.gz
+dpkg-scansources . /dev/null '' >Sources
+dpkg-scansources . /dev/null '' |gzip >Sources.gz
+
+echo packages created in ${BUILDDIR}
+cd ${SCRIPTDIR}

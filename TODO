@@ -48,7 +48,6 @@ Planned:
 -Dictionary packages: basic and additional (rpm/deb).
 -Shift click on kanji in word dic ->kanji details.
 -Menubar/toolbar: disable one only.
--Text only/pic only toolbar
 -hu.po. 
 -Option to add new entries to the edict dict file
 -Set options from command line.

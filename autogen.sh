@@ -175,3 +175,14 @@ if test x$NOCONFIGURE = x; then
 else
   echo Skipping configure process.
 fi
+
+#copy missing mkinstalldirs
+if test ! -x ./mkinstalldirs && test -x /usr/share/automake-1.8/mkinstalldirs; then
+    cp /usr/share/automake-1.8/mkinstalldirs ./mkinstalldirs
+fi
+if test ! -x ./mkinstalldirs && test -x /usr/share/automake-1.7/mkinstalldirs; then
+    cp /usr/share/automake-1.7/mkinstalldirs ./mkinstalldirs
+fi
+if test ! -x ./mkinstalldirs && test -x /usr/share/automake/mkinstalldirs; then
+    cp /usr/share/automake/mkinstalldirs ./mkinstalldirs
+fi

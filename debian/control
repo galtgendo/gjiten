@@ -2,13 +2,13 @@ Source: gjiten
 Section: x11
 Priority: optional
 Maintainer: Botond Botyanszki <b0ti@users.sourceforge.net>
-Build-Depends: debhelper (>> 3.0.0), libgnomeui-dev
+Build-Depends: debhelper (>> 4.2.0), libgnomeui-dev
 Standards-Version: 3.5.2
 
 Package: gjiten
 Architecture: any
 Depends: ${shlibs:Depends}, kanjidic, edict
-Suggests: im-ja
+Suggests: im-ja-all, enamdict
 Description: Japanese dictionary for GNOME
  Gjiten is a Japanese dictionary for GNOME with advanced word and kanji lookup
  features. Requires dictionary files (edict, kanjidic) to function.

@@ -160,23 +160,23 @@ void gjiten_start_kanjipad() {
 
 void gjiten_display_manual(GtkWidget *widget, void *data) {
   GtkWidget *window = data;
-  GError *err;
+  GError *err = NULL;
+  gboolean retval = FALSE;
+
+  retval = gnome_help_display("gjiten", NULL, &err);
   
-  err = NULL;  
-  gnome_help_display("gjiten.xml", NULL, &err);
-  
-  if (err != NULL) {
+  if (retval == FALSE) {
     GtkWidget *dialog;
     dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-				     GTK_DIALOG_DESTROY_WITH_PARENT,       
-				     GTK_MESSAGE_ERROR,
-				     GTK_BUTTONS_CLOSE,
-				     _("Could not display help: %s"),
-				     err->message);
+																		GTK_DIALOG_DESTROY_WITH_PARENT,       
+																		GTK_MESSAGE_ERROR,
+																		GTK_BUTTONS_CLOSE,
+																		_("Could not display help: %s"),
+																		err->message);
     
     g_signal_connect(G_OBJECT(dialog), "response",
-		      G_CALLBACK(gtk_widget_destroy),
-		      NULL);
+										 G_CALLBACK(gtk_widget_destroy),
+										 NULL);
     
     gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
     
@@ -211,7 +211,7 @@ void gjiten_create_about() {
     pixbuf = temp_pixbuf;
   }
 
-  pixbuf = gdk_pixbuf_new_from_file(PIXMAPDIR"gjiten/gjiten-logo.png", NULL);
+  pixbuf = gdk_pixbuf_new_from_file(PIXMAPDIR"/gjiten/gjiten-logo.png", NULL);
 
   if (strcmp(translator, "translated_by") == 0) translator = NULL;
 
@@ -219,7 +219,7 @@ void gjiten_create_about() {
     _("Released under the terms of the GNU GPL.\n"
     "Check out http://gjiten.sourceforge.net for updates"), 
   */
-  about = gnome_about_new("gjiten", VERSION, "Copyright \xc2\xa9 1999-2003 Botond Botyanszki",
+  about = gnome_about_new("gjiten", VERSION, "Copyright \xc2\xa9 1999-2004 Botond Botyanszki",
 			  _("gjiten is a Japanese dictionary for Gnome"),
 			  (const char **)authors,
 			  (const char **)documenters,
@@ -261,10 +261,10 @@ int main (int argc, char **argv) {
 #endif
 
   gnome_program_init("gjiten", VERSION, LIBGNOMEUI_MODULE, argc, argv, 
-		     GNOME_PARAM_POPT_TABLE, arg_options, 
-		     GNOME_PARAM_HUMAN_READABLE_NAME, _("gjiten"), 
-		     GNOME_PARAM_APP_DATADIR, GJITEN_DATADIR,
-		     NULL);
+										 GNOME_PARAM_POPT_TABLE, arg_options, 
+										 GNOME_PARAM_HUMAN_READABLE_NAME, _("gjiten"), 
+										 GNOME_PARAM_APP_DATADIR, GJITEN_DATADIR,
+										 NULL);
 
   if (! g_file_test (icon_path, G_FILE_TEST_EXISTS)) {
     g_warning ("Could not find %s", icon_path);
