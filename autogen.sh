@@ -6,13 +6,31 @@ test -z "$srcdir" && srcdir=.
 
 DIE=0
 
-if [ -n "$GNOME2_DIR" ]; then
-	ACLOCAL_FLAGS="-I $GNOME2_DIR/share/aclocal $ACLOCAL_FLAGS"
-	LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
-	PATH="$GNOME2_DIR/bin:$PATH"
-	export PATH
-	export LD_LIBRARY_PATH
+if test -z "USE_GNOME2_MACROS" ; then
+  USE_GNOME2_MACROS=0
 fi
+ 
+if test "$USE_GNOME2_MACROS" = 1 ; then
+  if test -z "$GNOME2_DIR" ; then
+    GNOME_COMMON_DATADIR="/usr/share"
+  else
+    GNOME_COMMON_DATADIR="$GNOME2_DIR/share"
+  fi
+  GNOME_COMMON_MACROS_DIR="$GNOME_COMMON_DATADIR/aclocal/gnome2-macros"
+else
+  if test -z "$GNOME_DIR" ; then
+    GNOME_COMMON_DATADIR="/usr/share"
+    LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
+    PATH="$GNOME2_DIR/bin:$PATH"
+    export PATH
+    export LD_LIBRARY_PATH
+  else
+    GNOME_COMMON_DATADIR="$GNOME_DIR/share"
+  fi
+  GNOME_COMMON_MACROS_DIR="$GNOME_COMMON_DATADIR/aclocal/gnome-macros"
+fi
+
+ACLOCAL_FLAGS="-I $GNOME_COMMON_MACROS_DIR $ACLOCAL_FLAGS"
 
 (test -f $srcdir/configure.in) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"

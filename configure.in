@@ -1,6 +1,8 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gjiten, 2.2, http://bugzilla.gnome.org/enter_bug.cgi?product=gjiten)
+GJITEN_VERSION=2.2
+
+AC_INIT(gjiten, http://sourceforge.net/tracker/?group_id=4881&atid=104881)
 AC_CONFIG_SRCDIR(src/gjiten.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -17,7 +19,7 @@ AC_PROG_MAKE_SET
 AC_PROG_INTLTOOL([0.22])
 
 GNOME_COMMON_INIT
-GNOME_PLATFORM_GNOME_2(yes, force)
+dnl GNOME_PLATFORM_GNOME_2(yes, force)
 PKG_CHECK_MODULES(GJITEN, libgnome-2.0 >= 2.2.0 libgnomeui-2.0 >= 2.2.0 libglade-2.0)
 
 # Checks for header files.
@@ -31,7 +33,7 @@ AC_C_CONST
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_FUNC_STAT
-AC_CHECK_FUNCS([getcwd putenv setlocale strerror strrchr strstr])
+AC_CHECK_FUNCS([getcwd putenv setlocale strerror strrchr strstr munmap])
 
 GNOME_COMPILE_WARNINGS(maximum)
 
@@ -44,7 +46,8 @@ AM_GLIB_GNU_GETTEXT
 
 AC_ARG_ENABLE(debug,
 		[  --enable-debug  Print debugging information. This is a feature which should not be usually enabled.],
-		[DEBUG_FLAGS="-DDEBUG_GJITEN -ggdb -std=c99 -pedantic"]
+                [debugging=yes; DEBUG_FLAGS="-DGNOME_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -DDEBUG_WNNLIB -DDEBUG_IM_JA -ggdb -std=c89 -pedantic"],
+                [debugging=no]
 	      )
 	      AC_SUBST(DEBUG_FLAGS)
 
