@@ -18,8 +18,10 @@ rm -rf $TARGET
 cd $SCRIPTDIR/..
 cp -r . $TARGET
 cd $TARGET
-if [ -f Makefile ]; then make distclean
+if [ -f Makefile ]; then 
+    make distclean
 fi
+cat rpm/gjiten.spec.in |sed s/@VERSION@/$VERSION/ >rpm/gjiten.spec
 rm -f po/.intltool-merge-cache
 rm -f po/Makefile.in.in.orig
 rm -f po/Makefile.in.in.rej

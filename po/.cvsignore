@@ -8,4 +8,4 @@ POTFILES
 *.gmo
 *.pot
 messages.mo
-
+*.autosave

@@ -7,7 +7,7 @@ Release: 1
 Copyright: GPL
 Group: X11/Applications
 Source: gjiten-@VERSION@.tar.gz
-BuildRoot: /var/tmp/@PACKAGE@-@VERSION@-root
+BuildRoot: /var/tmp/gjiten-@VERSION@-root
 Packager: Botond Botyanszki <b0ti@users.sourceforge.net>
 URL: http://gjiten.sourceforge.net
 
