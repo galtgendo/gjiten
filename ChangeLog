@@ -1,4 +1,4 @@
-v2.3 ()
+v2.3 (09/11/2004)
     - Fixed segv when kanjipad entry is NULL.
     - Made search result textviews non-editable.
     - Segv after dicfile preferences change fixed.

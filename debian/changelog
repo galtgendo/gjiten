@@ -1,13 +1,23 @@
+gjiten (2.3-1) unstable; urgency=low
+
+  * New upstream release. See ChangeLog. Closes Bug##261309
+  
+ -- Botond Botyanszki <b0ti@users.sourceforge.net>  Sat, 11 Sept 2004 16:55:22 +0200
+
 gjiten (2.2-2) unstable; urgency=low
 
-  * Sponsorized upload
-  * Fixed a few things in build-depends and rules.
-  * Fixed the man page section: 1 instead of l.
+  * Added myself to the Uploaders field.
+  * Linked with gnutls11/gcrypt11. Closes: Bug#263696
 
- -- Ludovic Drolez <ldrolez@debian.org>  Sun, 20 Jun 2004 11:19:07 +0200
+ -- Ludovic Drolez <ldrolez@debian.org>  Thu,  5 Aug 2004 20:44:06 +0200
 
 gjiten (2.2-1) unstable; urgency=low
 
+  * Sponsorized upload by ldrolez@debian.org
+  * My changes:
+  * Fixed a few things in build-depends and rules.
+  * Fixed the man page section: 1 instead of l.
+  * Upstream maintainer changes:
   * New upstream release. See ChangeLog.
   * Add dependency on kanjidic and edict, convert them to utf8
   
@@ -55,4 +65,3 @@ gjiten (0.8-1) unstable; urgency=low
 Local variables:
 mode: debian-changelog
 End:
-

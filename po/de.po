@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-13 17:04+0900\n"
+"POT-Creation-Date: 2004-08-24 21:54+0200\n"
 "PO-Revision-Date: 2003-04-28 21:32+0200\n"
 "Last-Translator: Gregor Riepl <seto-kun@freesurf.ch>\n"
 "Language-Team: Deutsch <seto-kun@freesurf.ch>\n"
@@ -78,13 +78,13 @@ msgstr ""
 msgid "Kanji info"
 msgstr "Kanji-Info :"
 
-#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:923
-#: src/worddic.c:924
+#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:932
+#: src/worddic.c:933
 msgid "KanjiDic"
 msgstr "Kanji-Dic"
 
 #: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1118
-#: src/kanjidic.c:1119 src/worddic.c:95 src/worddic.c:928 src/worddic.c:929
+#: src/kanjidic.c:1119 src/worddic.c:95 src/worddic.c:937 src/worddic.c:938
 msgid "KanjiPad"
 msgstr "Kanji-Pad"
 
@@ -350,37 +350,37 @@ msgstr "Unicode-Nummer (Hex)"
 msgid "ASCII JIS Code of Kanji"
 msgstr "ASCII JIS-Code"
 
-#: src/pref.c:128 src/pref.c:195
+#: src/pref.c:128 src/pref.c:199
 #, fuzzy
 msgid "Dictionary file not found!"
 msgstr "Wörterbuchdateien"
 
-#: src/pref.c:165 src/pref.c:230
+#: src/pref.c:169 src/pref.c:234
 #, fuzzy
 msgid "Select dictionary file"
 msgstr "Wörterbuchdateien auswählen"
 
-#: src/pref.c:217
+#: src/pref.c:221
 msgid "Please select an entry!"
 msgstr ""
 
-#: src/pref.c:408
+#: src/pref.c:415
 #, fuzzy
 msgid "Dictionary file path"
 msgstr "Wörterbuchdateien"
 
-#: src/pref.c:412
+#: src/pref.c:419
 #, fuzzy
 msgid "Dictionary name"
 msgstr "Wörterbuchdateien"
 
 #. gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
-#: src/pref.c:452
+#: src/pref.c:459
 #, fuzzy
 msgid "Select KanjiDic"
 msgstr "Kanji-Dic benutzen"
 
-#: src/pref.c:514
+#: src/pref.c:523
 #, fuzzy
 msgid "Select KanjiPad"
 msgstr "Kanji-Pad benutzen"
@@ -449,11 +449,11 @@ msgstr ""
 "Fehler beim öffnen von %s.\n"
 " Überprüfen Sie die Einstellungen oder lesen Sie die Dokumentation!"
 
-#: src/kanjidic.c:1107 src/worddic.c:907
+#: src/kanjidic.c:1107 src/worddic.c:916
 msgid "Close"
 msgstr "Schliessen"
 
-#: src/kanjidic.c:1123 src/worddic.c:933 src/worddic.c:1132
+#: src/kanjidic.c:1123 src/worddic.c:942 src/worddic.c:1149
 msgid "Search"
 msgstr "Suchen"
 
@@ -490,15 +490,15 @@ msgstr "Löschen"
 msgid "Search Results :"
 msgstr "Suchergebnisse :"
 
-#: src/kanjidic.c:1246
+#: src/kanjidic.c:1248
 msgid "Kanji Info :"
 msgstr "Kanji-Info :"
 
-#: src/conf.c:266
+#: src/conf.c:268
 msgid "Could not get gconf_client.\n"
 msgstr ""
 
-#: src/dicfile.c:66
+#: src/dicfile.c:70
 #, c-format
 msgid ""
 "Dictionary file is non-UTF: %s\n"
@@ -507,7 +507,7 @@ msgstr ""
 "Wörterbuchdatei ist nicht in UTF: %s\n"
 "Bitte konvertieren Sie es in UTF-8. Siehe auch die Dokumentation."
 
-#: src/dicfile.c:79
+#: src/dicfile.c:83
 #, c-format
 msgid ""
 "Error opening dictfile:  %s\n"
@@ -572,96 +572,111 @@ msgstr "Keine Treffer gefunden!"
 msgid "Invalid input: non-utf8\n"
 msgstr ""
 
-#: src/worddic.c:912
+#: src/worddic.c:921
 msgid "Back"
 msgstr "Zurück"
 
-#: src/worddic.c:917
+#: src/worddic.c:926
 msgid "Forward"
 msgstr "Vorwärts"
 
-#: src/worddic.c:973
+#.
+#. gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_NO,
+#. _("Show/Hide options"), "Show/Hide options",
+#. G_CALLBACK(worddic_show_hide_options), NULL, -1);
+#.
+#: src/worddic.c:950
+msgid ""
+"Show/Hide\n"
+"options"
+msgstr ""
+
+#: src/worddic.c:951
+msgid "Show/Hide options"
+msgstr ""
+
+#: src/worddic.c:990
 msgid "Japanese Search Options: "
 msgstr "Japanische Suchoptionen: "
 
-#: src/worddic.c:982
+#: src/worddic.c:999
 #, fuzzy
 msgid "E_xact Matches"
 msgstr "Exakte Treffer"
 
-#: src/worddic.c:987
+#: src/worddic.c:1004
 #, fuzzy
 msgid "_Start With Expression"
 msgstr "Ausdruck am Anfang"
 
-#: src/worddic.c:992
+#: src/worddic.c:1009
 #, fuzzy
 msgid "E_nd With Expression"
 msgstr "Ausdruck am Ende"
 
-#: src/worddic.c:997
+#: src/worddic.c:1014
 #, fuzzy
 msgid "_Any Matches"
 msgstr "Beliebige Treffer"
 
-#: src/worddic.c:1002
+#: src/worddic.c:1019
 #, fuzzy
 msgid "_Verb Deinflection"
 msgstr "Grundform bestimmen"
 
-#: src/worddic.c:1010
+#: src/worddic.c:1027
 msgid "English Search Options: "
 msgstr "Englische Suchoptionen: "
 
-#: src/worddic.c:1019
+#: src/worddic.c:1036
 #, fuzzy
 msgid "Wh_ole Expressions"
 msgstr "Ganze Ausdrücke"
 
-#: src/worddic.c:1024
+#: src/worddic.c:1041
 #, fuzzy
 msgid "_Whole Words"
 msgstr "Ganze Wörter"
 
-#: src/worddic.c:1029
+#: src/worddic.c:1046
 #, fuzzy
 msgid "Any _Matches"
 msgstr "Beliebige Treffer"
 
-#: src/worddic.c:1034
+#: src/worddic.c:1051
 msgid "General Options: "
 msgstr "Allgemeine Optionen: "
 
-#: src/worddic.c:1043
+#: src/worddic.c:1060
 #, fuzzy
 msgid "Search _Dic:"
 msgstr "Wörterbuch:"
 
-#: src/worddic.c:1061
+#: src/worddic.c:1078
 #, fuzzy
 msgid "Sea_rch All Dictionaries"
 msgstr "Alle Wörterbücher"
 
-#: src/worddic.c:1070
+#: src/worddic.c:1087
 #, fuzzy
 msgid "A_uto Adjust Options"
 msgstr "Automatisch anpassen"
 
-#: src/worddic.c:1086
+#: src/worddic.c:1103
 #, fuzzy
 msgid "_Limit Results:"
 msgstr "Resultate begrenzen:"
 
-#: src/worddic.c:1107
+#: src/worddic.c:1124
 msgid "Enter expression :"
 msgstr "Ausdruck :"
 
-#: src/worddic.c:1137
+#: src/worddic.c:1154
 #, fuzzy
 msgid "_Clear"
 msgstr "Löschen"
 
-#: src/worddic.c:1144
+#: src/worddic.c:1161
 msgid "Search results :"
 msgstr "Suchergebnisse :"
 
