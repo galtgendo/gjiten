@@ -896,7 +896,7 @@ WordDic *worddic_create() {
 	worddic_init_history();
   Verbinit(); //FIXME: On demand
 
-  wordDic->window = gnome_app_new("gjiten", "Gjiten - WordDic");
+  wordDic->window = gnome_app_new("gjiten", _("Gjiten - WordDic"));
   GTK_WIDGET_SET_FLAGS(wordDic->window, GTK_CAN_DEFAULT);
   g_signal_connect(G_OBJECT(wordDic->window), "destroy", G_CALLBACK(worddic_close), NULL);
   gtk_window_set_default_size(GTK_WINDOW(wordDic->window), 500, 500);

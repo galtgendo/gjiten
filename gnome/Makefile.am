@@ -1,5 +1,7 @@
 desktopdir = $(datadir)/applications
-desktop_DATA =	gjiten.desktop
+desktop_in_files = gjiten.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 appregistrydir = $(datadir)/application-registry
 appregistry_DATA = gjiten.applications

@@ -1086,7 +1086,7 @@ KanjiDic *kanjidic_create() {
   if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * 200);
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
 
-  kanjiDic->window = gnome_app_new("gjiten", "Gjiten - KanjiDic");
+  kanjiDic->window = gnome_app_new("gjiten", _("Gjiten - KanjiDic"));
   GTK_WIDGET_SET_FLAGS(kanjiDic->window, GTK_CAN_DEFAULT);
   g_signal_connect(G_OBJECT(kanjiDic->window), "destroy", G_CALLBACK(kanjidic_close), NULL);
   gtk_window_set_default_size(GTK_WINDOW(kanjiDic->window), 500, 500);
