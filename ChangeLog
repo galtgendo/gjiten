@@ -1,3 +1,7 @@
+v2.4
+    - gettext fix for kanji info pref dialog (Daichi Kawahata)
+    - KanjiDic segv on CTRL-Q fixed (Alexis S. L. Carvalho)
+
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.
     - Made search result textviews non-editable.

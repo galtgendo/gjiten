@@ -2,7 +2,7 @@
 /* gjiten.c
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
-  
+
    Copyright (C) 1999 - 2003 Botond Botyanszki <boti@rocketmail.com>
 
    This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,12 @@
 #include <libgnome/libgnome.h>
 #include <libgnomeui/libgnomeui.h>
 #include <gconf/gconf-client.h>
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
 
 #include "error.h"
 #include "constants.h"
@@ -68,14 +73,15 @@ enum {
 
 /* Command line arguments via popt */
 static struct poptOption arg_options [] = {
-  { NULL, '\0', POPT_ARG_CALLBACK, (gpointer)parse_an_arg, 0},
+  { NULL, '\0', POPT_ARG_CALLBACK, (gpointer)parse_an_arg, 0,
+    NULL, NULL },
 
-  { "kanjidic", 'k', POPT_ARG_NONE, NULL, KANJIDIC_KEY, 
-    N_("Start up Kanjidic instead of Word dictionary"), NULL},
- 
+  { "kanjidic", 'k', POPT_ARG_NONE, NULL, KANJIDIC_KEY,
+    N_("Start up Kanjidic instead of Word dictionary"), NULL },
+
   { "word-lookup", 'w', POPT_ARG_STRING, NULL, WORD_LOOKUP_KEY,
     N_("Look up WORD in first dictionary"), N_("WORD") },
-   
+
   { "kanji-lookup", 'l', POPT_ARG_STRING, NULL, KANJI_LOOKUP_KEY,
     N_("Look up KANJI in kanji dictionary"), N_("KANJI") },
 
@@ -85,8 +91,8 @@ static struct poptOption arg_options [] = {
   { "clip-word", 'v', POPT_ARG_NONE, NULL, CLIP_WORD_KEY,
     N_("Look up word from clipboard"), NULL },
 
-  { NULL, '\0', 0, NULL, 0}
-  
+  { NULL, '\0', 0, NULL, 0, NULL, NULL }
+
 };
 
 

@@ -467,7 +467,7 @@ void create_dialog_preferences() {
 
   for (tcol = 0; (tcol * 14 + trow < KCFGNUM) || (tcol < 3); tcol++) {
     for (trow = 0; (tcol * 14 + trow < KCFGNUM) && (trow < 14); trow++) {
-      checkb_prefs[tcol * 14 + trow] = gtk_check_button_new_with_label(strginfo[tcol * 14 + trow]);
+      checkb_prefs[tcol * 14 + trow] = gtk_check_button_new_with_label(_(strginfo[tcol * 14 + trow]));
       gtk_widget_show(checkb_prefs[tcol * 14 + trow]);
       gtk_table_attach(GTK_TABLE(tmpwidget), checkb_prefs[tcol * 14 + trow], tcol, tcol + 1, trow, trow + 1,
 											 (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);

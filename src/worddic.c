@@ -352,7 +352,7 @@ static void print_result(gchar *txt2print, int result_offset, gchar *searchstrg)
   currentchar = txt2print;
 
   while (g_unichar_isspace(*currentchar) == FALSE) { // find first space
-    if (currentchar - txt2print >= strlen(txt2print)) break;
+    if ((size_t) (currentchar - txt2print) >= strlen(txt2print)) break;
     currentchar = g_utf8_next_char(currentchar);
   }
   

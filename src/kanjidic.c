@@ -296,7 +296,7 @@ void print_kanjinfo(gunichar kanji) {
   for (i = 0; i < KCFGNUM; i++)
     if (gjitenApp->conf->kdiccfg[i] == TRUE) {
 			gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), 
-																							 &kanjiDic->kinfo_iter, strginfo[i], -1, "blue_foreground", NULL);
+																							 &kanjiDic->kinfo_iter, _(strginfo[i]), -1, "blue_foreground", NULL);
 	    gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, 
 																							 ": ", -1, "blue_foreground", NULL);
 	    if (i == KANJI) {
@@ -675,7 +675,7 @@ int radical_selected(gunichar *radical) {
   newradline = g_strndup(radline_ptr, strlen(radline_ptr) + 6); //Enough space for one more character
   radline_length = g_utf8_strlen(newradline, -1);
 
-  for (i = 0; i < strlen(newradline) + 6; i++) newradline[i] = 0; //clear newradline
+  for (i = 0; i < (int) (strlen(newradline) + 6); i++) newradline[i] = 0; //clear newradline
 
   removed = FALSE;
   for (i = 0; i < radline_length; i++) {  //Check if we already have the radical in the line
@@ -949,14 +949,17 @@ GtkWidget *create_window_radicals () {
 static void kanjidic_close() {
 
 	if (kanjiDic != NULL) {
+		KanjiDic *tmp;
 		radical_window_close();
 
-		gtk_widget_destroy(kanjiDic->window);
-		g_free(kanjiDic);
+		/* Avoid recursion */
+		tmp = kanjiDic;
 		kanjiDic = NULL;
+		gtk_widget_destroy(tmp->window);
+		g_free(tmp);
 		gjitenApp->kanjidic = NULL;
+		gjiten_exit();
 	}
-	gjiten_exit();
 }
 
 void shade_kanjidic_widgets() {

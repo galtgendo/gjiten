@@ -187,7 +187,7 @@ int get_word(char *src, char *dest, int pos) { /*0 if no more words in src, else
   
   k = pos;
   if (src[k] == ' ')  k++;
-  if ( strlen(src)-1 <= k) return(0);
+  if ( (int) (strlen(src) - 1) <= k) return(0);
   
   j = 0;
   if (src[k] == '{') {
