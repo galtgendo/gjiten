@@ -14,5 +14,5 @@ gjiten_SOURCES = 		\
 	dicutil.c dicutil.h	\
 	constants.h
 
-CFLAGS = @CFLAGS@ $(GJITEN_CFLAGS) -Wall -Wunused @DEBUG_FLAGS@
+gjiten_CFLAGS = $(GJITEN_CFLAGS) -Wall -Wunused @DEBUG_FLAGS@
 gjiten_LDADD = $(GJITEN_LIBS)
