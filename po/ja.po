@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: gjiten 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-06-13 17:04+0900\n"
-"PO-Revision-Date: 2003-10-13 22:12+0900\n"
+"PO-Revision-Date: 2004-06-13 19:00+0900\n"
 "Last-Translator: Botond Botyanszki <boti@rocketmail.com>\n"
 "Language-Team:  <boti@rocketmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: data/gjiten-settings.glade.h:1
 msgid "*"
@@ -509,9 +509,8 @@ msgid "Information about the program"
 msgstr "Gjiten似ついて"
 
 #: src/worddic.c:121
-#, fuzzy
 msgid "_Tools"
-msgstr "ツール"
+msgstr "ツール(_T)"
 
 #: src/worddic.c:310 src/worddic.c:523
 msgid "Matches in "
