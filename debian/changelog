@@ -1,21 +1,32 @@
+gjiten (2.2-2) unstable; urgency=low
+
+  * Sponsorized upload
+  * Fixed a few things in build-depends and rules.
+  * Fixed the man page section: 1 instead of l.
+
+ -- Ludovic Drolez <ldrolez@debian.org>  Sun, 20 Jun 2004 11:19:07 +0200
+
 gjiten (2.2-1) unstable; urgency=low
+
   * New upstream release. See ChangeLog.
   * Add dependency on kanjidic and edict, convert them to utf8
   
  -- Botond Botyanszki <b0ti@users.sourceforge.net>  Tue, 10 Oct 2003 21:52:42 +0900
 
-
 gjiten (2.1-1) unstable; urgency=low
+
   * See changelog
     
  -- Botond Botyanszki <b0ti@users.sourceforge.net>  Mon, 05 May 2003 21:48:13 +0900
 
 gjiten (2.0-2) unstable; urgency=low
+
   * See changelog
     
  -- Botond Botyanszki <b0ti@users.sourceforge.net>  Sat, 04 Jan 2003 13:37:13 +0900
 
 gjiten (2.0-1) unstable; urgency=low
+
   *  GNOME2 port prerelease
     
  -- Botond Botyanszki <b0ti@users.sourceforge.net>  Fri, 14 Jun 2002 14:31:22 +0900
@@ -44,3 +55,4 @@ gjiten (0.8-1) unstable; urgency=low
 Local variables:
 mode: debian-changelog
 End:
+

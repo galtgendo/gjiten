@@ -30,7 +30,7 @@ clean:
 	rm -f config.log config.cache
 
 	# Add here commands to clean up after the build process.
-#	-$(MAKE) distclean
+	-$(MAKE) distclean
 
 	dh_clean
 

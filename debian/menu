@@ -1,2 +1,3 @@
-?package(gjiten):needs=X11 section=Apps/Text \
+?package(gjiten):needs="X11" section="Apps/Text" \
   title="Gjiten" command="/usr/bin/gjiten"
+
