@@ -1,0 +1,117 @@
+v2.2 ()
+    - Search hiragana on katakana input and vice versa.
+    - Major code cleanup
+    - Fix 'whole expression' matching with newer edict files (ignore metadata in parenthesis)
+    - Search entry receives focus (and input) on keypress if in focus
+    - Accelerator keys
+    - Preferences rewritten, is now glade based.
+    - Unlimited number of dictionary files
+    - radkfile updated
+
+v2.1 (05/05/2003)
+    - GConf crash fixed.
+    - Set icon with GNOME.
+    - German translation.
+
+v2.0 (01/04/2003)
+    - Almost full rewrite:
+    - xjdic code removed, no more index files.
+    - Now uses GConf for storing configuration
+    - Ported to the GNOME 2.0 platform.
+    - Enhanced verb deinflection.
+    - Full unicode support, dictionary files need to be utf-8.
+    - Manual updated, now works with GNOME2 help system.
+    
+v1.0 (01/19/2002)
+    - "Reply overrun" crashes with the JP-German GDICT fixed.
+    - Search options are saved on exit.
+    - Limit search results in word dictionary. 
+    - Kanji info window moved to the main KanjiDic window. 
+    - KanjiDic kanji-info history.
+    - Automatic vertical scrollbars.
+    - Bigger fonts for KanjiDic. 
+    - Word dictionary fonts also customizable in preferences. 
+    
+v0.9 (10/25/2001)
+    - History saving (up to 50 entries) on exit. 
+    - Auto adjust search options if no match is found.
+    - Now starts up properly with gnome/gtk specific cmd line options.
+    - Updated for the IA64 architecture. 
+    - Shouldn't crash with Fvwm2 anymore.
+    - dpkg-buildpackage should work under debian potato from now.
+    - Dicfile limit raised to 40.
+    - Added Back/Forward buttons to the toolbar.
+    - Radkfile updated.    
+    - Fixed history behaviour (garbage, whitespace, case sensitivity)
+    - Segfault on unconfigured exit fixed.
+    - Numerous small bugfixes.
+        
+v0.8 (05/01/2001)
+    - Debianized source. =>Debian packages.
+    - Documentation updated and converted to DocBook sgml.
+    - Makefile updates.
+    - Japanese localization fixes.
+    - Search corrections.            
+    - Real time kanji lookup.
+    - Clipboard lookup (kanji&word) via command line. You can assign 
+       a keyboard shortcut with your window manager for fast lookups. 
+    - Docs moved to /usr/share/doc 
+    - Click on radical removes it from the list if already there.
+    - Fixed memory leaks.
+    - Popup window behaviour fixed.    
+    
+v0.7 (11/03/2000)
+    - Various small fixes, code cleanups.
+    - It's more user friendly on first startup now.
+    - $prefix is correctly substituted in source.
+    - Kanji info window behaviour fixed.        
+    - Radical selection window rewritten to use buttons.
+    - 'No dicfiles crash' fixed.
+    - Command line arguments (word and kanji lookup). See gjiten --help.    
+    - Gnome menu entry under Applications (gjiten.desktop file).
+    - Linear Search fixed.
+                
+v0.6 (05/21/2000)
+    - Linear search added: slower but more accurate. 
+    - Makefile fixes for compiling under Debian.
+    - Documentation updates (both ja and en). 
+    - Should be more tolerant with file errors.    
+    - Japanese localization: ja.po added. Set LANGUAGE=ja for Japanese messages.
+    - Copy, paste buttons.
+    - Lots of other fixes.
+
+v0.5 (04/19/2000)	
+    - Togglebuttons in Pref/kanjidic should work okay now. 
+    - Widget shading in KanjiDic via checkbuttons.
+    - README converted to html, added as Help/help.
+    - Set LC_ALL to ja_JP too. 
+    - Added "Search All Dics" feature.
+    - Logo.
+    - Documentation updates.
+    - Automake/Autoconf/Install fixes.
+    - Appbar messages.
+    - Code reorganized, misc fixes.
+    - Added Japanese documentation.
+        
+v0.4 (03/02/2000)
+    - Verb deinflection works now.
+    - Small cleanups and fixes. Preferences changed.
+    - Config file changed to GNOME style.
+    - Dictionary selection button changed to pulldown menu.
+    - KanjiPad startup button added. 
+    - Text Entry widgets replaced with Combo Entry widgets [search history]. 
+    -"Extra character after highlighted text" bug fixed.
+
+v0.3 (01/09/2000)
+    -Added an option for using more than one dictionary file.
+    -Added missing radkfile.
+    
+v0.2 (12/28/1999)
+    -Added a Kanji dictionary with some nice features.
+    -Added more options to preferences.
+    -Word dictionary lookup functions rewritten. Verb inflection feature is not 
+     implemented yet.
+    -More bugs, known ones killed ;)
+       
+v0.1 (12/25/1999) 
+    -First release. 

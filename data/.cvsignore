@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+gjiten.schemas
+*.bak
+gjiten-settings.gladep
+

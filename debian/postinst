@@ -1,0 +1,15 @@
+#! /bin/sh
+case "$1" in
+    configure)
+	scrollkeeper-update -q    
+    ;;
+    
+    abort-upgrade|abort-remove|abort-deconfigure)
+    
+    ;;
+
+esac
+
+#DEBHELPER#
+
+exit 0

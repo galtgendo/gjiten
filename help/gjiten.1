@@ -1,0 +1,60 @@
+.TH GJITEN l "20 Jun 2002"
+.SH NAME
+\fBgjiten\fP \- Japanese dictionary for Gnome
+.SH SYNOPSIS
+.B gjiten [ option ]
+
+.SH DESCRIPTION
+.B gjiten
+is a Japanese dictionary for the Gnome Desktop. It also has a kanji dictionary; 
+any combination of stroke number, radicals and search key can be used for kanji lookups. 
+Requires dictionary files in edict format and a working X Input Method (e.g. kinput2) for Japanese input.
+
+This manpage only explains the command line options. You should be able to access the complete documentation from the Help menu.
+.LP
+.SH OPTIONS
+\fB\-c\fR and \fB\-v\fR are convenient for fast lookups via keyboard shortcuts.
+
+.TP
+\fB\-k\fR
+Same as \fB\-\-kanjidic\fR
+.TP
+\fB\-\-kanjidic\fR
+Only show the \fBKanjiDic\fR window on startup.
+.TP
+\fB\-w WORD\fR
+Same as \fB\-\-word\-lookup=WORD\fR
+.TP
+\fB\-\-word\-lookup=WORD\fR
+Look up \fBWORD\fR on startup.
+.TP
+\fB\-l KANJI\fR
+Same as \fB\-\-kanji\-lookup=KANJI\fR
+.TP
+\fB\-\-kanji\-lookup=KANJI\fR
+Look up \fBKanji\fR on startup in \fBKanjiDic\fR.
+.TP
+\fB\-c\fR
+Same as \fB\-\-clip\-kanji\fR
+.TP
+\fB\-\-clip\-kanji\fR
+Look up kanji from the \fBclipboard\fR.
+.TP
+\fB\-v\fR
+Same as \fB\-\-clip\-word\fR
+.TP
+\fB\-\-clip\-word\fR
+Look up word from the \fBclipboard\fR.
+.TP
+\fB\-\-version\fR
+Prints the version of gjiten
+
+.PB
+.SH BUGS
+See the BUGS file for a list of bugs. The TODO file is more likely to contain these. Please contact me if you encounter any bugs.
+
+.SH SEE ALSO
+.RB xjdic(1)
+
+.SH AUTHORS
+Botond Botyanszki (boti@rocketmail.com)

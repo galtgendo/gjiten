@@ -1,0 +1,162 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html lang="ja">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.14-15mdk i586) [Netscape]">
+<META http-equiv="Content-Style-Type" content="text/css">
+<style type = "text/css">
+<!--
+body { margin:20px; line-height:150%; }
+-->
+</style>
+</head>
+<body background="foggy2.jpg">
+<em><a href="../C/index.html">English</a></em>
+<h1>
+<font size=+2>Gjitenのドキュメンテーション</font></h1>
+<p>Translated by Jason Vertrees (tree(at)mail.utexas.edu) and his professor Manabu
+Mizobe.
+<br>
+Updated by Yamagata Hiroo (hiyori13(at)alum.mit.edu)
+<br>
+<br></p>
+<p><font size="+1"><a href="#1.1">1.1 概要</a></font>
+<br><font size="+1">&nbsp;<a href="#1.2">1.2 インストール</a></font>
+<br><font size="+1">&nbsp;<a href="#1.3">1.3 歴史</a></font>
+<br><font size="+1">&nbsp;<a href="#1.4">1.4 使い方</a></font>
+<br><font size="+1">&nbsp;<a href="#1.5">1.5 問題解決 ／ 見つけて直す</a></font>
+<br><font size="+1">&nbsp;<a href="#1.6">1.6 将来の変化</a></font>
+<br><font size="+1">&nbsp;<a href="#1.7">1.7 フィードバック</a></font>
+<br><font size="+1">&nbsp;<a href="#1.8">1.8 お礼</a></font>
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="1.1"></a><font size="+1">1.1 概要</font></h2>
+
+<p><br>　GjitenはGNOME/Gtk+用の日本語辞書プログラムです。Jim Breen氏の書いたxjdicのコードの一部と、かれのまとめた辞書ファイルを使っています。バージョン0.2からは漢字辞典も含まれています。画数や部首や各種検索キーを使って漢字を探せます。日本語の入力には XIM (X Input Method, たとえば Kinput2など）が必要です。
+<br>　このプログラムはGNUの一般使用許可契約（GPL）に基づいて使用できます。一般使用許可条項は、このパッケージと一緒に入っています。くわしくは、COPYINGを読んでください。
+<br>
+<br></p>
+<h2>
+<a NAME="1.2"></a><font size="+1">1.2 インストール</font></h2>
+<p>(1) ソースから自分でコンパイルする場合：</p>
+<blockquote><p>
+<br>$ tar zxvf gjiten-0.x.tar.gz
+<br>$ cd gjiten-0.x
+<br>$ ./configure
+<br>$ make
+<br>$ su (rootパスワード入力）
+<br># make install
+</p></blockquote>
+<p>(2)　自分でバイナリRPMを作ってインストールする場合：</p>
+<blockquote><p>
+<br>$ su (rootパスワード入力）
+<br># rpm -tb gjiten-0.x.tar.gz
+</p></blockquote>
+
+ <p> するとrpmパッケージが /usr/src/RPM/RPMS/'uname -m'/ にできているはずです。</p>
+<p>(3)　RPMパッケージのインストール：</p>
+<blockquote><p>
+
+<br># rpm -i gjiten-0.xxx.rpm　（新規インストールの場合）
+<br># rpm --upgrade gjiten-0.xxx.rpm　（アップデートの場合）
+</p></blockquote>
+
+<p>　漢字を検索するには<em>kanjidic</em>という辞書ファイルが必要です。<a href="ftp://ftp.cc.monash.edu.au/">ftp.cc.monash.edu.au</a>でダウンロードできます。kanjidic.gzとedict.gzをダウンロードしましょう。他の辞書ファイルもあります（j_places（地名辞書）、compdic（コンピュータ用語辞書など）。それがうまくすんだら、設定メニューの「辞書ファイルのパス」で指定したパスに、辞書ファイルをunzipして下さい。デフォルトパスは「/usr/share/gjiten/」です。</p>
+<p>
+　それぞれの辞書ファイル用の索引ファイルがなければ、つくりましょう。genxjdxでこのファイルを作成できます。たとえばkanjidictファイルの索引ファイルは以下のようにして作ります。</p>
+<blockquote><p>
+# genxjdx /usr/share/gjiten/kanjidict
+</p></blockquote>
+<p>これでkanjidic.xjdxができます。</p>
+<p>
+　これらのファイルを一つのディレクトリに全部移動できなければ（たとえば書き込み権限がないなどの場合）、自分のホームディレクトリ（$HOME）にディレクトリをつくって、そこからすべての辞書や索引、そして各種データファイルへのシンボリックリンクをつくっておきましょう。
+<p>
+　さらに、glibc2用の日本語localeも必要です。さもないと、全部文字化けするうえ、gjitenを起動するたびにGTK+に文句を言われることになります。ほとんどのディストリビューションには、日本語localeは含まれていません（訳注：日本語ディストリビューションにはすべて含まれているのでご安心を）。<a href="http://www.linuxi18n.org/">www.linuxi18n.org</a>や<a href="ftp://ftp.kddlabs.co.jp/">ftp.kddlabs.co.jp</a>あたりを探してみましょう。locales-ja とか localedata-ja とかいう名前のパッケージです。</p>
+<p>
+　さあ、これで準備は終わりです。gjitenが問題なく起動するはずです（少なくとも、大きな問題は:)。
+  
+<br>
+<br></p>
+<h2>
+<a NAME="1.3"></a><font size="+1">1.3 歴史</font></h2>
+
+<p><br>　gjitenを作成したのは、日本語学習用に無料辞書が必要だったのにxjdicには満足でなかったからです。xjdicのキーをいちいち覚えて、それを醜いktermの中で実行するのは、私の趣味にあいません。それに、Linuxユーザーコミュニティーが作ったプログラムをたくさん使っているのに、私はまだ何もしていませんでした。そろそろ自分でも何か書く頃合いだと思ったわけです :)。だれかこいつを便利に使ってくれれば光栄です。</p>
+<p>　最初は独自の検索ルーチンを書き始めたけど、もうできあいのものがあるのに気が付きました。というわけでxjdicのソースを使いました。私のxjd*.cのソースファイルはJim
+Breenさんのオリジナルのxjdicv2.3ファイルとほとんど同じです。
+<br>
+<br></p>
+<h2>
+<a NAME="1.4"></a><font size="+1">1.4 使用方法</font></h2>
+
+<p><br>　まずgjitenを起動しましょう。始めに<strong><em>設定</em></strong>で設定をして下さい。そうでないとgjitenはうまく動かないでしょう。単語辞書といっしょに使いたい辞書があれば、それをリストに追加して下さい。辞書はどれも、索引ファイルと同じディレクトリになくてはダメです。
+</p>
+<br><u>単語辞書の使い方:</u>
+<p>　トグルボタンで検索オプションを設定できます。ちょっといじってみると、機能はわかるでしょう。特別の辞書を使うときは、プルダウンメニューで[GeneralOptions]のオプションでその辞書を選択して下さい。日本語を入力するには、GTK+に日本語を変換してわたすプログラムをたちあげましょう。私のコンピューターでは、シフト+スペースでKinput2を起動します。Kinput2は問題なく使えますが、他の入力変換プログラムは、まだ使ってないのでわかりません。カット &amp; ペーストもちゃんと使えますよ！</p>
+<p><u>漢字辞典の使い方:</u>
+<p>　その漢字の画数を知っていれば、<strong><em>画数で検索</em></strong>オプションを使いましょう。画数を入力します。正確な画数を知らない場合は、<strong>+/-</strong>フィールドも使えます。
+<br>　部首がわかっていれば、<strong><em>部首検索</em></strong>を選びます。XIMで、部首を直接入力しましょう。または、<strong><em>部首一覧の表示</em></strong>を選んで、部首ウィンドウの中の適切な部首をクリックして下さい。十部首まで入力できます。
+<br>　キーワードで検索したければ、<strong><em>キーワード検索</em></strong>オプションを使いましょう。KanjiDic のファイルの中にある言葉がキーワードです。大体、キーワードは漢字の読みとか、漢字の英語の意味です。KanjiDic のコードも使えます。例えばここに"S8"を入力すると、８画の漢字が検索されます。KanjiDic のコードについて、くわしくはJim
+Breen 氏の KanjiDic のドキュメンテーションを読んで下さい。
+<br>　検索結果が一つにしぼられたら、その漢字についての情報を表示するウィンドウが開きます。
+<br>　一つ以上が見つかった場合は、自分の知りたい漢字をクリックすれば、その漢字についての情報が表示されます。情報の表示のされかたは、「設定」で好きに変えられます。</p>
+<p><u>KanjiPad:</u>
+<p>　KanjiPadは独立したアプリケーションです。Owen TaylorさんがKanjiPadを書きました。漢字の手書き認識プログラムです。大体良くできていて、XjdicよりもKanjiPadのほうが手早く使えるかもしれません。
+<p>　書いた漢字が認識されたら、漢字はスクリーンの右側に表示されます。この漢字を選択して、KanjiDic又はgjitenにペーストできます。詳細は、KanjiPadのREADMEを読んで下さい。
+<br>　KanjiPadの最新のバージョンは以下からダウンロードできます：<a href="http://www.gtk.org/~otaylor/kanjipad/">http://www.gtk.org/~otaylor/kanjipad/</a>
+<br><a href="http://www.gtk.org/~otaylor/kanjipad/"></a>
+<br>
+<br></p>
+<h2>
+<a NAME="1.5"></a><font size="+1">1.5 トラブルシューティング</font></h2>
+<p>
+<em>vconj ファイルが開けません</em>とか<em>radkfile ファイルが開けません</em>というメッセージが出てきたら、これらのファイルを辞書ファイルと同じディレクトリに入れる必要があります。<a href="#1.2">インストール</a>を読み直してください。
+
+<br>　gjitenが正しく起動しない場合は、gjitenのconfigファイルをチェックして下さい。ふつうは$HOME/.gnome/gjitenというファイルです。(現在、$HOME/.gjitenrcというファイルは使われていませんから、抹消してください。)
+$HOME/.gnome/gjitenを削除して、gjitenを設定しなおして下さい。手動でgjitenの中身をいじってくれてもいいですが、これはあまりおすすめしません。まず次のところを見て、既知のバグかどうかしらべてください: <a href=" http://gjiten.sourceforge.net/BUGS">http://gjiten.sourceforge.net/BUGS</a>  ここに載っていなくて、しかもその誤動作が再現できるようなら、<strong>是非とも</strong>私に報告してください。<br>
+<br></p>
+<h2>
+<a NAME="1.6"></a><font size="+1">1.6 将来の変化</font></h2>
+
+<p><br>最新リリースは、<a href="http://gjiten.sourceforge.net">http://gjiten.sourceforge.net</a>へ行って下さい。将来のリリースのためには、<a href="TODO">TODO</a>ファイルを御覧になって下さい。
+<br>
+<br></p>
+<h2>
+<a NAME="1.7"></a><font size="+1">1.7 フィードバック</font></h2>
+
+<p><br>助言やリクエスト、コメント、パッチ、バグリポート、現金（^.^）など、送って下さい。<a href="mailto:boti at rocketmail dot com">boti at rocketmail dot com</a></p>
+<p>バグリポートの時は、以下のことも書いてください。：</p>
+<ul>
+<li>gjitenのバージョン</li>
+
+<li>システムの情報</li>
+
+<li>Linuxバージョンの情報</li>
+
+<li>Xfreeのリリース</li>
+
+<li>gtkのリリース</li>
+
+<li>gnomeのリリース</li>
+
+<li>その他、重要と思った点はなんでも</li>
+</ul>
+
+<br>&nbsp;
+<h2>
+<a NAME="1.8"></a><font size="+1">1.8 クレジット</font></h2>
+
+<p><br>お世話になった人:
+<ul>
+<li>
+英和辞書、和英辞書、xjdicなどを作ったJim Breenさん</li>
+
+<li>
+Gladeを作った人</li>
+
+<li>
+Linuxのコミュニティー</li>
+</ul>
+
+</body>
+</html>

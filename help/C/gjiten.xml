@@ -1,0 +1,568 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"/usr/share/sgml/docbook/dtd/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY appversion "2.0">
+  <!ENTITY app "gjiten">
+]>
+     
+<article id="index" lang="en">
+  <articleinfo> 
+	 <title>&app; Manual V&appversion;</title>
+	  <copyright>
+	    <year>1999 - 2001</year>
+	    <holder>Botond Botyanszki</holder>
+	  </copyright>
+
+  <!-- translators: uncomment this:
+  <copyright>
+   <year>2003</year>
+   <holder>ME-THE-TRANSLATOR (Japanese translation)</holder>
+  </copyright>
+   -->
+
+&legal; 
+
+	 <authorgroup> 
+		<author> 
+		  <firstname>Botond</firstname>
+		  <surname>Botyanszki</surname> 
+		  <affiliation> 
+			 <address> <email>boti@rocketmail.com</email> </address>
+		  </affiliation>
+		</author>
+
+<!-- This is appropriate place for other contributors: translators,
+      maintainers,  etc. Commented out by default.
+       <othercredit role="translator">
+	<firstname>Latin</firstname> 
+	<surname>Translator 1</surname> 
+	<affiliation> 
+	  <orgname>Latin Translation Team</orgname> 
+	  <address> <email>translator@gnome.org</email> </address> 
+	</affiliation>
+	<contrib>Latin translation</contrib>
+      </othercredit>
+-->
+	 </authorgroup>
+</articleinfo>
+
+  <indexterm zone="index"> 
+    <primary>gjiten</primary> 
+  </indexterm>
+  <indexterm zone="index"> 
+    <primary>Dictionaries</primary> 
+  </indexterm>
+
+<!-- ============= Document Body ============================= -->
+<!-- ============= Introduction ============================= -->
+   <sect1 id="Introduction">
+      <title>Introduction</title>
+      <para>
+	<application>Gjiten</application> is a Japanese dictionary program. 
+	It also has a kanji dictionary. Any combination of stroke
+	number, radicals and search key can be used for kanji lookups.
+	<application>Gjiten</application> requires a working X Input Method  
+	[e.g. <application>kinput2</application>] for Japanese input.
+      </para>
+      <para>
+	This program is licensed under the terms of the GNU GPL, 
+	a copy of which you should have received with this package. 
+	See the file COPYING for more details.
+      </para>
+    </sect1>
+<!-- ============= History ============================= -->
+    <sect1 id="History">
+      <title>History</title>
+      <para>
+	I wrote <application>gjiten</application> because I needed a free software dictionary for 
+	my Japanese studies and wasn't satisfied with <application>xjdic</application>. 
+	Learning all <application>xjdic</application>'s keys and running it in the ugly 
+	<application>kterm</application> isn't my taste. The other reason is that I've been using 
+	so much software written by the Open Source Software community without any contributions, 
+	so I thought it was time to write something ;) 
+	Hopefully someone finds this little program useful. 
+	Older relesases (pre 2.0) used some code from <application>xjdic</application> written by Jim Breen, 
+	but this has been removed.
+      </para>
+    </sect1>
+<!-- ============= Installation ============================= -->
+    <sect1 id="Installation">
+      <title>Installation</title>
+      <para>Rolling your own from a tarball:
+	<screen><userinput>
+	    <prompt>%</prompt><command> tar </command><option>zxpvf </option><filename>gjiten-x.x.tar.gz</filename>
+	    <prompt>%</prompt><command> cd </command><filename>gjiten-x.x</filename>
+	    <prompt>%</prompt><command> ./configure</command>
+	    <prompt>%</prompt><command> make</command>
+	    <prompt>%</prompt><command> make install</command></userinput></screen>
+      </para>
+      <para>
+	Or you can make a binary rpm the following way.
+	You need to be root for this.
+	<screen><userinput>
+	    <prompt>%</prompt><command> rpm </command><option>-tb </option><filename>gjiten-x.x.tar.gz</filename></userinput></screen>
+	The rpm package should be created under <filename>/usr/src/RPM/RPMS/<replaceable>`uname -m`</replaceable>/</filename>
+	See rpm(8) for details.
+      </para>
+      <para>
+	Installation from binary rpm:
+	<screen><userinput>
+	    <prompt>%</prompt><command> rpm </command><option>-i </option><filename>gjiten-x.xxx.rpm</filename></userinput></screen>
+	Upgrading from rpm:
+	<screen><userinput>
+	    <prompt>%</prompt><command> rpm </command><option>--upgrade </option><filename>gjiten-x.xxx.rpm</filename></userinput></screen>
+      </para>
+      <para>Creating a debian package from the tarball:
+	<screen><userinput>
+	    <prompt>%</prompt><command> tar </command><option>zxpvf </option><filename>gjiten-x.x.tar.gz</filename>
+	    <prompt>%</prompt><command> cd </command><filename>gjiten-x.x</filename>
+	    <prompt>%</prompt><command> dpkg-buildpackage </command><option>-rfakeroot </option>
+	    </userinput></screen>
+	This should create <filename>../gjiten_x.x-1_i386.deb</filename>.
+      </para>
+      <para>
+	Then you should install this binary package with <userinput><command>dpkg</command><option> -i</option></userinput>.
+      </para>
+    </sect1>
+
+<!-- ============= Dictionary files ============================= -->
+    <sect1 id="Dictfiles">
+      <title>Dictionary files</title>
+      <para>
+	<application>Gjiten</application> needs dictionary files to function. 
+
+	You will need the <filename>kanjidic</filename> dictionary file for kanji lookups 
+	for <application>KanjiDic</application> and other dictionary files for the word dictionary 
+	in edict format. You can get these from 
+	<ulink url="ftp://ftp.cc.monash.edu.au">ftp://ftp.cc.monash.edu.au</ulink>.
+	You should download <filename>kanjidic.gz</filename> and <filename>edict.gz</filename>. 
+	There are some other dictionary files also you might be interested in.
+	(<filename>j_places, compdic, etc</filename>.) 
+	<command>gunzip</command> the dictionary files to the <filename>
+	Path To Dictionary Files</filename> set in <guibutton>Preferences</guibutton>. 
+	This should be the same directory where the <filename>radkfile</filename> and 
+	<filename>vconj</filename> files got installed.
+	[default: <filename>/usr/share/gjiten/</filename>].
+
+	The source tarball contains a script <filename>dicfiles/getdics</filename> that will download a 
+	bunch of dictionary files with <application>wget</application>. 
+      </para>
+      <para>
+	The Debian distribution contains three dictionary packages that you can install via 
+	apt-get: <filename>enamdict</filename>,
+	<filename>edict</filename> and <filename>kanjidicic</filename>
+      </para>
+      <para>
+	As of v2.0 <application>Gjiten</application> uses the GTK2 and GNOME2 libraries. These handle 
+	text as unicode internally unlike their previous versions. Gjiten now needs the dictionary and data 
+	files in UTF-8 encoding instead of EUC-JP.
+
+	Please convert the dictionary and data files to UTF-8. You can use <application>iconv</application>
+	for this.
+
+	<screen><userinput>
+	    <prompt>%</prompt><command> iconv </command><option>-f EUC-JP -t UTF-8 </option><filename>dictfile </filename><option>-o </option><filename>dictfile.utf8</filename>
+	</userinput></screen>
+	
+	If the dictionary file is not UTF-8, Gjiten will complain after you add them in the preferences. 
+      </para>
+      <para>
+	The datafiles <filename>radkfile.utf8</filename> and <filename>vconj.utf8</filename> are needed by 
+	<application>Gjiten</application>. Please copy these into the directory of your dictionary files.
+      </para>
+
+    </sect1>
+    <sect1 id="Usage">
+      <title>Usage</title>
+      <para>
+	Start up <application>gjiten</application>.
+      </para>
+      <para>
+	Set the <guibutton>Preferences</guibutton> first, otherwise 
+	<application>gjiten</application> might not work correctly. 
+	Add the dictionary files to the list that you want to use with the word dictionary. 
+      </para>
+      <para>
+	Please note that the kanjidic dictionary file should not be added
+	to the list together with the other word dictionary files, 
+	it has a separate file entry box. 
+      </para>
+      <sect2 id="Word">
+	<title>Word dictionary usage</title>
+	<para>
+	  You can set the search options with the toggle buttons. Experiment with them a little 
+	  to see what they do. Select the dictionary file in the <guibutton>pulldown menu</guibutton>
+	  under general options that you want to search in.
+	</para>
+	<para>
+	  The <guilabel>Auto Adjust Options</guilabel> can be quite a handy feature.
+	  <application>Gjiten</application> will search for matches setting the <guilabel> English 
+	  Search Options</guilabel> in the following order if it doesn't find any match for your prior
+	  criteria: <guilabel>Whole Expressions</guilabel> -> <guilabel>Whole Words</guilabel> -> 
+	  <guilabel>Any Matches</guilabel>. Similarly in the case of a Japanese search it will set
+	  the toggle buttons from top to bottom. 
+	</para>	
+	<para>
+	For Japanese input, you have to activate (shift-space for <application>kinput2</application> 
+	in my case) the program on your system that can convert and pass Japanese text to GTK.
+	Cut and paste works well also! ;)
+	</para>
+      </sect2>
+      <sect2 id="kanji">
+	<title>Kanji dictionary usage</title>
+	<para>
+	  I'll refer to the kanji dictionary part of <application>gjiten</application> as  
+	  <application>KanjiDic</application>.
+	</para>
+	<para>
+	  If you know the stroke number of the kanji, enable the <guilabel>Search By Strokes</guilabel> 
+	  option. Set the stroke number. If you are not exactly sure, use the <guilabel>+/- field
+	  </guilabel> also. 
+	</para>
+	<para>
+	  Enable the <guilabel>Search By Radical</guilabel> option if you know the radical(s) of the kanji.
+	  Either enter the radical directly through your XIM, or click on the 
+	  <guibutton>Show Radical List</guibutton> for the radical window. Here you can click on the 
+	  appropriate radical to <action>pop it into</action> the <guilabel>radical search entry</guilabel>.
+	  You can enter up to 10 radicals.
+	</para> 
+	<para>
+	  If you want to search by a keyword also, then enable the <guilabel>Search By Key</guilabel> 
+	  option. A keyword can be anything that the <filename>Kanjidic</filename> file contains. 
+	  Usually this will be a reading (in kana) or an english meaning of the kanji. 
+	  But it can be a <filename>kanjidic</filename> code also. 
+	  For example entering S8 here would give all the kanji with 8 strokes.
+	  Read Jim Breen's documentation about the kanjidic file if you want to know more about these.
+	</para>
+	<para>
+	  KanjiDic has real-time kanji lookup. This means that while you are entering radicals it will
+	  look up and show the kanji matching your criteria without having to press the <guibutton> 
+	    search</guibutton> every time you enter a radical.
+	  If only 1 kanji is found then an info window will <action>pop up</action> with the 
+	  information about the kanji. If more than one is found then you have to click on the kanji to
+	  get the info about it. You can customize these info fields shown in the 
+	  <guibutton>Preferences</guibutton>. 
+	</para>
+      </sect2>
+      <sect2 id="comdline">
+	  <title>Command Line</title>
+	  <para>
+	    Issue the command <userinput><command>gjiten</command><option> --help</option></userinput>
+	    to get a list of all the command line arguments that <application>gjiten</application>
+	    understands. Here is the important part:
+	    <programlisting>
+ gjiten options
+	      -k, --kanjidic              Start up Kanjidic instead of Word dictionary
+	      -w, --word-lookup=WORD      Look up WORD in first dictionary
+	      -l, --kanji-lookup=KANJI    Look up KANJI in kanji dictionary
+	      -c, --clip-kanji            Look up kanji from clipboard
+	      -v, --clip-word             Look up word from clipboard
+	    </programlisting>
+	    <tip>
+	      <para>
+		As a useful utilization of these I assigned a shortcut <keycap>ctrl-alt-w</keycap>
+		with my window manager to the command <command>gjiten</command><option> -v</option>.
+		In the <application>Sawfish</application> window manager you can add this command to 
+		your existing shortcuts as <command>run-shell-command</command>.
+		So I just have to highlight the text then press <keycap>ctrl-alt-w</keycap> 
+		and <application>gjiten</application> gets fired up
+		with the search results already looked up. You can add another shortcut for the kanji
+		lookup.
+	      </para>
+	    </tip>
+	  </para>
+	</sect2>
+	<sect2 id="KanjiPad">
+	  <title>KanjiPad</title>
+	  <para>
+	    <application>KanjiPad</application> is a separate application written by Owen Taylor. 
+	    It is a handwriting recognition program for kanji. 
+	    Does a quite good job in many cases and might be faster to use then KanjiDic. 
+	    Select the kanji that appears on the right side of <application>KanjiPad</application> 
+	    after recognition, then you can paste this into <application>KanjiDic</application> 
+	    or the into word dictionary for further lookups. 
+	    Read it's README for more info. 
+	  </para>
+	  <para>
+	    The latest version of <application>KanjiPad</application> can be downloaded from
+	    <ulink url="http://www.gtk.org/~otaylor/kanjipad/"> 
+	      http://www.gtk.org/~otaylor/kanjipad/</ulink> 
+	  </para>
+	</sect2>
+    </sect1>
+<!-- ============= Troubleshooting ============================= -->
+    <sect1 id="troubleshooting">
+      <title>Troubleshooting</title>
+      <para>
+	Here are some common errors and their solutions users usually get when running <application>
+	  gjiten</application>.
+      </para>
+
+      <sect2 id="ferror">
+	<title>File errors</title>
+	<para>
+	  If you get a message <guilabel>unable to open file: vconj.utf8 </guilabel>
+	  or <guilabel>unable to open file: radkfile.utf8</guilabel> 
+	  then you need to put these two data files in the same directory with your dictionary files set 
+	  under the <guilabel>Path To Dictionary Files</guilabel> under <guibutton>Preferences</guibutton>.
+	  Please read the <link linkend="Dictfiles">installation instructions</link> again. 
+	  </para>
+	</sect2>
+
+      <sect2 id="ximerrors">
+	<title>Japanese input (mostly Kinput2)</title>
+	<para>
+	  <application>Gjiten</application> doesn't have any code that has to do with Japanese input. 
+	  The GTK library handles this completely. So if your XIM doesn't work, don't blame me! ;)
+	</para>
+	<para>
+	  Few things that might help to make it work for you:
+	  Make sure your XIM works fine with other applications. Try <application>Kterm</application>
+	  for example. If it works with Kterm, then try a GTK+ program. 
+	  </para>
+	  <para>
+     	   <application>Kinput2</application> needs LC_ALL to be set to ja_JP in order to work, otherwise the input 
+		window won't pop up. You don't need to export this, <application>Gjiten</application> will do it for you
+		if you enable it in the Preferences (under fonts).
+	  </para>
+	  <para>
+		You also need the Japanese locale for glibc to be able to input with kinput2. 
+		 Under debian, you will 	have to put <envar>ja_JP.EUC-JP EUC-JP</envar> into 
+		<filename>/etc/locale.gen</filename>, then rerun <application>locale-gen</application>
+		Other distributions should ship this with a locales package.
+	  </para>
+       </sect2>
+	
+       <sect2 id="winman">
+	<title>Window manager and Kinput2 problems</title>
+	<para>
+	  There was no solution to this problem in the docs, though lately it appeared in the kinput2(1) 
+	  manual. 
+	</para>
+	<para>
+	    Contributed by John Seebach <email>jseebach(at)mindless.com</email>
+	</para>
+	<para>
+	  Certain window managers (I've seen this problem with WindowMaker, Sawmill, and KWM, 
+	  but there are probably more as well) don't handle <application>kinput2</application> pop-up
+	  windows particularly well. You'll know you're using one of those Window Managers if 
+	  you fire up <application>gjiten</application>, try to start the conversion widget, and get 
+	  a window that blinks uncontrollably and doesn't allow you to enter anything to be converted.
+	</para>
+	<para>
+	  Fortunately, there are some workarounds. 
+	  First, try adding the following lines to the kinput2 section of your 
+	  <filename>.Xdefaults</filename> or <filename>.Xresources</filename>:
+	  <programlisting>
+  Kinput2*useOverrideShellForMode: true
+  *preeditType: OverTheSpot 
+	  </programlisting>
+	  Next, you need to tell your window manager how to deal with a <application>kinput2</application>
+	  window. I've only tested this with <application>WindowMaker</application>, because that's 
+	  what I use, so outside of that,  your on your own.
+	</para>
+	<para>
+	  If you're using <application>WindowMaker</application>, try adding the following lines to 
+	  <filename>~/GNUstep/Defaults/WMWindowAttributes</filename> :
+	  <programlisting>
+  Kinput2 = { 
+   DontSaveSession = Yes;
+   KeepInsideScreen = Yes;
+   KeepOnTop = Yes;
+   NoAppIcon = Yes;
+   NoHideOthers = Yes;
+   NoKeyBindings = Yes;
+   NoMouseBindings = Yes;
+   NoResizebar = Yes;
+   NotClosable = Yes;
+   NotMiniaturizable = Yes;
+   Omnipresent = Yes;
+   SkipWindowList = Yes;
+   Unfocusable = Yes;
+ };
+	  </programlisting>
+
+	  You may either need to <action>log out</action> of your X session and start again, or try:
+	  <screen><userinput><prompt>%</prompt><command> xrdb</command><option> -load</option><filename> .Xresources</filename></userinput></screen>
+	  in order for the changes to your X resources to take effect.
+	</para>
+	</sect2>
+      <sect2 id="mojibake">
+	<title>Fonts and mojibake</title>
+	<para>
+ 	Mojibake occurs when you get garbage instead of Japanese characters. With GTK2 and Gjiten,
+	this will be in the form of empty boxes in place of Japanese characters. This is a font problem.
+	</para>
+	<para>
+	Antialiasing (with GDK) and Japanese don't work well at the time. You should disable it in the 
+	<guibutton>Preferences</guibutton>. 
+	</para>
+	<para>
+	You also need to select a fontset that has Japanese characters to be used with <application>Gjiten</application>.
+	"Sans" and "Serif" and also "unifont" should usually work.
+	</para>
+	<para>
+		<application>kinput2</application> needs <envar>LC_ALL</envar> to be set to 
+		<replaceable>ja_JP</replaceable>. If you don't have the <envar>LANGUAGE</envar> environment variable
+		set, then this will also default to <replaceable>ja_JP</replaceable> and all the widget text and menus will be in 
+		Japanese. If you wan't English then check the "Force LANGUAGE=C" option in the Preferences.
+	</para>
+	<para>
+		The last three options under the Fonts tab need <application>gjiten</application> to be restarted 
+for these to take effect, because they are setting environment variables.
+	</para>
+	</sect2>
+
+      <sect2 id="netscape">
+	<title>Pasting from Netscape</title>
+	<para>
+	  If pasting Japanese text from <application>Netscape</application> into 
+	  <application>Gjiten</application> has no effect, only non-japanese can be pasted,
+	  then set the <envar>LC_ALL</envar> environment variable to <replaceable>ja_JP</replaceable> in
+	  your shell before starting <application>Netscape</application> 
+	  (<userinput><command>export</command><option> LC_ALL</option>=<replaceable>ja_JP</replaceable></userinput> for bash). This solved the problem in my case. 
+	</para>
+      </sect2>
+      <sect2 id="start">
+	<title>Settings</title>
+	<para>
+	  Gjiten uses <application>gconf</application> to store its settings, so you can use the
+  	  <application>gconf-editor</application> to poke the settings directly under <filename>apps/gjiten</filename>.
+	</para>
+	</sect2>
+      <sect2 id="bugs">
+	<title>Bugs</title>
+	<para>
+	  Check for known bugs here first:<ulink url="http://gjiten.sourceforge.net/BUGS">
+	    http://gjiten.sourceforge.net/BUGS</ulink>. 
+	  If it's not listed here and you can reproduce it then report it to me please. 
+	</para>
+      </sect2>
+    </sect1>
+
+<!-- =============  ============================= -->
+    <sect1 id="improve">
+      <title>Future Improvements</title>
+      <para>
+	Check out <ulink url="http://gjiten.sourceforge.net">http://gjiten.sourceforge.net</ulink>
+	for the latest release. 
+	Read the <ulink url="http://gjiten.sourceforge.net/TODO">TODO</ulink> file to see 
+	what's planned for future releases. Feel free to <link linkend="emailme">email me</link> 
+	with other suggestions. 
+	</para>
+      <para>
+	A few people have asked for a <option>--disable-gnome</option> <command>configure</command> 
+	option (that is a GTK+ only build).
+	IMHO: if you can afford to have the GTK+ libs installed on your system, then you can afford the 
+	Gnome libs also. 
+	The gnome libraries provide features that would take me much longer to code in pure GTK+. 
+	I would have to rewrite and add lots of stuff to the sources for this, and I just don't have the
+	time. Instead I'd like to add new features.
+	If you want to do this, then feel free to hack code and <link linkend="emailme">send</link> 
+	a patch to me. 
+      </para>
+    </sect1>
+
+<!-- ============= Feedback  ============================= -->
+    <sect1 id="feedback">
+      <title>Feedback</title>
+      <para>
+	Send me suggestions, wishes, comments, patches, bug reports, money [optional] ;) 
+	<anchor id="emailme"/>You can contact me at: <email>boti@rocketmail.com</email>
+      </para>
+      <para>
+	If you send me bugreports, please include the following information also:
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      gjiten version
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      distribution and other info about your OS
+	    </para>
+	  </listitem>
+	  <listitem> 
+	    <para>
+	      Xfree release
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      gtk release
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      gnome releas
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      output of <userinput><command>gdb </command><replaceable>gjiten</replaceable></userinput>
+	      and <userinput><command>strace </command><replaceable>gjiten</replaceable></userinput>
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      and any other info you might think is important.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </sect1>
+    <sect1 id="credits">
+      <title>Credits</title>
+      <para>
+	Thanx go to: 
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      Mike Fabian <email>mfabian at suse dot de</email> for various patches and suggestions, 
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Yamagata Hiroo <email>hiyori13 at alum dot mit dot edu</email> for translation revisions, 
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      John Seebach <email>jseebach at mindless dot com</email> for doc and makefile fixes,
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Jason Vertrees <email>tree at computer dot org</email> and his professor 
+	      Manabu Mizobe for the Japanese translation of the docs and HP, I was to lazy to do it :-)
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+		Ryan Nielsen <email>ran at gondolin dot fortyoz dot org</email> for his feature enhancing patch.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Jim Breen <email>j.breen at csse dot monash dot edu dot au</email> for creating and maintaining 
+		the Japanese-English dictionary files and xjdic,
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      The Glade people, for making my job easier,
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      People who write free software. You know who you are! 
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </sect1>
+</article>
+
+

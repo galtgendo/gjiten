@@ -1,0 +1,11 @@
+# List of source files containing translatable strings.
+
+data/gjiten-settings.glade
+src/gjiten.c
+src/pref.c
+src/kanjidic.c
+src/conf.c
+src/dicfile.c
+src/dicutil.c
+src/error.c
+src/worddic.c

@@ -1,0 +1,46 @@
+gjiten (2.2-1) unstable; urgency=low
+  * Add dependency on kanjidic and edict, convert them to utf8
+  * See changelog
+    
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Tue, 10 Oct 2003 21:52:42 +0900
+
+
+gjiten (2.1-1) unstable; urgency=low
+  * See changelog
+    
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Mon, 05 May 2003 21:48:13 +0900
+
+gjiten (2.0-2) unstable; urgency=low
+  * See changelog
+    
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Sat, 04 Jan 2003 13:37:13 +0900
+
+gjiten (2.0-1) unstable; urgency=low
+  *  GNOME2 port prerelease
+    
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Fri, 14 Jun 2002 14:31:22 +0900
+
+gjiten (1.0-2) unstable; urgency=low
+  *  gjiten-1.0-fix applied
+    
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Wed, 23 Jan 2002 12:10:12 +0900
+
+gjiten (1.0-1) unstable; urgency=low
+  * See changelog
+
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Sat, 18 Jan 2002 18:38:19 +0900
+
+gjiten (0.9-1) unstable; urgency=low
+  * See changelog
+
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Tue, 23 Oct 2001 18:13:29 +0900
+
+gjiten (0.8-1) unstable; urgency=low
+
+  * Initial Release for debian.
+
+ -- Botond Botyanszki <Botond Botyanszki@users.sourceforge.net>  Sat, 14 Apr 2001 18:13:29 +0900
+
+Local variables:
+mode: debian-changelog
+End:

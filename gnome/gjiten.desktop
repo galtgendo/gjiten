@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Gjiten
+Name[ja]=Gjiten
+Comment=Japanese dictionary
+Comment[ja]=日本語辞典
+Categories=GNOME;Application;Utility;
+Encoding=UTF-8
+Exec=gjiten
+Icon=jiten.png
+StartupNotify=true
+Terminal=false
+Type=Application

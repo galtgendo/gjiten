@@ -1,0 +1,40 @@
+%define prefix /usr
+
+Summary: Japanese dictionary for GNOME.
+Name: gjiten
+Version: @VERSION@
+Release: 1
+Copyright: GPL
+Group: X11/Applications
+Source: gjiten-@VERSION@.tar.gz
+BuildRoot: /var/tmp/@PACKAGE@-@VERSION@-root
+Packager: Botond Botyanszki <b0ti@users.sourceforge.net>
+URL: http://gjiten.sourceforge.net
+
+%description
+Gjiten is a Japanese dictionary program for GNOME. It also has a kanji dictionary; 
+any combination of stroke number, radicals and search key can be used for kanji lookups. 
+Requires dictionary files in edict format and a working X Input Method [eg. kinput2] for Japanese input.
+
+See http://gjiten.sourceforge.net for dictionary files and updates.
+
+%prep
+%setup
+%build
+./configure --prefix=%prefix
+make
+
+%install
+if [ -d $RPM_BUILD_ROOT ] ; then rm -rf $RPM_BUILD_ROOT; fi
+mkdir $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-, root, root)
+
+%doc README COPYING TODO AUTHORS INSTALL NEWS ChangeLog
+%{prefix}/bin/*
+%{prefix}/share/*

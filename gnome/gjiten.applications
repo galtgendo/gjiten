@@ -1,0 +1,8 @@
+gjiten
+	command=gjiten
+	name=gjiten
+	can_open_multiple_files=false
+	expects_uris=false
+	requires_terminal=false
+	mime_types=text/*,text/html,text/plain
+	uses_gnomevfs=false
