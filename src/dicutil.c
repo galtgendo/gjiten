@@ -171,7 +171,7 @@ int get_jp_match_type(gchar *line, gchar *srchstrg, int offset) {
       }
       else return START_WITH_MATCH;
     }
-    else {
+    else { // has an alpha char before
       if (g_unichar_isalpha(g_utf8_get_char(line + offset + srchstrglen)) == FALSE)
 				return END_WITH_MATCH;
     }

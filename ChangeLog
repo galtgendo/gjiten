@@ -4,6 +4,7 @@ v2.4
     - Translation fixes and desktop file i18n. (Daichi Kawahata)
     - Dicfile match colorization fix for gettext translation.
     - KanjiDic history width problem fixed.
+    - Added support for the Chinese CEDICT dictionary.
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.

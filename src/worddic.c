@@ -248,7 +248,7 @@ static void Verbinit() {
   verbinit_done = TRUE;
 }
 
-static void print_matches_in(GjitenDicfile *dicfile) {
+static inline void print_matches_in(GjitenDicfile *dicfile) {
 	//Print dicfile name if all dictionaries are selected
 	if ((dicname_printed == FALSE) && (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active)) {
 		gchar *tmpstr, *hl_start_ptr;
@@ -265,20 +265,12 @@ static void print_matches_in(GjitenDicfile *dicfile) {
 		gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
 																						 dicfile->name, -1, "brown_foreground", NULL);
 		gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, tmpstr + hl_end, -1);
-
 		g_free(tmpstr);
-
-		/*
-			gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, , -1);
-			gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
-			dicfile->name, -1, "brown_foreground", NULL);
-			gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, ":\n", -1);
-		*/
 		dicname_printed = TRUE;
 	}
 }
 
-void print_verb_inflections(GjitenDicfile *dicfile, gchar *srchstrg) {
+static void print_verb_inflections(GjitenDicfile *dicfile, gchar *srchstrg) {
 	int srchresp, roff, rlen;
   int32_t oldrespos, respos;
   int gjit_search = SRCH_START;
@@ -366,25 +358,28 @@ static void print_result(gchar *txt2print, int result_offset, gchar *searchstrg)
   GtkTextMark *linestart;
   GtkTextIter startmatch, endmatch;
 
-  linestart = gtk_text_buffer_create_mark(GTK_TEXT_BUFFER(wordDic->text_results_buffer), "linestart", &wordDic->iter, TRUE);
+  linestart = gtk_text_buffer_create_mark(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+																					"linestart", &wordDic->iter, TRUE);
 
   strg_to_roff = (gchar *) g_strndup(txt2print, result_offset);
   strlen_to_roff = g_utf8_strlen(strg_to_roff, -1);
   
   currentchar = txt2print;
 
-  while (g_unichar_isspace(*currentchar) == FALSE) { // find first space
+	while (!((*currentchar == '[') || (*currentchar == '/'))) { // find end of [KANJI]
     if ((size_t) (currentchar - txt2print) >= strlen(txt2print)) break;
     currentchar = g_utf8_next_char(currentchar);
   }
-  
-  //print out japanese word
+  currentchar = g_utf8_prev_char(currentchar); // go back to the space
+
+  //print out japanese word == [KANJI]
   if (gjitenApp->conf->bigwords == FALSE) {
-    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, txt2print, currentchar - txt2print); 
+    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+													 &wordDic->iter, txt2print, currentchar - txt2print); 
   }
   else {
-    gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, txt2print, 
-																						 currentchar - txt2print, "largefont", NULL);
+    gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,
+																						 txt2print, currentchar - txt2print, "largefont", NULL);
   }
   
   currentchar = g_utf8_next_char(currentchar);
@@ -394,30 +389,37 @@ static void print_result(gchar *txt2print, int result_offset, gchar *searchstrg)
     while(*(currentchar) != ']') { //find ending ]
       currentchar = g_utf8_next_char(currentchar);
     }
-    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, kana_start, currentchar - kana_start); //print out kana reading
+    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+													 &wordDic->iter, kana_start, currentchar - kana_start); //print out kana reading
     gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, ") ", 2);
     currentchar += 3;
   }
   else {
-    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, " ", 1); // insert space 
+    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+													 &wordDic->iter, " ", 1); // insert space 
     currentchar++;
   }
 
-  while ((currentchar < txt2print + strlen(txt2print)) && (*currentchar != '\n')) {
+  while (currentchar < txt2print + strlen(txt2print)) {
+		if (*currentchar == '\n') break;
     exp_start = currentchar;
-    while ((*currentchar != '/')) { 
+    while (!((*currentchar == '/') || (*currentchar == '\n'))) { 
       currentchar = g_utf8_next_char(currentchar);  
     }
-    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, exp_start, currentchar - exp_start); //print out expression
+		if (*currentchar == '\n') break;
+    gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+													 &wordDic->iter, exp_start, currentchar - exp_start); //print out expression
     gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, "; ", 2);
-    currentchar++;
+		currentchar = g_utf8_next_char(currentchar);  
   }
-  gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, "\n", 1); // insert linebreak
+  gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer),
+												 &wordDic->iter, "\n", 1); // insert linebreak
 
-  //find searchstrg matches in the line we print and highlight it.
+  //find searchstrg matches in the line. we print and highlight it.
   gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &endmatch, linestart);
   
-  while (gtk_text_iter_forward_search(&endmatch, searchstrg, 0, &startmatch, &endmatch, &wordDic->iter) == TRUE) {
+  while (gtk_text_iter_forward_search(&endmatch, searchstrg, 0,
+																			&startmatch, &endmatch, &wordDic->iter) == TRUE) {
     gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), 
 																			"blue_foreground", &startmatch, &endmatch);
   }
@@ -587,7 +589,7 @@ int lower_search_option() {
   return FALSE;
 }
 
-void worddic_hira_kata_search(GjitenDicfile *dicfile, gchar *srchstrg) {
+static void worddic_hira_kata_search(GjitenDicfile *dicfile, gchar *srchstrg) {
 	gchar *hirakata;
 	if (gjitenApp->conf->search_kata_on_hira) {
 		if (isKatakanaString(srchstrg) == TRUE) {
@@ -605,7 +607,7 @@ void worddic_hira_kata_search(GjitenDicfile *dicfile, gchar *srchstrg) {
 	}
 }
 
-void worddic_search(unsigned char *srchstrg) {
+static void worddic_search(unsigned char *srchstrg) {
   gchar appbarmsg[50];
   int truncated;
 	GjitenDicfile *dicfile;
