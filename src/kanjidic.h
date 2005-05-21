@@ -91,6 +91,7 @@ struct _KanjiDic {
 	GtkWidget *button_clearrad;
 	GtkWidget *button_cleark;
 	GtkWidget *vbox_history;
+ 	GtkWidget *scrolledwin_history;
 	GSList *kanji_history_list;
 	GtkTextTag *tag_large_font;
 

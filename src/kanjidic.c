@@ -743,6 +743,8 @@ void history_add(gunichar unicharkanji) {
   gtk_box_reorder_child(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, 0);
   gtk_widget_show(history_kanji_button);
 
+	if (GTK_WIDGET_VISIBLE(kanjiDic->scrolledwin_history) != TRUE)
+		gtk_widget_show(kanjiDic->scrolledwin_history);
 }
 
 
@@ -1012,6 +1014,8 @@ void history_init() {
     gtk_box_pack_start(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, FALSE, FALSE, 0);
     // gtk_box_reorder_child(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, 0);
     gtk_widget_show(history_kanji_button);
+		if (GTK_WIDGET_VISIBLE(kanjiDic->scrolledwin_history) != TRUE)
+			gtk_widget_show(kanjiDic->scrolledwin_history);
     tmp_list_ptr = g_slist_next(tmp_list_ptr);
   }
 }
@@ -1068,9 +1072,7 @@ KanjiDic *kanjidic_create() {
   GtkWidget *hbox;
   GtkWidget *frame_kinfo;
   GtkWidget *tmpimage;
- 	GtkWidget *scrolledwin_history;
 	GtkWidget *vpane;
-
 
   load_radkfile();
 
@@ -1136,7 +1138,6 @@ KanjiDic *kanjidic_create() {
   gtk_widget_show(table_koptions);
   gtk_container_add(GTK_CONTAINER(frame_koptions), table_koptions);
 
-  //FIXME: use mnemonics
   kanjiDic->checkb_stroke = gtk_check_button_new_with_mnemonic(_("Search By _Strokes:")); 
   gtk_widget_show(kanjiDic->checkb_stroke);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->checkb_stroke, 0, 1, 0, 1,
@@ -1261,18 +1262,16 @@ KanjiDic *kanjidic_create() {
   gtk_box_pack_start(GTK_BOX(hbox), scrolledwin_kinfo, TRUE, TRUE, 0);
   gtk_container_add(GTK_CONTAINER(scrolledwin_kinfo), kanjiDic->text_kanjinfo_view);
 
-  scrolledwin_history = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwin_history),
+  kanjiDic->scrolledwin_history = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(kanjiDic->scrolledwin_history),
 																 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_widget_show(scrolledwin_history);
 
   kanjiDic->vbox_history = gtk_vbox_new(FALSE, 0);
   gtk_widget_show(kanjiDic->vbox_history);
   history_init();
 
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolledwin_history), kanjiDic->vbox_history);
-					//  gtk_container_add(GTK_CONTAINER(scrolledwin_history), kanjiDic->vbox_history);
-  gtk_box_pack_start(GTK_BOX(hbox), scrolledwin_history, FALSE, FALSE, 0);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(kanjiDic->scrolledwin_history), kanjiDic->vbox_history);
+  gtk_box_pack_start(GTK_BOX(hbox), kanjiDic->scrolledwin_history, FALSE, TRUE, 0);
 
   vpane = gtk_vpaned_new();
   gtk_widget_show(vpane);
