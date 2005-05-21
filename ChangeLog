@@ -1,13 +1,14 @@
 v2.4
-    - gettext fix for kanji info pref dialog (Daichi Kawahata)
-    - KanjiDic segv on CTRL-Q fixed (Alexis S. L. Carvalho)
-    - Translation fixes and desktop file i18n (Daichi Kawahata)
+    - Gettext fix for kanji info pref dialog. (Daichi Kawahata)
+    - KanjiDic segv on CTRL-Q fixed. (Alexis S. L. Carvalho)
+    - Translation fixes and desktop file i18n. (Daichi Kawahata)
+    - Dicfile match colorization fix for gettext translation.
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.
     - Made search result textviews non-editable.
     - Segv after dicfile preferences change fixed.
-    - Added Show/Hide search options button to the toolbar
+    - Added Show/Hide search options button to the toolbar.
 
 v2.2 (06/13/2004)
     - Search hiragana on katakana input and vice versa.

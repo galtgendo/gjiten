@@ -3,7 +3,6 @@
 -only open files (radkfile, vconj) if needed
 -Start Kanjidic, close word dic, preferences -> ok.
 -update radical table with unicode radicals http://www.unicode.org/charts/
-DONE -Katakana/Hiragana search: requested by wnelson at ao.net
 -Setting envvars needs restart => into doc and warning dialog.
 -Whole Expr search, fix first highlights which are not whole words.
 -serach for "h" & whole Word gives unrelevant matches.

@@ -248,6 +248,35 @@ static void Verbinit() {
   verbinit_done = TRUE;
 }
 
+static void print_matches_in(GjitenDicfile *dicfile) {
+	//Print dicfile name if all dictionaries are selected
+	if ((dicname_printed == FALSE) && (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active)) {
+		gchar *tmpstr, *hl_start_ptr;
+		gint hl_start = 0;
+		gint hl_end = 0; 
+						
+		tmpstr = g_strdup_printf(_("Matches in %s:\n"), dicfile->name);
+		hl_start_ptr = strstr(tmpstr, dicfile->name);
+		hl_start = hl_start_ptr == NULL ? 0 : hl_start_ptr - tmpstr;
+		hl_end = hl_start + strlen(dicfile->name);
+
+		if (hl_start > 0)
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, tmpstr, hl_start);
+		gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
+																						 dicfile->name, -1, "brown_foreground", NULL);
+		gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, tmpstr + hl_end, -1);
+
+		g_free(tmpstr);
+
+		/*
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, , -1);
+			gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
+			dicfile->name, -1, "brown_foreground", NULL);
+			gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, ":\n", -1);
+		*/
+		dicname_printed = TRUE;
+	}
+}
 
 void print_verb_inflections(GjitenDicfile *dicfile, gchar *srchstrg) {
 	int srchresp, roff, rlen;
@@ -305,14 +334,7 @@ void print_verb_inflections(GjitenDicfile *dicfile, gchar *srchstrg) {
 					printit = FALSE; // Display only EXACT_MATCHes
 
 				if (printit == TRUE) {
-					//Print dicfile name if all dictionaries are selected
-					if ((dicname_printed == FALSE) && (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active)) {
-						gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, _("Matches in "), -1);
-						gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
-																										 dicfile->name, -1, "brown_foreground", NULL);
-						gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, ":\n", -1);
-						dicname_printed = TRUE;
-					}
+					print_matches_in(dicfile);
 					gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
 																									 _("Possible inflected verb or adjective: "), 
 																									 -1, "brown_foreground", NULL);
@@ -518,14 +540,7 @@ static void search_in_dicfile(GjitenDicfile *dicfile, unsigned char *srchstrg) {
       printf("criteria: %d\n", match_criteria);
       */
 
-			//Print dicfile name if all dictionaries are selected
-      if ((dicname_printed == FALSE) && (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active)) {
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, _("Matches in "), -1);
-				gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter,  
-																								 dicfile->name, -1, "brown_foreground", NULL);
-				gtk_text_buffer_insert(GTK_TEXT_BUFFER(wordDic->text_results_buffer), &wordDic->iter, ":\n", -1);
-				dicname_printed = TRUE;
-      }
+			print_matches_in(dicfile);
       print_result(repstr, roff, srchstrg);
       //get_kanji_and_reading(repstr); FIXME
       word_matches++;
