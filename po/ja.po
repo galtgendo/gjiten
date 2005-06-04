@@ -10,13 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gjiten 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 15:10+0200\n"
+"POT-Creation-Date: 2005-05-30 21:17+0200\n"
 "PO-Revision-Date: 2005-05-21 15:12+0200\n"
 "Last-Translator: Botond Botyanszki <boti@rocketmail.com>\n"
 "Language-Team:  Japanese <boti@rocketmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: data/gjiten-settings.glade.h:1
 msgid "*"
@@ -74,12 +74,12 @@ msgstr "Gjiten の設定"
 msgid "Kanji info"
 msgstr "漢字情報"
 
-#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:947
+#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:949
 msgid "KanjiDic"
 msgstr "漢英字典"
 
-#: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1121
-#: src/worddic.c:95 src/worddic.c:952
+#: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1123
+#: src/worddic.c:95 src/worddic.c:954
 msgid "KanjiPad"
 msgstr "漢字パッド"
 
@@ -115,7 +115,7 @@ msgstr "ひらがなを入力した場合カタカナも検索する"
 msgid "Use large font for Japanese in _WordDic search results"
 msgstr "単語辞典での検索結果の日本語に大きなフォントを使用する(_W)"
 
-#: data/gjiten-settings.glade.h:24 src/kanjidic.c:99 src/kanjidic.c:1116
+#: data/gjiten-settings.glade.h:24 src/kanjidic.c:99 src/kanjidic.c:1118
 msgid "WordDic"
 msgstr "単語辞典"
 
@@ -242,7 +242,7 @@ msgstr "クリップボードから受取った文字は漢字ではありませ
 msgid "Kanji"
 msgstr "漢字"
 
-#: src/pref.c:59 src/kanjidic.c:900
+#: src/pref.c:59 src/kanjidic.c:902
 msgid "Radicals"
 msgstr "部首"
 
@@ -405,7 +405,7 @@ msgstr "部首が不適切です!\n"
 msgid "I don't seem to recognize this radical: '%s' !!!\n"
 msgstr "この部首は認識できないようです: '%s' !!!\n"
 
-#: src/kanjidic.c:531 src/worddic.c:697
+#: src/kanjidic.c:531 src/worddic.c:699
 msgid "Searching..."
 msgstr "検索中..."
 
@@ -434,7 +434,7 @@ msgstr "一致する漢字はありません！"
 msgid "Kanji found: %d"
 msgstr "一致する漢字数: %d 件"
 
-#: src/kanjidic.c:828 src/worddic.c:187
+#: src/kanjidic.c:830 src/worddic.c:187
 #, c-format
 msgid ""
 "Error opening %s.\n"
@@ -443,56 +443,55 @@ msgstr ""
 "%s を開けませんでした。\n"
 "設定を確認するか文書を御覧下さい！"
 
-#: src/kanjidic.c:1089
+#: src/kanjidic.c:1091
 msgid "Gjiten - KanjiDic"
 msgstr "Gjiten - 漢英字典"
 
-#: src/kanjidic.c:1110
+#: src/kanjidic.c:1112
 msgid "Close KanjiDic"
 msgstr "漢英字典を閉じます"
 
-#: src/kanjidic.c:1117
+#: src/kanjidic.c:1119
 msgid "Launch WordDic"
 msgstr "単語辞典を実行します"
 
-#: src/kanjidic.c:1122 src/worddic.c:953
+#: src/kanjidic.c:1124 src/worddic.c:955
 msgid "Launch KanjiPad"
 msgstr "漢字パッドを実行します"
 
-#: src/kanjidic.c:1126
+#: src/kanjidic.c:1128
 msgid "Search entered Kanji"
 msgstr "入力した漢字を検索します"
 
-#: src/kanjidic.c:1130
+#: src/kanjidic.c:1132
 msgid "Kanji Search Options"
 msgstr "漢字検索オプション"
 
-#. FIXME: use mnemonics
-#: src/kanjidic.c:1140
+#: src/kanjidic.c:1141
 msgid "Search By _Strokes:"
 msgstr "画数による検索(_S):"
 
-#: src/kanjidic.c:1147
+#: src/kanjidic.c:1148
 msgid "Search By _Radical:"
 msgstr "部首による検索(_R):"
 
-#: src/kanjidic.c:1154
+#: src/kanjidic.c:1155
 msgid "Search By _Key:"
 msgstr "キーによる検索(_K):"
 
-#: src/kanjidic.c:1180
+#: src/kanjidic.c:1181
 msgid "Show Radical _List"
 msgstr "部首一覧を表示する(_L)"
 
-#: src/kanjidic.c:1203 src/kanjidic.c:1211
+#: src/kanjidic.c:1204 src/kanjidic.c:1212
 msgid "Clear"
 msgstr "消去"
 
-#: src/kanjidic.c:1223
+#: src/kanjidic.c:1224
 msgid "Search Results :"
 msgstr "検索の結果 :"
 
-#: src/kanjidic.c:1251
+#: src/kanjidic.c:1252
 msgid "Kanji Info :"
 msgstr "漢字情報 :"
 
@@ -543,58 +542,58 @@ msgstr "ツール(_T)"
 msgid "Matches in %s:\n"
 msgstr "%sでの検索結果:\n"
 
-#: src/worddic.c:339
+#: src/worddic.c:331
 msgid "Possible inflected verb or adjective: "
 msgstr "動詞活用形または形容詞の候補： "
 
-#: src/worddic.c:550
+#: src/worddic.c:552
 msgid "Results truncated"
 msgstr "結果 (切捨)"
 
-#: src/worddic.c:617
+#: src/worddic.c:619
 msgid "No dicfiles specified! Set your preferences first."
 msgstr "辞典ファイルが指定されていません! まず設定をして下さい。"
 
-#: src/worddic.c:655
+#: src/worddic.c:657
 #, c-format
 msgid "Matches found (truncated): %d"
 msgstr "一致数 (切捨): %d 件"
 
-#: src/worddic.c:656
+#: src/worddic.c:658
 #, c-format
 msgid "Matches found: %d"
 msgstr "一致数: %d 件"
 
-#: src/worddic.c:659
+#: src/worddic.c:661
 msgid "No match found!"
 msgstr "一致する単語はありません！"
 
-#: src/worddic.c:667
+#: src/worddic.c:669
 msgid "Invalid input: non-utf8\n"
 msgstr "入力が不適切です: UTF-8 ではありません\n"
 
 #. FIXME: On demand
-#: src/worddic.c:914
+#: src/worddic.c:916
 msgid "Gjiten - WordDic"
 msgstr "Gjiten - 単語辞典"
 
-#: src/worddic.c:931
+#: src/worddic.c:933
 msgid "Close Gjiten"
 msgstr "Gjiten を閉じます"
 
-#: src/worddic.c:936
+#: src/worddic.c:938
 msgid "Previous search result"
 msgstr "前の結果を表示します"
 
-#: src/worddic.c:941
+#: src/worddic.c:943
 msgid "Next search result"
 msgstr "次の結果を表示します"
 
-#: src/worddic.c:948
+#: src/worddic.c:950
 msgid "Launch KanjiDic"
 msgstr "漢英字典を実行します"
 
-#: src/worddic.c:957
+#: src/worddic.c:959
 msgid "Search for entered expression"
 msgstr "入力した語句を検索します"
 
@@ -603,7 +602,7 @@ msgstr "入力した語句を検索します"
 #. _("Show/Hide options"), "Show/Hide options",
 #. G_CALLBACK(worddic_show_hide_options), NULL, -1);
 #.
-#: src/worddic.c:965
+#: src/worddic.c:967
 msgid ""
 "Show/Hide\n"
 "options"
@@ -611,83 +610,82 @@ msgstr ""
 "オプションの\n"
 "表示/非表示"
 
-#: src/worddic.c:966
+#: src/worddic.c:968
 msgid "Show/Hide options"
 msgstr "オプションを表示/隠します"
 
-#: src/worddic.c:1005
+#: src/worddic.c:1007
 msgid "Japanese Search Options: "
 msgstr "日本語検索オプション: "
 
-#: src/worddic.c:1014
+#: src/worddic.c:1016
 msgid "E_xact Matches"
 msgstr "厳密に一致する(_x)"
 
-#: src/worddic.c:1019
+#: src/worddic.c:1021
 msgid "_Start With Expression"
 msgstr "入力した語句から始まる(_S)"
 
-#: src/worddic.c:1024
+#: src/worddic.c:1026
 msgid "E_nd With Expression"
 msgstr "入力した語句で終わる(_N)"
 
-#: src/worddic.c:1029
+#: src/worddic.c:1031
 msgid "_Any Matches"
 msgstr "いずれかに一致する(_A)"
 
-#: src/worddic.c:1034
+#: src/worddic.c:1036
 msgid "_Verb Deinflection"
 msgstr "動詞は終止形にする(_V)"
 
-#: src/worddic.c:1042
+#: src/worddic.c:1044
 msgid "English Search Options: "
 msgstr "英語検索オプション: "
 
-#: src/worddic.c:1051
+#: src/worddic.c:1053
 msgid "Wh_ole Expressions"
 msgstr "語句全体(_O)"
 
-#: src/worddic.c:1056
+#: src/worddic.c:1058
 msgid "_Whole Words"
 msgstr "単語全体(_W)"
 
-#: src/worddic.c:1061
+#: src/worddic.c:1063
 msgid "Any _Matches"
 msgstr "いずれかに一致する(_M)"
 
-#: src/worddic.c:1066
+#: src/worddic.c:1068
 msgid "General Options: "
 msgstr "一般オプション: "
 
-#: src/worddic.c:1075
+#: src/worddic.c:1077
 msgid "Search _Dic:"
 msgstr "辞典ファイルを検索(_D):"
 
-#: src/worddic.c:1093
+#: src/worddic.c:1095
 msgid "Sea_rch All Dictionaries"
 msgstr "全ての辞典ファイルを検索(_R)"
 
-#: src/worddic.c:1102
+#: src/worddic.c:1104
 msgid "A_uto Adjust Options"
 msgstr "検索オプションを自動選択(_U)"
 
-#: src/worddic.c:1118
+#: src/worddic.c:1120
 msgid "_Limit Results:"
 msgstr "該当数を制限(_L):"
 
-#: src/worddic.c:1139
+#: src/worddic.c:1141
 msgid "Enter expression :"
 msgstr "語句を入力して下さい :"
 
-#: src/worddic.c:1164
+#: src/worddic.c:1166
 msgid "Search"
 msgstr "検索"
 
-#: src/worddic.c:1169
+#: src/worddic.c:1171
 msgid "_Clear"
 msgstr "消去(_C)"
 
-#: src/worddic.c:1176
+#: src/worddic.c:1178
 msgid "Search results :"
 msgstr "検索の結果 :"
-

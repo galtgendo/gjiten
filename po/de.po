@@ -1,170 +1,154 @@
 # translation of de.po to Deutsch
 # gjiten de.po
-# Copyright (C) 2003
+# Copyright (C) 2005
 # Gregor Riepl <seto-kun@freesurf.ch>
-# Gregor Riepl <seto-kun@freesurf.ch>, 2003
+# Gregor Riepl <seto-kun@freesurf.ch>, 2005
 msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-21 15:10+0200\n"
-"PO-Revision-Date: 2003-04-28 21:32+0200\n"
+"POT-Creation-Date: 2005-05-30 21:25+0200\n"
+"PO-Revision-Date: 2005-05-30 20:40+0200\n"
 "Last-Translator: Gregor Riepl <seto-kun@freesurf.ch>\n"
 "Language-Team: Deutsch <seto-kun@freesurf.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.1\n"
 
 #: data/gjiten-settings.glade.h:1
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: data/gjiten-settings.glade.h:2
 msgid ""
 "<i>If you change the following, please restart gjiten for the settings to "
 "take effect.</i>"
 msgstr ""
+"<i>Bitte Gjiten neu starten wenn bei den folgenden Einstellungen etwas "
+"geändert wird"
 
 #: data/gjiten-settings.glade.h:3
-#, fuzzy
 msgid "Add dictionary files"
 msgstr "Wörterbuchdateien auswählen"
 
 #: data/gjiten-settings.glade.h:4
-#, fuzzy
 msgid "Dictionaries"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbücher"
 
 #: data/gjiten-settings.glade.h:5
-#, fuzzy
 msgid "Dictionary file"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchdatei"
 
 #: data/gjiten-settings.glade.h:6
-#, fuzzy
 msgid "Dictionary file properties"
-msgstr "Wörterbuchdateien"
+msgstr "Eigenschaften der Wörterbuchdatei"
 
 #: data/gjiten-settings.glade.h:7
-#, fuzzy
 msgid "Dictionary file:"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchdatei:"
 
 #: data/gjiten-settings.glade.h:8
-#, fuzzy
 msgid "Dictionary name:"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchnam:"
 
 #: data/gjiten-settings.glade.h:9
 msgid "Environment Variables"
-msgstr ""
+msgstr "Umgebungsvariablen"
 
 #: data/gjiten-settings.glade.h:10
 msgid "Fonts"
 msgstr "Schriftarten"
 
 #: data/gjiten-settings.glade.h:11
-#, fuzzy
 msgid "General"
-msgstr "Allgemeine Einstellungen"
+msgstr "Allgemein"
 
 #: data/gjiten-settings.glade.h:12
 msgid "Gjiten Settings"
-msgstr ""
+msgstr "Gjiten-Einstellungen"
 
 #: data/gjiten-settings.glade.h:13
-#, fuzzy
 msgid "Kanji info"
-msgstr "Kanji-Info :"
+msgstr "Kanji-Info"
 
-#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:947
+#: data/gjiten-settings.glade.h:14 src/worddic.c:91 src/worddic.c:949
 msgid "KanjiDic"
 msgstr "Kanji-Dic"
 
-#: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1121
-#: src/worddic.c:95 src/worddic.c:952
+#: data/gjiten-settings.glade.h:15 src/kanjidic.c:95 src/kanjidic.c:1123
+#: src/worddic.c:95 src/worddic.c:954
 msgid "KanjiPad"
 msgstr "Kanji-Pad"
 
 #: data/gjiten-settings.glade.h:16
-#, fuzzy
 msgid "Kanjidic dictionary file:"
-msgstr "Wörterbuchdateien auswählen"
+msgstr "Kanjidic-Wörterbuch:"
 
 #: data/gjiten-settings.glade.h:17
-#, fuzzy
 msgid "Large font:"
-msgstr "Grosse Schrift: "
+msgstr "Grosse Schrift:"
 
 #: data/gjiten-settings.glade.h:18
-#, fuzzy
 msgid "Normal font:"
-msgstr "Standardschrift: "
+msgstr "Standardschrift:"
 
 #: data/gjiten-settings.glade.h:19
-#, fuzzy
 msgid "Options"
-msgstr "Allgemeine Einstellungen"
+msgstr "Optionen"
 
 #: data/gjiten-settings.glade.h:20
-#, fuzzy
 msgid "Path to KanjiPad executable:"
 msgstr "Kanji-Pad-Programm:"
 
 #: data/gjiten-settings.glade.h:21
 msgid "Search for Hiragana on Katakana input"
-msgstr ""
+msgstr "Nach Hiragana suchen wenn Katakana eingegeben wurde"
 
 #: data/gjiten-settings.glade.h:22
 msgid "Search for Katakana on Hiragana input"
-msgstr ""
+msgstr "Nach Katakana suchen wenn Hiragana eingegeben wurde"
 
 #: data/gjiten-settings.glade.h:23
-#, fuzzy
 msgid "Use large font for Japanese in _WordDic search results"
-msgstr "Grosse Schrift für japanische Wörter in den Suchresultaten benutzen"
+msgstr "Grosse Schrift für japanische _Wörter in den Suchresultaten benutzen"
 
-#: data/gjiten-settings.glade.h:24 src/kanjidic.c:99 src/kanjidic.c:1116
+#: data/gjiten-settings.glade.h:24 src/kanjidic.c:99 src/kanjidic.c:1118
 msgid "WordDic"
 msgstr "Wörterbuch"
 
 #: data/gjiten-settings.glade.h:25
-#, fuzzy
 msgid "_Antialiasing   [GDK__USE__XFT=1]  (might not work with Japanese)"
 msgstr ""
-"Anti-Aliasing (funktioniert möglicherweise nicht mit japanischen Schriften)"
+"_Anti-Aliasing   [GDK__USE__XFT=1](funktioniert möglicherweise nicht mit "
+"japanischen Schriften)"
 
 #: data/gjiten-settings.glade.h:26
 msgid "_English interface [LANGUAGE=C]"
-msgstr ""
+msgstr "_Englische Oberfläche [LANGUAGE=C]"
 
 #: data/gjiten-settings.glade.h:27
 msgid "_Kinput2 support   [LC__ALL=ja__JP]"
-msgstr ""
+msgstr "_Kinput2-Unterstützung   [LC__ALL=ja__JP]"
 
 #: data/gjiten-settings.glade.h:28
 msgid "_Override environment variables"
-msgstr ""
+msgstr "_Umgebungsvariablen überschreiben"
 
 #: data/gjiten-settings.glade.h:29
-#, fuzzy
 msgid "_Use large font for kanji results in KanjiDic"
-msgstr "Grosse Schrift für Kanji im Kanji-Dic benutzen"
+msgstr "_Grosse Schrift für Kanji im Kanji-Dic benutzen"
 
 #: gnome/gjiten.desktop.in.h:1
-#, fuzzy
 msgid "Gjiten"
-msgstr "gjiten"
+msgstr "Gjiten"
 
 #: gnome/gjiten.desktop.in.h:2
-#, fuzzy
 msgid "Japanese dictionary"
-msgstr "Japanische Suchoptionen: "
+msgstr "Japanisches Wörterbuch"
 
 #: src/gjiten.c:80
 msgid "Start up Kanjidic instead of Word dictionary"
-msgstr "Kanji-Suche anstelle von Wort-Suche starten"
+msgstr "Mit Kanji-Suche anstatt Wort-Suche starten"
 
 #: src/gjiten.c:83
 msgid "Look up WORD in first dictionary"
@@ -197,7 +181,7 @@ msgid ""
 "and set the correct path to it in the Preferences.\n"
 "See the Documentation for more details about KanjiPad."
 msgstr ""
-"Kann das Kanji-Pad-Programm nicht finden!\n"
+"Kann das KanjiPad-Programm nicht finden!\n"
 "Bitte überprüfen Sie, ob es installiert ist\n"
 "und stellen Sie den korrekten Pfad ein.\n"
 "Schauen Sie in der Dokumentation nach für weitere Infos."
@@ -209,15 +193,15 @@ msgstr "Kann Hilfe nicht lesen: %s"
 
 #: src/gjiten.c:199
 msgid "TRANSLATORS! PUT YOUR NAME HERE"
-msgstr ""
+msgstr "Gregor Riepl <seto-kun@freesurf.ch>"
 
 #: src/gjiten.c:229
 msgid "gjiten is a Japanese dictionary for Gnome"
-msgstr "gjiten ist ein Japanisches Wörterbuch für Gnome"
+msgstr "Gjiten ist ein Japanisches Wörterbuch für Gnome"
 
 #: src/gjiten.c:271
 msgid "gjiten"
-msgstr "gjiten"
+msgstr "Gjiten"
 
 #: src/gjiten.c:284
 msgid ""
@@ -228,13 +212,12 @@ msgstr ""
 " Bitte überprüfen Sie die Einstellungen!"
 
 #: src/gjiten.c:287
-#, fuzzy
 msgid ""
 "Welcome to Gjiten.\n"
 " Please set your Preferences!"
 msgstr ""
 "Willkommen bei Gjiten.\n"
-" Bitte nehmen SIe die Einstellungen vor!"
+" Bitte nehmen Sie die Einstellungen vor!"
 
 #: src/gjiten.c:303 src/gjiten.c:331
 msgid "Unable to look up kanji: NON-UTF8 string received from clipboard!\n"
@@ -250,7 +233,7 @@ msgstr "Nicht-Japanisches Zeichen in der Zwischenablage: %s\n"
 msgid "Kanji"
 msgstr "Kanji"
 
-#: src/pref.c:59 src/kanjidic.c:900
+#: src/pref.c:59 src/kanjidic.c:902
 msgid "Radicals"
 msgstr "Radikale"
 
@@ -264,7 +247,7 @@ msgstr "Lesungen"
 
 #: src/pref.c:62
 msgid "Romanized Korean reading"
-msgstr "Romanisierte Koreanische Lesung"
+msgstr "Romanisierte koreanische Lesung"
 
 #: src/pref.c:63
 msgid "Romanized Pinyin reading"
@@ -272,7 +255,7 @@ msgstr "Romanisierte Pinyin-Lesung"
 
 #: src/pref.c:64
 msgid "English meaning"
-msgstr "Englische Bedeutung"
+msgstr "Bedeutung"
 
 #: src/pref.c:65
 msgid "Bushu radical number"
@@ -312,7 +295,7 @@ msgstr "Index in Nelson's \"Modern Reader's Char Dict\""
 
 #: src/pref.c:74
 msgid "\"The New Nelson Char Dict\" index"
-msgstr "\"The New Nelson Char Dict\"Index"
+msgstr "\"The New Nelson Char Dict\"-Index"
 
 #: src/pref.c:75
 msgid "Spahn&Hadamitzky index"
@@ -359,39 +342,33 @@ msgid "ASCII JIS Code of Kanji"
 msgstr "ASCII JIS-Code"
 
 #: src/pref.c:128 src/pref.c:199
-#, fuzzy
 msgid "Dictionary file not found!"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchdatei nicht gefunden!"
 
 #: src/pref.c:169 src/pref.c:234
-#, fuzzy
 msgid "Select dictionary file"
-msgstr "Wörterbuchdateien auswählen"
+msgstr "Wörterbuchdatei auswählen"
 
 #: src/pref.c:221
 msgid "Please select an entry!"
-msgstr ""
+msgstr "Bitte einen Eintrag auswählen!"
 
 #: src/pref.c:415
-#, fuzzy
 msgid "Dictionary file path"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchdateipfad"
 
 #: src/pref.c:419
-#, fuzzy
 msgid "Dictionary name"
-msgstr "Wörterbuchdateien"
+msgstr "Wörterbuchname"
 
-#. 	gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
+#. gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
 #: src/pref.c:459
-#, fuzzy
 msgid "Select KanjiDic"
-msgstr "Kanji-Dic benutzen"
+msgstr "Kanji-Dic auswählen"
 
 #: src/pref.c:523
-#, fuzzy
 msgid "Select KanjiPad"
-msgstr "Kanji-Pad benutzen"
+msgstr "Kanji-Pad auswählen"
 
 #: src/kanjidic.c:116 src/kanjidic.c:117 src/worddic.c:122
 msgid "Tools"
@@ -419,7 +396,7 @@ msgstr "Ungültiges Radikal!\n"
 msgid "I don't seem to recognize this radical: '%s' !!!\n"
 msgstr "Dieses Radikal gibt für mich keinen Sinn: '%s' !!!\n"
 
-#: src/kanjidic.c:531 src/worddic.c:697
+#: src/kanjidic.c:531 src/worddic.c:699
 msgid "Searching..."
 msgstr "Suche läuft..."
 
@@ -448,79 +425,70 @@ msgstr "Keine Treffer gefunden!"
 msgid "Kanji found: %d"
 msgstr "Kanji gefunden: %d"
 
-#: src/kanjidic.c:828 src/worddic.c:187
+#: src/kanjidic.c:830 src/worddic.c:187
 #, c-format
 msgid ""
 "Error opening %s.\n"
 " Check your preferences or read the documentation!"
 msgstr ""
-"Fehler beim öffnen von %s.\n"
+"Fehler beim Öffnen von %s.\n"
 " Überprüfen Sie die Einstellungen oder lesen Sie die Dokumentation!"
 
-#: src/kanjidic.c:1089
-#, fuzzy
+#: src/kanjidic.c:1091
 msgid "Gjiten - KanjiDic"
-msgstr "Kanji-Dic"
+msgstr "Gjiten - Kanji-Dic"
 
-#: src/kanjidic.c:1110
-#, fuzzy
+#: src/kanjidic.c:1112
 msgid "Close KanjiDic"
-msgstr "Kanji-Dic benutzen"
+msgstr "Kanji-Dic schliessen"
 
-#: src/kanjidic.c:1117
-#, fuzzy
+#: src/kanjidic.c:1119
 msgid "Launch WordDic"
-msgstr "Wörterbuch"
+msgstr "Wörterbuch starten"
 
-#: src/kanjidic.c:1122 src/worddic.c:953
-#, fuzzy
+#: src/kanjidic.c:1124 src/worddic.c:955
 msgid "Launch KanjiPad"
-msgstr "Kanji-Pad"
+msgstr "Kanji-Pad starten"
 
-#: src/kanjidic.c:1126
+#: src/kanjidic.c:1128
 msgid "Search entered Kanji"
-msgstr ""
+msgstr "Eingegebene Kanji suchen"
 
-#: src/kanjidic.c:1130
+#: src/kanjidic.c:1132
 msgid "Kanji Search Options"
 msgstr "Kanji-Suchoptionen"
 
-#. FIXME: use mnemonics
-#: src/kanjidic.c:1140
-#, fuzzy
+#: src/kanjidic.c:1141
 msgid "Search By _Strokes:"
-msgstr "Nach Strichanzahl suchen:"
+msgstr "Nach _Strichanzahl suchen:"
 
-#: src/kanjidic.c:1147
-#, fuzzy
+#: src/kanjidic.c:1148
 msgid "Search By _Radical:"
-msgstr "Nach Radikal suchen:"
+msgstr "Nach _Radikal suchen:"
 
-#: src/kanjidic.c:1154
-#, fuzzy
+#: src/kanjidic.c:1155
 msgid "Search By _Key:"
-msgstr "Nach Schlüssel suchen:      "
+msgstr "Nach S_chlüssel suchen:"
 
-#: src/kanjidic.c:1180
-#, fuzzy
+#: src/kanjidic.c:1181
 msgid "Show Radical _List"
-msgstr "Radikalliste anzeigen"
+msgstr "Radikal_liste anzeigen"
 
-#: src/kanjidic.c:1203 src/kanjidic.c:1211
+#: src/kanjidic.c:1204 src/kanjidic.c:1212
 msgid "Clear"
 msgstr "Löschen"
 
-#: src/kanjidic.c:1223
+#: src/kanjidic.c:1224
 msgid "Search Results :"
 msgstr "Suchergebnisse :"
 
-#: src/kanjidic.c:1251
+#: src/kanjidic.c:1252
 msgid "Kanji Info :"
 msgstr "Kanji-Info :"
 
 #: src/conf.c:268
 msgid "Could not get gconf_client.\n"
-msgstr ""
+msgstr "Konnte gconf_client nicht erhalten.\n"
 
 #: src/dicfile.c:75
 #, c-format
@@ -529,7 +497,8 @@ msgid ""
 "Please convert it to UTF-8. See the docs for more."
 msgstr ""
 "Wörterbuchdatei ist nicht in UTF: %s\n"
-"Bitte konvertieren Sie es in UTF-8. Siehe auch die Dokumentation."
+"Bitte konvertieren Sie sie in UTF-8.\n"
+"In der Dokumentation finden Sie weitere Informationen."
 
 #: src/dicfile.c:88
 #, c-format
@@ -537,7 +506,7 @@ msgid ""
 "Error opening dictfile:  %s\n"
 "Check your preferences!"
 msgstr ""
-"Fehler beim öffnen der Wörterbuchdatei:  %s\n"
+"Fehler beim Öffnen der Wörterbuchdatei:  %s\n"
 "Überprüfen Sie die Einstellungen!"
 
 #: src/worddic.c:103
@@ -557,177 +526,161 @@ msgid "Information about the program"
 msgstr "Informationen über das Programm"
 
 #: src/worddic.c:121
-#, fuzzy
 msgid "_Tools"
-msgstr "Werkzeuge"
+msgstr "_Werkzeuge"
 
 #: src/worddic.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Matches in %s:\n"
-msgstr "Treffer "
+msgstr "Treffer in %s:\n"
 
-#: src/worddic.c:339
+#: src/worddic.c:331
 msgid "Possible inflected verb or adjective: "
 msgstr "Mögliches gebeugtes Verb oder Adjektiv: "
 
-#: src/worddic.c:550
+#: src/worddic.c:552
 msgid "Results truncated"
 msgstr "Ergebnisse abgeschnitten"
 
-#: src/worddic.c:617
+#: src/worddic.c:619
+#, c-format
 msgid "No dicfiles specified! Set your preferences first."
 msgstr "Keine Wörterbücher ausgewählt! Bitte zuerst einstellen."
 
-#: src/worddic.c:655
+#: src/worddic.c:657
 #, c-format
 msgid "Matches found (truncated): %d"
 msgstr "Treffer gefunden (abgeschnitten): %d"
 
-#: src/worddic.c:656
+#: src/worddic.c:658
 #, c-format
 msgid "Matches found: %d"
 msgstr "Treffer gefunden: %d"
 
-#: src/worddic.c:659
+#: src/worddic.c:661
 msgid "No match found!"
 msgstr "Keine Treffer gefunden!"
 
-#: src/worddic.c:667
+#: src/worddic.c:669
 msgid "Invalid input: non-utf8\n"
-msgstr ""
+msgstr "Ungültige Eingabe: Nicht UTF8\n"
 
 #. FIXME: On demand
-#: src/worddic.c:914
-#, fuzzy
+#: src/worddic.c:916
 msgid "Gjiten - WordDic"
-msgstr "Wörterbuch"
+msgstr "Gjiten - Wörterbuch"
 
-#: src/worddic.c:931
-#, fuzzy
+#: src/worddic.c:933
 msgid "Close Gjiten"
-msgstr "Gjiten beenden"
+msgstr "Gjiten schliessen"
 
-#: src/worddic.c:936
-#, fuzzy
+#: src/worddic.c:938
 msgid "Previous search result"
-msgstr "Suchergebnisse :"
+msgstr "Vorhergehendes Suchergebnis"
 
-#: src/worddic.c:941
-#, fuzzy
+#: src/worddic.c:943
 msgid "Next search result"
-msgstr "Suchergebnisse :"
+msgstr "Nächstes Suchergebnis"
 
-#: src/worddic.c:948
-#, fuzzy
+#: src/worddic.c:950
 msgid "Launch KanjiDic"
-msgstr "Kanji-Dic"
+msgstr "Kanji-Dic starten"
 
-#: src/worddic.c:957
-#, fuzzy
+#: src/worddic.c:959
 msgid "Search for entered expression"
-msgstr "Ausdruck :"
+msgstr "Eingegebenen Ausdruck suchen"
 
 #.
 #. gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_NO,
 #. _("Show/Hide options"), "Show/Hide options",
 #. G_CALLBACK(worddic_show_hide_options), NULL, -1);
 #.
-#: src/worddic.c:965
+#: src/worddic.c:967
 msgid ""
 "Show/Hide\n"
 "options"
 msgstr ""
+"Optionen\n"
+"zeigen/\n"
+"verbergen"
 
-#: src/worddic.c:966
+#: src/worddic.c:968
 msgid "Show/Hide options"
-msgstr ""
+msgstr "Optionen zeigen/verbergen"
 
-#: src/worddic.c:1005
+#: src/worddic.c:1007
 msgid "Japanese Search Options: "
 msgstr "Japanische Suchoptionen: "
 
-#: src/worddic.c:1014
-#, fuzzy
+#: src/worddic.c:1016
 msgid "E_xact Matches"
-msgstr "Exakte Treffer"
+msgstr "E_xakte Treffer"
 
-#: src/worddic.c:1019
-#, fuzzy
+#: src/worddic.c:1021
 msgid "_Start With Expression"
-msgstr "Ausdruck am Anfang"
+msgstr "Au_sdruck am Anfang"
 
-#: src/worddic.c:1024
-#, fuzzy
+#: src/worddic.c:1026
 msgid "E_nd With Expression"
-msgstr "Ausdruck am Ende"
+msgstr "Ausdruck am E_nde"
 
-#: src/worddic.c:1029
-#, fuzzy
+#: src/worddic.c:1031
 msgid "_Any Matches"
-msgstr "Beliebige Treffer"
+msgstr "_Beliebige Treffer"
 
-#: src/worddic.c:1034
-#, fuzzy
+#: src/worddic.c:1036
 msgid "_Verb Deinflection"
-msgstr "Grundform bestimmen"
+msgstr "_Grundform bestimmen"
 
-#: src/worddic.c:1042
+#: src/worddic.c:1044
 msgid "English Search Options: "
 msgstr "Englische Suchoptionen: "
 
-#: src/worddic.c:1051
-#, fuzzy
+#: src/worddic.c:1053
 msgid "Wh_ole Expressions"
-msgstr "Ganze Ausdrücke"
+msgstr "Gan_ze Ausdrücke"
 
-#: src/worddic.c:1056
-#, fuzzy
+#: src/worddic.c:1058
 msgid "_Whole Words"
-msgstr "Ganze Wörter"
+msgstr "Ganze _Wörter"
 
-#: src/worddic.c:1061
-#, fuzzy
+#: src/worddic.c:1063
 msgid "Any _Matches"
-msgstr "Beliebige Treffer"
+msgstr "Beliebige _Treffer"
 
-#: src/worddic.c:1066
+#: src/worddic.c:1068
 msgid "General Options: "
 msgstr "Allgemeine Optionen: "
 
-#: src/worddic.c:1075
-#, fuzzy
+#: src/worddic.c:1077
 msgid "Search _Dic:"
-msgstr "Wörterbuch:"
+msgstr "Wörterbu_ch:"
 
-#: src/worddic.c:1093
-#, fuzzy
+#: src/worddic.c:1095
 msgid "Sea_rch All Dictionaries"
-msgstr "Alle Wörterbücher"
+msgstr "Alle Wö_rterbücher"
 
-#: src/worddic.c:1102
-#, fuzzy
+#: src/worddic.c:1104
 msgid "A_uto Adjust Options"
-msgstr "Automatisch anpassen"
+msgstr "A_utomatisch anpassen"
 
-#: src/worddic.c:1118
-#, fuzzy
+#: src/worddic.c:1120
 msgid "_Limit Results:"
-msgstr "Resultate begrenzen:"
+msgstr "Resu_ltate begrenzen:"
 
-#: src/worddic.c:1139
+#: src/worddic.c:1141
 msgid "Enter expression :"
 msgstr "Ausdruck :"
 
-#: src/worddic.c:1164
+#: src/worddic.c:1166
 msgid "Search"
 msgstr "Suchen"
 
-#: src/worddic.c:1169
-#, fuzzy
+#: src/worddic.c:1171
 msgid "_Clear"
-msgstr "Löschen"
+msgstr "Lö_schen"
 
-#: src/worddic.c:1176
+#: src/worddic.c:1178
 msgid "Search results :"
 msgstr "Suchergebnisse :"
 
@@ -739,66 +692,3 @@ msgstr "Suchergebnisse :"
 
 #~ msgid "Forward"
 #~ msgstr "Vorwärts"
-
-#~ msgid "translated_by"
-#~ msgstr "Gregor Riepl <seto-kun@freesurf.ch>"
-
-#~ msgid "Dicfile error! Set your preferences first."
-#~ msgstr "Wörterbuchdatei-Fehler! Bitte zuerst einstellen."
-
-#~ msgid ""
-#~ "Released under the terms of the GNU GPL.\n"
-#~ "Check out http://gjiten.sourceforge.net for updates"
-#~ msgstr ""
-#~ "Veröffentlicht unter den Bedingungen der GNU GPL.\n"
-#~ "Updates finden Sie auf http://gjiten.sourceforge.net"
-
-#~ msgid "Sorry, the limit is 100 dictionaries."
-#~ msgstr "Sorry, nicht mehr als 40 Wörterbücher möglich."
-
-#~ msgid "Preferences"
-#~ msgstr "Einstellungen"
-
-#~ msgid "Path To Dictionary Files:"
-#~ msgstr "Pfad zu den Wörterbuchdateien"
-
-#~ msgid "Toolbar Visible"
-#~ msgstr "Werkzeugleiste sichtbar"
-
-#~ msgid "Menubar Visible"
-#~ msgstr "Menüleiste sichtbar"
-
-#~ msgid "KanjiDic File:"
-#~ msgstr "Kanji-Dic-Datei:"
-
-#~ msgid "KanjiInfo Options"
-#~ msgstr "Kanji-Info-Optionen"
-
-#~ msgid "Force LC_ALL=ja_JP (for kinput2)"
-#~ msgstr "LC_ALL=ja_JP erzwingen (für kinput2)"
-
-#~ msgid "Force LANGUAGE=C (for English messages and GUI text)"
-#~ msgstr "LANGUAGE=C erzwingen (für englische Meldungen und GUI-Text)"
-
-#~ msgid ""
-#~ "Error opening index file:  %s\n"
-#~ "Check your preferences!"
-#~ msgstr ""
-#~ "Fehler beim öffnen der Indexdatei:  %s\n"
-#~ "Überprüfen Sie die Einstellungen!"
-
-#~ msgid ""
-#~ "Dictfile %s and its index don't match!\n"
-#~ "Check your preferences or regenerate the index."
-#~ msgstr ""
-#~ "Wörterbuchdatei %s und Indexdatei stimmen nicht überein!\n"
-#~ "Überprüfen Sie die Einstellungen oder erzeugen Sie den Index neu."
-
-#~ msgid "Copy"
-#~ msgstr "Kopieren"
-
-#~ msgid "Paste"
-#~ msgstr "Einfügen"
-
-#~ msgid "Linear Search"
-#~ msgstr "Lineare Suche"
