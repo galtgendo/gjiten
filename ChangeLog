@@ -6,6 +6,7 @@ v2.4
     - KanjiDic history width problem fixed.
     - Added support for the Chinese CEDICT dictionary.
     - German translation update. (Gregor Riepl)
+    - Unicode radicals in KanjiDic (optional).
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.

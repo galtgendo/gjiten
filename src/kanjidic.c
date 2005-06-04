@@ -42,6 +42,7 @@
 #include "pref.h"
 #include "gjiten.h"
 #include "error.h"
+#include "radical-convtable.h"
 
 /*====== Prototypes========================================================*/
 void kanji_selected(gunichar *kanji);
@@ -794,6 +795,23 @@ void get_rad_of_kanji(gunichar kanji) {
   }
 }
 
+static gunichar jis_radical_to_unicode(gchar *radical) {
+	gint i;
+
+	gchar jisutf8[6]; 
+
+	if (gjitenApp->conf->unicode_radicals == TRUE) {
+		g_unichar_to_utf8(g_utf8_get_char(radical), jisutf8);
+
+		for (i = 0; i < sizeof(radicaltable) / sizeof(radpair); i++) {
+			if (strcmp(radicaltable[i].jis, jisutf8) == 0) {
+				return g_utf8_get_char(radicaltable[i].uni);
+			}
+		}
+	}
+
+	return g_utf8_get_char(radical);
+}
 
 // Load the radical data from the file
 static void load_radkfile() {
@@ -852,37 +870,40 @@ static void load_radkfile() {
       rad_index++;                         //Increase number of radicals found
       radkfile_ptr = g_utf8_next_char(radkfile_ptr);
       while (g_unichar_iswide(g_utf8_get_char(radkfile_ptr)) == FALSE) //Find radical
-	radkfile_ptr = g_utf8_next_char(radkfile_ptr);
-      radicals[rad_index].radical = g_utf8_get_char(radkfile_ptr); //store radical
+				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+
+      radicals[rad_index].radical = jis_radical_to_unicode(radkfile_ptr); //store radical
+
       while (g_ascii_isdigit(*radkfile_ptr) == FALSE) //Find stroke number
-	radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+
       radicals[rad_index].strokes = atoi(radkfile_ptr);  //Store the stroke number
       radical_kanji_start[rad_index] = kanji_index;
       radical_kanji_count[rad_index] = 0;
       if (rad_index != 0) {
-	if (radical_kanji_count[rad_index - 1] > rad_max) 
-	  rad_max = radical_kanji_count[rad_index - 1];  // find largest kanji count for a given radical
+				if (radical_kanji_count[rad_index - 1] > rad_max) 
+					rad_max = radical_kanji_count[rad_index - 1];  // find largest kanji count for a given radical
       }
       radkfile_ptr = get_eof_line(radkfile_ptr, radkfile_end); //Goto next line
     }
     else {   //Kanji
       while ((*radkfile_ptr != '$') && (radkfile_ptr < radkfile_end)) {
-	if (*radkfile_ptr == '\n') {
-	  radkfile_ptr++;
-	  continue;
-	}
-	//printf("KANJI_INDEX: %d \n", kanji_index);
-	radical_kanji[kanji_index] = g_utf8_get_char(radkfile_ptr); //Store kanji
-	radkfile_ptr = g_utf8_next_char(radkfile_ptr);
-	radical_kanji_count[rad_index]++;
-	kanji_index++; 
+				if (*radkfile_ptr == '\n') {
+					radkfile_ptr++;
+					continue;
+				}
+				//printf("KANJI_INDEX: %d \n", kanji_index);
+				radical_kanji[kanji_index] = g_utf8_get_char(radkfile_ptr); //Store kanji
+				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+				radical_kanji_count[rad_index]++;
+				kanji_index++; 
       }
     }
   }
   total_radicals = rad_index;
 }
 
-GtkWidget *create_window_radicals () {
+static GtkWidget *create_window_radicals () {
   int i = 0, j = 0, k = 0, rad_index = 0;
   int curr_strokecount = 0;
   GtkWidget *radtable; 

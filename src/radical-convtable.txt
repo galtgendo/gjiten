@@ -1,0 +1,23 @@
+# jis to unicode radical mapping
+# http://www.unicode.org/charts/PDF/U2E80.pdf
+
+化	亻
+#		个	人
+刈	刂
+込	辶
+#		尚	小
+忙	忄
+扎	扌
+汁	氵
+犯	犭
+艾	艹
+#		邦	
+阡	阝
+#		老	耂
+杰	灬
+礼	礻
+#		禹	??
+初	衤
+#		買	⺲ ⺫
+
+0	0

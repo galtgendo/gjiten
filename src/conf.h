@@ -67,6 +67,8 @@ struct _GjitenConfig {
   gboolean searchlimit_enabled;
   gboolean autoadjust_enabled;
 
+	gboolean unicode_radicals;
+
   GjitenDicfile *selected_dic;
   GjitenDicfile *mmaped_dicfile;
   PangoFontDescription *normalfont_desc;

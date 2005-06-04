@@ -346,6 +346,7 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
 	gjitenApp->conf->search_kata_on_hira = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_kata_on_hira"))->active;	
 	gjitenApp->conf->search_hira_on_kata = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_hira_on_kata"))->active;	
 	gjitenApp->conf->verb_deinflection = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection"))->active;	
+	gjitenApp->conf->unicode_radicals = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals"))->active;	
       
   gjitenApp->conf->numofdics = 0;
 
@@ -455,6 +456,7 @@ void create_dialog_preferences() {
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_kata_on_hira")), gjitenApp->conf->search_kata_on_hira);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_hira_on_kata")), gjitenApp->conf->search_hira_on_kata);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection")), gjitenApp->conf->verb_deinflection);	
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals")), gjitenApp->conf->unicode_radicals);	
 	
 	chdir(GJITEN_DICDIR);
 	//	gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
