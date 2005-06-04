@@ -909,7 +909,7 @@ static GtkWidget *create_window_radicals () {
   GtkWidget *radtable; 
   GtkWidget *tmpwidget = NULL;
   GtkWidget *radical_label;
-  gchar strokenum_label[4];
+  gchar *strokenum_label;
   gchar radical[6];
 
 	load_radkfile(); 
@@ -935,9 +935,11 @@ static GtkWidget *create_window_radicals () {
     }
     if (curr_strokecount != radicals[rad_index].strokes) {
       curr_strokecount = radicals[rad_index].strokes;
-      snprintf((char *)&strokenum_label, 3, "%d", curr_strokecount); //Make a label with the strokenumber
-      tmpwidget = gtk_label_new(strokenum_label); //radical stroke number label
-      
+      strokenum_label = g_strdup_printf("<b>%d</b>", curr_strokecount); //Make a label with the strokenumber
+      tmpwidget = gtk_label_new(""); //radical stroke number label
+      gtk_label_set_markup(tmpwidget, strokenum_label);
+			g_free(strokenum_label);
+
       gtk_table_attach(GTK_TABLE(radtable), tmpwidget , i, i+1, j, j+1,
 		       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
 		       (GtkAttachOptions)(0), 0, 0);

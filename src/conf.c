@@ -86,6 +86,11 @@ GjitenConfig *conf_load() {
 
   conf->searchlimit_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/searchlimit_enabled", NULL);
   conf->maxwordmatches = gconf_client_get_int(gconf_client, "/apps/gjiten/general/maxwordmatches", NULL);
+	if (conf->maxwordmatches < 1) {
+		conf->searchlimit_enabled = FALSE;
+		conf->maxwordmatches = 100;
+	}
+
   conf->dictpath = gconf_client_get_string(gconf_client, "/apps/gjiten/general/dictpath", NULL);
   conf->menubar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/menubar", NULL);
   conf->toolbar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/toolbar", NULL);
