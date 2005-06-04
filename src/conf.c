@@ -74,7 +74,6 @@ GjitenConfig *conf_load() {
   }
 
   conf->autoadjust_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/autoadjust_enabled", NULL);
-  conf->deinflection_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", NULL);
 
   conf->bigwords = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/bigwords", NULL);
   conf->bigkanji = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/bigkanji", NULL);
@@ -90,8 +89,10 @@ GjitenConfig *conf_load() {
   conf->dictpath = gconf_client_get_string(gconf_client, "/apps/gjiten/general/dictpath", NULL);
   conf->menubar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/menubar", NULL);
   conf->toolbar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/toolbar", NULL);
+
   conf->search_kata_on_hira = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/search_kata_on_hira", NULL);
   conf->search_hira_on_kata = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/search_hira_on_kata", NULL);
+  conf->verb_deinflection = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", NULL);
 
   if (conf->kanjidic == NULL) conf->kanjidic = g_new0(GjitenDicfile, 1);
   conf->kanjidic->path = gconf_client_get_string(gconf_client, "/apps/gjiten/kanjidic/kanjidicfile", NULL);
@@ -214,8 +215,10 @@ void conf_save(GjitenConfig *conf) {
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_ja_JP", conf->force_ja_JP, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_language_c", conf->force_language_c, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/envvar_override", conf->envvar_override, NULL);
+
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_kata_on_hira", conf->search_kata_on_hira, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_hira_on_kata", conf->search_hira_on_kata, NULL);
+  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", conf->verb_deinflection, NULL);
 
   //Save dicfiles [path and name seperated with linebreak]
 	gconfList = gconf_value_new(GCONF_VALUE_LIST);
@@ -247,7 +250,6 @@ void conf_save_history(GList *history, GjitenConfig *conf) {
 
 void conf_save_options(GjitenConfig *conf) {
     gconf_client_set_bool(gconf_client, "/apps/gjiten/general/autoadjust_enabled", conf->autoadjust_enabled, NULL);
-    gconf_client_set_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", conf->deinflection_enabled, NULL);
     gconf_client_set_bool(gconf_client, "/apps/gjiten/general/searchlimit_enabled", conf->searchlimit_enabled, NULL);
     gconf_client_set_int(gconf_client, "/apps/gjiten/general/maxwordmatches", conf->maxwordmatches, NULL);
 }

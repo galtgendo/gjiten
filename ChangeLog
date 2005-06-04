@@ -1,10 +1,11 @@
 v2.4
     - Gettext fix for kanji info pref dialog. (Daichi Kawahata)
     - KanjiDic segv on CTRL-Q fixed. (Alexis S. L. Carvalho)
-    - Translation fixes and desktop file i18n. (Daichi Kawahata)
+    - Japanese translation fixes and desktop file i18n. (Daichi Kawahata)
     - Dicfile match colorization fix for gettext translation.
     - KanjiDic history width problem fixed.
     - Added support for the Chinese CEDICT dictionary.
+    - German translation update. (Gregor Riepl)
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.

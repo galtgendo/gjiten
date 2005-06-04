@@ -89,11 +89,11 @@ static GnomeUIInfo edit_menu_uiinfo[] = {
 static GnomeUIInfo tools_menu_uiinfo[] = {
   {
     GNOME_APP_UI_ITEM, N_("KanjiDic"), NULL, kanjidic_create, 
-    NULL, NULL, GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+    NULL, NULL, GNOME_APP_PIXMAP_FILENAME, "kanjidic.png", 0, 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("KanjiPad"), NULL, gjiten_start_kanjipad, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+    GNOME_APP_PIXMAP_FILENAME, "kanjipad.png", 0, 0, NULL
   },
   GNOMEUIINFO_END
 };
@@ -446,12 +446,10 @@ static void search_in_dicfile(GjitenDicfile *dicfile, unsigned char *srchstrg) {
       jpsrch = TRUE;
       break;
     }
-  }
-  while ((currchar = g_utf8_find_next_char(currchar, srchstrg + strlen(srchstrg))) != NULL);
+  } while ((currchar = g_utf8_find_next_char(currchar, srchstrg + strlen(srchstrg))) != NULL);
   
   // Verb deinfelction
-  if (GTK_TOGGLE_BUTTON(wordDic->checkb_verb)->active) print_verb_inflections(dicfile, srchstrg);
-  
+  if (gjitenApp->conf->verb_deinflection == TRUE) print_verb_inflections(dicfile, srchstrg);
 
   if (jpsrch == TRUE) {
     if (GTK_TOGGLE_BUTTON(wordDic->radiob_jpexact)->active) match_criteria = EXACT_MATCH;
@@ -464,7 +462,6 @@ static void search_in_dicfile(GjitenDicfile *dicfile, unsigned char *srchstrg) {
     if (GTK_TOGGLE_BUTTON(wordDic->radiob_words)->active) match_criteria = WORD_MATCH;
     if (GTK_TOGGLE_BUTTON(wordDic->radiob_partial)->active) match_criteria = ANY_MATCH;
   }
-
 
   oldrespos = srchpos = 0;
   
@@ -737,8 +734,8 @@ static void shade_worddic_widgets() {
   if ((wordDic->menu_selectdic != NULL) && (wordDic->radiob_searchdic != NULL)) 
     gtk_widget_set_sensitive(wordDic->menu_selectdic, GTK_TOGGLE_BUTTON(wordDic->radiob_searchdic)->active);
 
-  if (wordDic->checkb_autoadjust != NULL) gjitenApp->conf->autoadjust_enabled = (GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust)->active);
-  if (wordDic->checkb_verb != NULL) gjitenApp->conf->deinflection_enabled = (GTK_TOGGLE_BUTTON(wordDic->checkb_verb)->active);  
+  if (wordDic->checkb_autoadjust != NULL)
+		gjitenApp->conf->autoadjust_enabled = (GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust)->active);
 }
 
 
@@ -1033,14 +1030,6 @@ WordDic *worddic_create() {
   gtk_widget_show(wordDic->radiob_any);
   gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->radiob_any, FALSE, FALSE, 0);
 
-  wordDic->checkb_verb = gtk_check_button_new_with_mnemonic(_("_Verb Deinflection"));
-  gtk_widget_show(wordDic->checkb_verb);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_verb), TRUE);
-  gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->checkb_verb, FALSE, FALSE, 0);
-  g_signal_connect(G_OBJECT(wordDic->checkb_verb), "toggled", 
-									 G_CALLBACK(shade_worddic_widgets), NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_verb), gjitenApp->conf->deinflection_enabled);
-  
   frame_engopt = gtk_frame_new(_("English Search Options: "));
   gtk_widget_show(frame_engopt);
   gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_engopt, TRUE, TRUE, 0);

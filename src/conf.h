@@ -62,10 +62,11 @@ struct _GjitenConfig {
 	gboolean envvar_override;
 	gboolean search_kata_on_hira;
 	gboolean search_hira_on_kata;
+  gboolean verb_deinflection;
 
   gboolean searchlimit_enabled;
   gboolean autoadjust_enabled;
-  gboolean deinflection_enabled;
+
   GjitenDicfile *selected_dic;
   GjitenDicfile *mmaped_dicfile;
   PangoFontDescription *normalfont_desc;

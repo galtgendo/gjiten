@@ -93,11 +93,11 @@ static GnomeUIInfo kedit_menu_uiinfo[] = {
 static GnomeUIInfo ktools_menu_uiinfo[] = {
   {
     GNOME_APP_UI_ITEM, N_("KanjiPad"), NULL, gjiten_start_kanjipad, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+    GNOME_APP_PIXMAP_FILENAME, "kanjipad.png", 0, 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("WordDic"), NULL, worddic_create, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+    GNOME_APP_PIXMAP_FILENAME, "kanjidic.png", 0, 0, NULL
   },
   GNOMEUIINFO_END
 };
