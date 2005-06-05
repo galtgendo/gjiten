@@ -169,7 +169,7 @@ void gjiten_display_manual(GtkWidget *widget, void *data) {
   GError *err = NULL;
   gboolean retval = FALSE;
 
-  retval = gnome_help_display("gjiten", NULL, &err);
+  retval = gnome_help_display("gjiten.xml", NULL, &err);
   
   if (retval == FALSE) {
     GtkWidget *dialog;
@@ -225,7 +225,7 @@ void gjiten_create_about() {
     _("Released under the terms of the GNU GPL.\n"
     "Check out http://gjiten.sourceforge.net for updates"), 
   */
-  about = gnome_about_new("gjiten", VERSION, "Copyright \xc2\xa9 1999-2004 Botond Botyanszki",
+  about = gnome_about_new("gjiten", VERSION, "Copyright \xc2\xa9 1999-2005 Botond Botyanszki",
 			  _("gjiten is a Japanese dictionary for Gnome"),
 			  (const char **)authors,
 			  (const char **)documenters,
@@ -269,7 +269,7 @@ int main (int argc, char **argv) {
   gnome_program_init("gjiten", VERSION, LIBGNOMEUI_MODULE, argc, argv, 
 										 GNOME_PARAM_POPT_TABLE, arg_options, 
 										 GNOME_PARAM_HUMAN_READABLE_NAME, _("gjiten"), 
-										 GNOME_PARAM_APP_DATADIR, GJITEN_DATADIR,
+										 GNOME_PARAM_APP_DATADIR, GNOMEDATADIR,
 										 NULL);
 
   if (! g_file_test (icon_path, G_FILE_TEST_EXISTS)) {

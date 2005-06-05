@@ -1,4 +1,4 @@
-v2.4
+v2.4 (06/05/2005)
     - Gettext fix for kanji info pref dialog. (Daichi Kawahata)
     - KanjiDic segv on CTRL-Q fixed. (Alexis S. L. Carvalho)
     - Japanese translation fixes and desktop file i18n. (Daichi Kawahata)
@@ -10,6 +10,7 @@ v2.4
     - Don't limit if result limit is < 1.
     - Perl script for automated dictionary setup (system-wide or user-only).
     - Gconf schema for system-wide settings.
+    - Fixed help menu.
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.

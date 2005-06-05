@@ -412,7 +412,7 @@ foreach my $dic (@dics) {
     print "[$dic->{name}] $dic->{status}\n";
     if ($dic->{status} eq "OK") {
 	if ($dic->{section} eq "kanjidic") {
-	    $kanjidicgconf = "$UTFDICDIR/$dic->{targetfile}\n$dic->{name}";
+	    $kanjidicgconf = "$UTFDICDIR/$dic->{targetfile}";
 	}
 	else {
 	    $gconfstrg .= "$UTFDICDIR/$dic->{targetfile}\n$dic->{name},";
@@ -481,7 +481,9 @@ __SCHEMA__
     if (system("GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults $GCONFTOOL --makefile-install-rule $SCHEMAFILE") != 0) {
 	print "Gconf schema installation failed!\n";
     }
-    else system("/usr/bin/killall gconfd-2"); #restart gconfd
+    else {
+	system("/usr/bin/killall gconfd-2"); #restart gconfd
+    }
 }
 
 print "\nPlease run \"rm -rf $TMPDIR\" if everything is set up correctly!\n";

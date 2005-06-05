@@ -937,7 +937,7 @@ static GtkWidget *create_window_radicals () {
       curr_strokecount = radicals[rad_index].strokes;
       strokenum_label = g_strdup_printf("<b>%d</b>", curr_strokecount); //Make a label with the strokenumber
       tmpwidget = gtk_label_new(""); //radical stroke number label
-      gtk_label_set_markup(tmpwidget, strokenum_label);
+      gtk_label_set_markup(GTK_LABEL(tmpwidget), strokenum_label);
 			g_free(strokenum_label);
 
       gtk_table_attach(GTK_TABLE(radtable), tmpwidget , i, i+1, j, j+1,
