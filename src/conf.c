@@ -51,6 +51,7 @@ GjitenConfig *conf_load() {
 	conf = g_new0(GjitenConfig, 1);
 
   conf->version = gconf_client_get_string(gconf_client, "/apps/gjiten/general/version", NULL);
+	/*
   if (conf->version == NULL) { // FIXME: gconf schema
     conf->kdiccfg[KANJI] = TRUE; 
     conf->kdiccfg[RADICAL] = TRUE;
@@ -72,6 +73,7 @@ GjitenConfig *conf_load() {
     conf->autoadjust_enabled = TRUE;
     return conf; 
   }
+	*/
 
   conf->autoadjust_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/autoadjust_enabled", NULL);
 

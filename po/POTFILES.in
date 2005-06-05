@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 
 data/gjiten-settings.glade
+data/gjiten.schemas.in
 gnome/gjiten.desktop.in
 src/gjiten.c
 src/pref.c

@@ -1,0 +1,192 @@
+<!-- Install with the following command:
+GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults /usr/bin/gconftool - -makefile-install-rule /home/boti/gjiten.schema
+-->
+
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/toolbar</key>
+      <applyto>/apps/gjiten/general/toolbar</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/menubar</key>
+      <applyto>/apps/gjiten/general/menubar</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+<!--
+    <schema>
+      <key>/schemas/apps/gjiten/general/envvar_override</key>
+      <applyto>/apps/gjiten/general/envvar_override</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/force_ja_JP</key>
+      <applyto>/apps/gjiten/general/force_ja_JP</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+-->
+    <schema>
+      <key>/schemas/apps/gjiten/general/search_kata_on_hira</key>
+      <applyto>/apps/gjiten/general/search_kata_on_hira</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/autoadjust_enabled</key>
+      <applyto>/apps/gjiten/general/autoadjust_enabled</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+<!-- KanjiDic -->
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/english</key>
+      <applyto>/apps/gjiten/kanjidic/english</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/freq</key>
+      <applyto>/apps/gjiten/kanjidic/freq</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/kanji</key>
+      <applyto>/apps/gjiten/kanjidic/kanji</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/jouyou</key>
+      <applyto>/apps/gjiten/kanjidic/jouyou</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/korean</key>
+      <applyto>/apps/gjiten/kanjidic/korean</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/pinyin</key>
+      <applyto>/apps/gjiten/kanjidic/pinyin</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/radical</key>
+      <applyto>/apps/gjiten/kanjidic/radical</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/reading</key>
+      <applyto>/apps/gjiten/kanjidic/reading</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/strokes</key>
+      <applyto>/apps/gjiten/kanjidic/strokes</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+
+  </schemalist>
+</gconfschemafile>

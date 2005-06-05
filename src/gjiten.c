@@ -279,14 +279,6 @@ int main (int argc, char **argv) {
     gnome_window_icon_set_default_from_file(icon_path);
   }
 
-  if (gjitenApp->conf->version) { /* if gjiten was run before */
-    if (strcmp(gjitenApp->conf->version, VERSION)) {
-			gjiten_add_errormsg(_("Config file has a different version.\n Please update your Preferences!"));
-		}
-  }
-  else gjiten_add_errormsg(_("Welcome to Gjiten.\n Please set your Preferences!"));
-
- 
   /* the following is for clipboard lookup. */
   if ((gjitenApp->conf->clip_kanji_lookup == TRUE) || (gjitenApp->conf->clip_word_lookup == TRUE)) {
     if (gjitenApp->conf->clip_word_lookup) {

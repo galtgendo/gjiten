@@ -8,6 +8,8 @@ v2.4
     - German translation update. (Gregor Riepl)
     - Optional unicode radicals in KanjiDic.
     - Don't limit if result limit is < 1.
+    - Perl script for automated dictionary setup.
+    - Gconf schema for system-wide settings.
 
 v2.3 (10/06/2004)
     - Fixed segv when kanjipad entry is NULL.

@@ -1,14 +1,20 @@
 #!/usr/bin/perl
 
+#
+# Perl script to download EDICT dictionaries for gjiten.
+#
+# It will fetch and unpack dicfiles then configure the gconf settings.
+# Dicfiles will be placed under $HOME/.gjiten
+#
+
 use strict;
 
 
 my $TMPDIR = "/tmp/gjiten-dics";
 my $DLDIR = "$TMPDIR/dl";
 
-my $UTFDICDIR = "$ENV{HOME}/.gjiten";
+my $UTFDICDIR = "$ENV{HOME}/gjiten";
 
-die "couldn't get home directory!\n" if "$ENV{HOME}" eq "";
 
 # binaries
 my $WGET = "/usr/bin/wget";
@@ -17,8 +23,9 @@ my $UNZIP = "/usr/bin/unzip";
 my $ICONV = "/usr/bin/iconv";
 my $GCONFTOOL = "/usr/bin/gconftool-2";
 
-my $DELETETMP = 0;  # clean up after finishing?
+#my $DELETETMP = 0;  # clean up after finishing?
 
+die "couldn't get home directory!\n" if "$ENV{HOME}" eq "";
 
 my @dics = (
 	    { 
@@ -266,7 +273,7 @@ foreach my $dic (@dics) {
 #wget -c http://ftp.cc.monash.edu.au/pub/nihongo/edict.gz -O dl/edict.gz
     if (! -f "$DLDIR/$dic->{package}") {
 	print "Downloading \"$dic->{name}\" from $dic->{url}\n";
-	my @wget = ("$WGET -c $dic->{url} -O $DLDIR/$dic->{package}");
+	my @wget = ("$WGET -q -c $dic->{url} -O $DLDIR/$dic->{package}");
 	if (system(@wget) != 0) {
 	    $dic->{status} = "download failed";
 	    next;
@@ -357,11 +364,11 @@ if (system("$GCONFTOOL --type list --list-type=string --set /apps/gjiten/general
 }
 
 if ($kanjidicgconf ne "") {
-    print "$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"\n";
+#    print "$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"\n";
     if (system("$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"") != 0) {
 	print "Setting up kanjidic for gjiten failed.\n";
     }
 }
 
-	
+print "Please run \"rm -rf $TMPDIR\" if everything is set up correctly!\n";
 

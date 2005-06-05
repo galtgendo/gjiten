@@ -19,7 +19,6 @@ build-stamp:
 
 	# Add here commands to compile the package.
 	$(MAKE)
-	#/usr/bin/docbook-to-man debian/gjiten.sgml > gjiten.1
 
 	touch build-stamp
 
@@ -30,7 +29,7 @@ clean:
 	rm -f config.log config.cache
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) distclean
+#	-$(MAKE) distclean
 
 	dh_clean
 
@@ -41,7 +40,11 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/gjiten.
-	$(MAKE) DESTDIR=$(CURDIR)/debian/gjiten install
+#	$(MAKE) DESTDIR=$(CURDIR)/debian/gjiten install
+	GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 \
+	$(MAKE) install \
+	    prefix=$(CURDIR)/debian/gjiten/usr \
+	    sysconfdir=$(CURDIR)/debian/gjiten/etc
 
 
 # Build architecture-independent files here.
