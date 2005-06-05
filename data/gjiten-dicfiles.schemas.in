@@ -1,0 +1,40 @@
+<!-- Install with the following command:
+GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults /usr/bin/gconftool - -makefile-install-rule /home/boti/gjiten.schema
+-->
+
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/dictionary_list</key>
+      <applyto>/apps/gjiten/general/dictionary_list</applyto>
+      <owner>gjiten</owner>
+      <type>list</type>
+      <list_type>string</list_type>
+      <default>[/usr/share/gjiten/dics/edict
+English-main,/usr/share/gjiten/dics/compdic
+Computers]</default>
+      <locale name="C">
+         <short>List of dictionary files</short>
+         <long>
+          List of dictionary files. Format is: 
+          "[/path/to/dicfile1\ndictionary_name1,/path/to/dicfile2\ndictionary_name2]
+          Don't put a space after the comma!
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/kanjidicfile</key>
+      <applyto>/apps/gjiten/kanjidic/kanjidicfile</applyto>
+      <owner>gjiten</owner>
+      <type>string</type>
+      <default>/usr/share/gjiten/dics/kanjidic</default>
+      <locale name="C">
+       <short>Kanjidic dictionary file</short>
+       <long>Kanjidic dictionary file</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>
