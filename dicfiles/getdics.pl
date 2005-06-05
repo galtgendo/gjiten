@@ -4,17 +4,64 @@
 # Perl script to download EDICT dictionaries for gjiten.
 #
 # It will fetch and unpack dicfiles then configure the gconf settings.
-# Dicfiles will be placed under $HOME/.gjiten
 #
 
 use strict;
 
-
 my $TMPDIR = "/tmp/gjiten-dics";
 my $DLDIR = "$TMPDIR/dl";
 
-my $UTFDICDIR = "$ENV{HOME}/gjiten";
+my $SYSTEMWIDE = ($< == 0) ? 1 : 0; # if we run as root, do a system wide install.
 
+my $UTFDICDIR;
+if ($SYSTEMWIDE == 1) {
+    $UTFDICDIR = "/usr/share/gjiten/dics";
+}
+else {
+    $UTFDICDIR = "$ENV{HOME}/gjiten";
+    die "couldn't get home directory!\n" if "$ENV{HOME}" eq "";
+}
+
+if ($#ARGV != 0) {
+    printhelp();
+    exit 1;
+}
+
+my $BASICSETUP;
+
+if (@ARGV[0] eq "-basic") {
+    $BASICSETUP = 1;
+}
+elsif (@ARGV[0] eq "-all") {
+    $BASICSETUP = 0;
+}
+else {
+    printhelp();
+    exit 1;
+}
+
+sub printhelp {
+
+    print <<_HELP_
+
+ This script will download and install all the dictionary files
+ known to work with Gjiten.
+ You can either install the basic dics (edict + kanjidic) or install
+ them all (this requires ~60Mb of disk space!).
+
+ If you run this script as a user, the dictionary files will be
+ installed in \$HOME/gjiten.
+ If you run it as root, they will be placed under /usr/share/gjiten/dics
+ and they will be set up system-wide in gconf to make them automatically
+ available to all users without any setup.
+
+ Usage:
+	\"$0 -all\"    install all dictionary files.
+	\"$0 -basic\"  install basic dictionary files only.
+
+_HELP_
+;
+}
 
 # binaries
 my $WGET = "/usr/bin/wget";
@@ -25,7 +72,11 @@ my $GCONFTOOL = "/usr/bin/gconftool-2";
 
 #my $DELETETMP = 0;  # clean up after finishing?
 
-die "couldn't get home directory!\n" if "$ENV{HOME}" eq "";
+foreach my $bin ($WGET, $GUNZIP, $ICONV, $GCONFTOOL) {
+    if (! -e $bin) {
+	die "Couldn't find executable $bin!\n";
+    }
+}
 
 my @dics = (
 	    { 
@@ -97,7 +148,7 @@ my @dics = (
 		"encoding"    => "EUC-JP",
 		"sourcefile"  => "compdic",
 		"targetfile"  => "compdic",
-		"name"        => "Computers&IT",
+		"name"        => "Computers",
 		"section"     => "extra",
 	    },
 	    { 
@@ -217,7 +268,7 @@ my @dics = (
 		"encoding"    => "EUC-JP",
 		"sourcefile"  => "stardict",
 		"targetfile"  => "stardict",
-		"name"        => "Stars&Constellations",
+		"name"        => "Stars-Constellations",
 		"section"     => "extra",
 	    },
 	    { 
@@ -256,6 +307,9 @@ my @dics = (
 	    );
 
 
+print "Doing a user-only installation into $UTFDICDIR.\n" if ($SYSTEMWIDE == 0);
+print "Doing a system-wide installation into $UTFDICDIR.\n" if ($SYSTEMWIDE == 1);
+
 
 if (! -d $TMPDIR) {
     mkdir $TMPDIR or die "couldn't create $TMPDIR";
@@ -267,7 +321,11 @@ if (! -d $UTFDICDIR) {
     mkdir $UTFDICDIR or die "couldn't create $UTFDICDIR";
 }
 
+my $OKDIC = 0;
+
 foreach my $dic (@dics) {
+
+    next if (($BASICSETUP == 1) && ($dic->{section} eq "extra"));
 
 # DOWNLOAD    
 #wget -c http://ftp.cc.monash.edu.au/pub/nihongo/edict.gz -O dl/edict.gz
@@ -338,14 +396,19 @@ foreach my $dic (@dics) {
 	}
     }
     $dic->{status} = "OK";
-
-
+    $OKDIC++;
 }
+
+die "All dicfiles failed. Please run \"rm -rf $TMPDIR\"\n" if ($OKDIC == 0);
+
+print "Dicfiles successfully installed into $UTFDICDIR.\n";
 
 my $gconfstrg = "[";
 my $kanjidicgconf = "";
 
 foreach my $dic (@dics) {
+    next if (($BASICSETUP == 1) && ($dic->{section} eq "extra"));
+
     print "[$dic->{name}] $dic->{status}\n";
     if ($dic->{status} eq "OK") {
 	if ($dic->{section} eq "kanjidic") {
@@ -359,16 +422,67 @@ foreach my $dic (@dics) {
 chop($gconfstrg);
     $gconfstrg .= "]";
 
-if (system("$GCONFTOOL --type list --list-type=string --set /apps/gjiten/general/dictionary_list \"$gconfstrg\"") != 0) {
-    print "Setting up dicfiles for gjiten failed.\n";
-}
+if ($SYSTEMWIDE == 0) {
+    if (system("$GCONFTOOL --type list --list-type=string --set /apps/gjiten/general/dictionary_list \"$gconfstrg\"") != 0) {
+	print "Setting up dicfiles for gjiten failed.\n";
+    }
 
-if ($kanjidicgconf ne "") {
+    if ($kanjidicgconf ne "") {
 #    print "$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"\n";
-    if (system("$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"") != 0) {
-	print "Setting up kanjidic for gjiten failed.\n";
+	if (system("$GCONFTOOL --type string --set /apps/gjiten/kanjidic/kanjidicfile \"$kanjidicgconf\"") != 0) {
+	    print "Setting up kanjidic for gjiten failed.\n";
+	}
     }
 }
+else {
+    my $SCHEMAFILE = "$TMPDIR/gjiten-dicfiles.schema";
+    open(SCHEMA, ">$SCHEMAFILE") || die "couldn't create $SCHEMAFILE\n";
 
-print "Please run \"rm -rf $TMPDIR\" if everything is set up correctly!\n";
+    print SCHEMA <<__SCHEMA__
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gjiten/general/dictionary_list</key>
+      <applyto>/apps/gjiten/general/dictionary_list</applyto>
+      <owner>gjiten</owner>
+      <type>list</type>
+      <list_type>string</list_type>
+      <default>$gconfstrg</default>
+      <locale name=\"C\">
+         <short>List of dictionary files</short>
+         <long>
+          List of dictionary files. Format is: 
+          [/path/to/dicfile1\ndictionary_name1,/path/to/dicfile2\ndictionary_name2]
+          Don\'t put a space after the comma!
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/kanjidicfile</key>
+      <applyto>/apps/gjiten/kanjidic/kanjidicfile</applyto>
+      <owner>gjiten</owner>
+      <type>string</type>
+      <default>$kanjidicgconf</default>
+      <locale name=\"C\">
+       <short>Kanjidic dictionary file</short>
+       <long>Kanjidic dictionary file</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>
+
+__SCHEMA__
+;
+    close(SCHEMA);
+
+    if (system("GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults $GCONFTOOL --makefile-install-rule $SCHEMAFILE") != 0) {
+	print "Gconf schema installation failed!\n";
+    }
+    else system("/usr/bin/killall gconfd-2"); #restart gconfd
+}
+
+print "\nPlease run \"rm -rf $TMPDIR\" if everything is set up correctly!\n";
 

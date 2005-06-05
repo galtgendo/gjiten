@@ -8,7 +8,7 @@ v2.4
     - German translation update. (Gregor Riepl)
     - Optional unicode radicals in KanjiDic.
     - Don't limit if result limit is < 1.
-    - Perl script for automated dictionary setup.
+    - Perl script for automated dictionary setup (system-wide or user-only).
     - Gconf schema for system-wide settings.
 
 v2.3 (10/06/2004)

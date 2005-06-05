@@ -18,7 +18,7 @@ Computers]</default>
          <short>List of dictionary files</short>
          <long>
           List of dictionary files. Format is: 
-          "[/path/to/dicfile1\ndictionary_name1,/path/to/dicfile2\ndictionary_name2]
+          [/path/to/dicfile1\ndictionary_name1,/path/to/dicfile2\ndictionary_name2]
           Don't put a space after the comma!
          </long>
       </locale>
