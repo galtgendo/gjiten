@@ -84,6 +84,7 @@ gboolean dicfile_init(GjitenDicfile *dicfile) {
 
 	if (dicfile->status != DICFILE_OK) {
 		dicfile->file = open(dicfile->path, O_RDONLY);
+
 		if (dicfile->file == -1) {
 			gjiten_print_error(_("Error opening dictfile:  %s\nCheck your preferences!"), dicfile->path);
 			dicfile->status = DICFILE_BAD;
@@ -99,10 +100,10 @@ gboolean dicfile_init(GjitenDicfile *dicfile) {
 				dicfile->size = dicfile->stat.st_size;
 			}
 		}
+		printf("ok.\n");
 		dicfile->status = DICFILE_OK;
-		return TRUE;
 	}
-	else return TRUE;
+	return TRUE;
 }
 
 void dicfile_close(GjitenDicfile *dicfile) {

@@ -19,7 +19,7 @@ int gjiten_print_error(const char *fmt, ... ) {
 	va_start(args, fmt);
 	pstr = g_strdup_vprintf(fmt, args);
 	va_end(args);
- 
+
 	if (pstr != NULL) {
 	  dialog = gtk_message_dialog_new(NULL, 0, GTK_MESSAGE_ERROR,  GTK_BUTTONS_OK, "%s", pstr );
 

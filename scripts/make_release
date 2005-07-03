@@ -19,6 +19,7 @@ cd $SCRIPTDIR/..
 cp -r . $TARGET
 cd $TARGET
 if [ -f Makefile ]; then 
+    ./autogen.sh
     make distclean
 fi
 cat rpm/gjiten.spec.in |sed s/@VERSION@/$VERSION/ >rpm/gjiten.spec

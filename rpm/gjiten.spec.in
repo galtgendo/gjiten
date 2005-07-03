@@ -4,7 +4,8 @@ Summary: Japanese dictionary for GNOME.
 Name: gjiten
 Version: @VERSION@
 Release: 1
-Copyright: GPL
+Copyright:GPL
+Group: Productivity/Office/Dictionary
 Group: X11/Applications
 Source: gjiten-@VERSION@.tar.gz
 BuildRoot: /var/tmp/gjiten-@VERSION@-root
@@ -21,13 +22,28 @@ See http://gjiten.sourceforge.net for dictionary files and updates.
 %prep
 %setup
 %build
-./configure --prefix=%prefix
+export GCONF_SCHEMA_FILE_DIR=%{_sysconfdir}/gconf/schemas
+./configure --prefix=%prefix \
+	    --mandir=%{_mandir}
 make
 
 %install
+export GCONF_SCHEMA_FILE_DIR=%{_sysconfdir}/gconf/schemas
 if [ -d $RPM_BUILD_ROOT ] ; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
+
+%post
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS="gjiten.schemas gjiten-dicfiles.schemas"
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/$S >/dev/nulldone
+done
+update-desktop-database %{_datadir}/applications
+
+%postun
+#FIXME uninstall schema
+update-desktop-database %{_datadir}/applications
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -38,3 +54,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc README COPYING TODO AUTHORS INSTALL NEWS ChangeLog
 %{prefix}/bin/*
 %{prefix}/share/*
+%{_sysconfdir}/gconf/schemas/*
+%{_mandir}/man1/*

@@ -102,6 +102,7 @@ gint search4string(gint srchtype, GjitenDicfile *dicfile, gchar *srchstrg, guint
 	if (dicfile->status == DICFILE_NOT_INITIALIZED) {
 		if (dicfile_init(dicfile) == FALSE) return SRCH_FAIL; 
 	}
+	if (dicfile->status != DICFILE_OK) return SRCH_FAIL;
 
   if ((dicfile != conf.mmaped_dicfile) && (conf.mmaped_dicfile != NULL)) {
     //free mem of previously used dicfile	
