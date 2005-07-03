@@ -613,7 +613,7 @@ static void worddic_search(unsigned char *srchstrg) {
   word_matches = 0;
 
 	if (gjitenApp->conf->dicfile_list == NULL) {
-    sprintf(appbarmsg,_("No dicfiles specified! Set your preferences first."));
+    snprintf(appbarmsg, 50, _("No dicfiles specified! Set your preferences first."));
     gnome_appbar_set_status(GNOME_APPBAR(wordDic->appbar_mainwin),appbarmsg);
     return;
   } 
@@ -651,8 +651,8 @@ static void worddic_search(unsigned char *srchstrg) {
   }
 
   if (word_matches) {
-    if (truncated) sprintf(appbarmsg, _("Matches found (truncated): %d"), word_matches);
-    else sprintf(appbarmsg, _("Matches found: %d"), word_matches);
+    if (truncated) snprintf(appbarmsg, 50, _("Matches found (truncated): %d"), word_matches);
+    else snprintf(appbarmsg, 50, _("Matches found: %d"), word_matches);
     gnome_appbar_set_status(GNOME_APPBAR(wordDic->appbar_mainwin), appbarmsg);
   }
   else gnome_appbar_set_status(GNOME_APPBAR(wordDic->appbar_mainwin), _("No match found!"));

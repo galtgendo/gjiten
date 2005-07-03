@@ -464,7 +464,7 @@ void findk_by_stroke(int stroke, int plusmin, struct knode **llist) {
   if (lowerlim < 1) lowerlim = 1;
  
   for (i = lowerlim; i <= upperlim ; i++) {
-    sprintf(srchkey,"S%d ", i);
+    snprintf(srchkey, 10, "S%d ", i);
     findk_by_key(srchkey, llist);
   }
 }
@@ -585,24 +585,24 @@ void on_kanji_search() {
     if ((stroke < 1) || (stroke > 30)) {
       	gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
 				_("Invalid stroke count :-P "));
-	return;
+				return;
     }
     if (klinklist == NULL) {
       findk_by_stroke(stroke, plus_min, &klinklist);  // this should! give results
       if (klinklist == NULL) {
-	gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
+				gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
 				_("Stroke search didn't find any match :-O "));
-	return;
+				return;
       }
     }
     else {
       findk_by_stroke(stroke, plus_min, &tmpklinklist);
       klists_merge(&klinklist,&tmpklinklist); 
       if (klinklist == NULL) {  
-	found = FALSE; 
-	gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
-				_("No such kanji with this stroke/radical combination.")); 
-	return;
+				found = FALSE; 
+				gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
+																_("No such kanji with this stroke/radical combination.")); 
+				return;
       }
     }
   }
@@ -611,7 +611,7 @@ void on_kanji_search() {
     if (klinklist == NULL) findk_by_key(kentry, &klinklist);
     else {
       findk_by_key(kentry, &tmpklinklist);
-      klists_merge(&klinklist,&tmpklinklist);
+      klists_merge(&klinklist, &tmpklinklist);
     }
     if (klinklist == NULL) {    
       gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji), _("No Matches found!"));
@@ -619,8 +619,8 @@ void on_kanji_search() {
     }
   }
   
-  sprintf(kappbarmsg,_("Kanji found: %d"),count_kanji(klinklist));
-  gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),kappbarmsg);
+  snprintf(kappbarmsg, 100, _("Kanji found: %d"), count_kanji(klinklist));
+  gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji), kappbarmsg);
 
   if (count_kanji(klinklist) == 1) print_kanjinfo(klinklist->kanji);
   

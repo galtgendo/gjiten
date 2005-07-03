@@ -39,7 +39,7 @@ GConfClient *gconf_client;
 GjitenConfig *conf_load() {
   gchar dicprefix[] = "/apps/gjiten/general/dic";
   gchar *tmpstrg;
-  gchar historystr[30];
+  gchar historystr[31];
   gchar *tmpptr, *endptr;
   gchar gnomekcfg[] = "/apps/gjiten/kanjidic/";
   int i;
@@ -177,7 +177,7 @@ GjitenConfig *conf_load() {
  
   //Load gjiten search history
   for (i = 0; i <= 50; i++) {
-    sprintf(historystr, "/apps/gjiten/history/history%d", i);
+    snprintf(historystr, 31, "/apps/gjiten/history/history%d", i);
     conf->history[i] = gconf_client_get_string(gconf_client, historystr, NULL);
     if (conf->history[i] == NULL) break;
   }
@@ -250,8 +250,7 @@ void conf_save_history(GList *history, GjitenConfig *conf) {
   int i;
   if (history != NULL) {
     for (i = 0; i <= 50; i++) {
-      sprintf(historystr,"/apps/gjiten/history/history%d", i);
-      //printf("%s: %s\n", historystr, (char*) history->data);
+      snprintf(historystr, 31, "/apps/gjiten/history/history%d", i);
       gconf_client_set_string(gconf_client, historystr, history->data, NULL);
       history = g_list_next(history);
       if (history == NULL) break;
