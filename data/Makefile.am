@@ -3,7 +3,7 @@ pkgdata_DATA = vconj.utf8 radkfile.utf8
 gladedir	= $(pkgdatadir)
 glade_DATA	= gjiten-settings.glade
 
-schemasdir       = $(sysconfdir)/gconf/schemas
+schemasdir       = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = gjiten.schemas.in gjiten-dicfiles.schemas.in
 schemas_DATA     = $(schemas_in_files:.schemas.in=.schemas)
 @INTLTOOL_SCHEMAS_RULE@
