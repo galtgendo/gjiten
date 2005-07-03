@@ -1,6 +1,7 @@
 v2.5 ()
     - History buffer overrun fixed (John Thacker).
-    
+    - Updated spec for FC3
+    - Fixed segfault with invalid dicfile in the schema.
 
 v2.4 (06/05/2005)
     - Gettext fix for kanji info pref dialog. (Daichi Kawahata)
