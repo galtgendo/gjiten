@@ -4,7 +4,7 @@ Summary: Japanese dictionary for GNOME.
 Name: gjiten
 Version: @VERSION@
 Release: 1
-Copyright:GPL
+License: GPL
 Group: Productivity/Office/Dictionary
 Group: X11/Applications
 Source: gjiten-@VERSION@.tar.gz

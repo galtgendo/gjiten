@@ -8,8 +8,6 @@ touch $srcdir/README
 
 DIE=0
 
-ACLOCAL_FLAGS="-I $ACLOCAL_FLAGS"
-
 (test -f $srcdir/configure.in) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level package directory"
