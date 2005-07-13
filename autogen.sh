@@ -4,33 +4,11 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
+touch $srcdir/README
+
 DIE=0
 
-if test -z "USE_GNOME2_MACROS" ; then
-  USE_GNOME2_MACROS=0
-fi
- 
-if test "$USE_GNOME2_MACROS" = 1 ; then
-  if test -z "$GNOME2_DIR" ; then
-    GNOME_COMMON_DATADIR="/usr/share"
-  else
-    GNOME_COMMON_DATADIR="$GNOME2_DIR/share"
-  fi
-  GNOME_COMMON_MACROS_DIR="$GNOME_COMMON_DATADIR/aclocal/gnome2-macros"
-else
-  if test -z "$GNOME_DIR" ; then
-    GNOME_COMMON_DATADIR="/usr/share"
-    LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
-    PATH="$GNOME2_DIR/bin:$PATH"
-    export PATH
-    export LD_LIBRARY_PATH
-  else
-    GNOME_COMMON_DATADIR="$GNOME_DIR/share"
-  fi
-  GNOME_COMMON_MACROS_DIR="$GNOME_COMMON_DATADIR/aclocal/gnome-macros"
-fi
-
-ACLOCAL_FLAGS="-I $GNOME_COMMON_MACROS_DIR $ACLOCAL_FLAGS"
+ACLOCAL_FLAGS="-I $ACLOCAL_FLAGS"
 
 (test -f $srcdir/configure.in) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
@@ -128,8 +106,6 @@ do
     echo processing $dr
     ( cd $dr
 
-      aclocalinclude="$ACLOCAL_FLAGS"
-
       if grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null; then
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
@@ -152,8 +128,8 @@ do
 	  libtoolize --force --copy
 	fi
       fi
-      echo "Running aclocal $aclocalinclude ..."
-      aclocal $aclocalinclude
+      echo "Running aclocal ..."
+      aclocal
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running autoheader..."
 	autoheader
@@ -167,6 +143,8 @@ do
 done
 
 conf_flags="--enable-maintainer-mode"
+
+rm -f README
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...
