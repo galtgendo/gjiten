@@ -1,4 +1,5 @@
 v2.5 ()
+    - Fixed stroke count search when irrelevant results showed up. 
     - History buffer overrun fixed (John Thacker).
     - Updated spec for FC3
     - Fixed segfault with invalid dicfile in the schema.

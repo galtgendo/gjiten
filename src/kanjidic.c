@@ -464,7 +464,7 @@ void findk_by_stroke(int stroke, int plusmin, struct knode **llist) {
   if (lowerlim < 1) lowerlim = 1;
  
   for (i = lowerlim; i <= upperlim ; i++) {
-    snprintf(srchkey, 10, "S%d ", i);
+    snprintf(srchkey, 10, " S%d ", i);
     findk_by_key(srchkey, llist);
   }
 }

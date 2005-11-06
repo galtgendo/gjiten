@@ -100,7 +100,6 @@ gboolean dicfile_init(GjitenDicfile *dicfile) {
 				dicfile->size = dicfile->stat.st_size;
 			}
 		}
-		printf("ok.\n");
 		dicfile->status = DICFILE_OK;
 	}
 	return TRUE;
