@@ -1,4 +1,5 @@
--gconf schema
+-system wide dictionaries should appear automatically.
+-auto-adjust should revert the options (optional)
 -use gnome history for gnome_entry
 -only open files (radkfile, vconj) if needed
 -Whole Expr search, fix first highlights which are not whole words.
@@ -14,7 +15,7 @@
 -"Put kanji in clipboard/word dic on successful lookup" option
 -Kanji result split win separator position
 -Work on vconj a bit more
--Kanjipad exec: gnome-exec.h
+-Kanjipad exec: g_spawn_async
 -remove background from logo. fuckin ugly ;)
 -update documentation: describe the search options (by key) a little more, real-time explanation, LC_ALL
 -One kanji match: should be added to the history
@@ -30,7 +31,6 @@ Planned:
 -Back-Fwd should set dics/options too. And also store the options in history
 -Save kanjidic history in config on exit.
 -Doubleclick on kanji should look it up in Word dictionary.
--Rightclick on kanji->menu popup: append/paste into Word dic/show kanji info 
 -Add clear menu to menubar in word dictionary.
 -Limit Kanji search hits too.
 -Kanji result clist size should adjust itself to the window size
@@ -39,7 +39,6 @@ Planned:
 -update and convert ja docs to DocBook
 -Tooltips.
 -Dictionary packages: basic and additional (rpm/deb).
--Shift click on kanji in word dic ->kanji details.
 -Menubar/toolbar: disable one only.
 -hu.po. 
 -Option to add new entries to the edict dict file

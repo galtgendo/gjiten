@@ -1,5 +1,5 @@
 appicondir = $(datadir)/pixmaps
-appicon_DATA = kanjidic.png kanjipad.png jiten.png
+appicon_DATA = kanjidic.png kanjipad.png jiten.png left_ptr_question.png
 
 applogodir = $(datadir)/pixmaps/gjiten
 applogo_DATA = gjiten-logo.png

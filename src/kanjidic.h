@@ -56,9 +56,9 @@
 #define MISSC 25
 #define UNI 26 
 #define JIS 27
-
 #define KCFGNUM 28
 
+#define KBUFSIZE 500
 
 
 typedef struct _KanjiDic KanjiDic;
@@ -101,5 +101,6 @@ struct _KanjiDic {
 KanjiDic *kanjidic_create();
 void print_kanjinfo(gunichar kanji);
 void kanjidic_apply_fonts();
+void kanji_selected(gunichar kanji);
 
 #endif

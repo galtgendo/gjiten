@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* gjiten.c
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
 
-   Copyright (C) 1999 - 2003 Botond Botyanszki <boti@rocketmail.com>
+   Copyright (C) 1999 - 2005 Botond Botyanszki <boti@rocketmail.com>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by
@@ -146,6 +147,7 @@ void gjiten_exit() {
 void gjiten_start_kanjipad() {
   FILE *kanjipad_binary;
   char *kpad_cmd;
+	int32_t len;
 
   kanjipad_binary = fopen(gjitenApp->conf->kanjipad,"r");
   if (kanjipad_binary == NULL) {
@@ -155,10 +157,11 @@ void gjiten_start_kanjipad() {
 												 "See the Documentation for more details about KanjiPad."));
   }
   else {
+		len = strlen(gjitenApp->conf->kanjipad) + 2;
     fclose(kanjipad_binary);
-    kpad_cmd = g_malloc(strlen(gjitenApp->conf->kanjipad) + 2);
-    strcpy(kpad_cmd, gjitenApp->conf->kanjipad);
-    strcat(kpad_cmd, "&");
+    kpad_cmd = g_malloc(len);
+    strncpy(kpad_cmd, gjitenApp->conf->kanjipad, len);
+    strncat(kpad_cmd, "&", 1);
     system(kpad_cmd); /* FIXME */
     g_free(kpad_cmd);
   }

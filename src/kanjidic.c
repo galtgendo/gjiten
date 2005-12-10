@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* kanjidic.c
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
   
-   Copyright (C) 1999-2003 Botond Botyanszki <boti@rocketmail.com>
+   Copyright (C) 1999-2005 Botond Botyanszki <boti@rocketmail.com>
    xjdic code Copyright (C) 1998 Jim Breen 
 
    This program is free software; you can redistribute it and/or modify
@@ -45,15 +46,13 @@
 #include "radical-convtable.h"
 
 /*====== Prototypes========================================================*/
-void kanji_selected(gunichar *kanji);
-
 int get_radical_index(gunichar radical);
 void get_rad_of_kanji(gunichar kanji);
 
 static void kanjidic_close();
 
 /* VARIABLES ************************/
-gchar *kdic_line = NULL;  /*size = KCFGNUM * 200 */
+gchar *kdic_line = NULL;  /*size = KCFGNUM * KBUFSIZE */
 gchar kanjiselected[2];
 gchar *radkfile = NULL;
 guint32 radkfile_size;
@@ -124,155 +123,167 @@ static GnomeUIInfo kmenubar_uiinfo[] = {
 
 /* ************************************************************ */
 void do_kdicline(gchar *kstr) {
-  char tmpstr[200];
+  char tmpstr[KBUFSIZE];
   int i, pos;
 
-  //printf("%s\n", kstr);
+  if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * KBUFSIZE);
+  if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
 
-  for (i = 0; i < KCFGNUM * 200; i++) { //clear it
+  for (i = 0; i < KCFGNUM * KBUFSIZE; i++) { //clear it
     kdic_line[i] = 0;
   }
-
   
-  g_unichar_to_utf8(g_utf8_get_char(kstr), &kdic_line[KANJI * 200] ); //KANJI
-  get_rad_of_kanji(g_utf8_get_char(kdic_line + KANJI * 200)); //RADICAL
+  g_unichar_to_utf8(g_utf8_get_char(kstr), &kdic_line[KANJI * KBUFSIZE] ); //KANJI
+  get_rad_of_kanji(g_utf8_get_char(kdic_line + KANJI * KBUFSIZE)); //RADICAL
   
-  get_word(kstr, kdic_line+JIS*200,3);
+  get_word(kdic_line + JIS * KBUFSIZE, kstr, KBUFSIZE, 3);
   pos = 7;
   //printf("%s\n",kstr);
-  while (pos != 0){
-    pos = get_word(kstr,tmpstr,pos);
+  while (pos != 0) {
+    pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
     if ((tmpstr[0] >> 7)) {       // jap char   //FIXME
-     	if (strlen(kdic_line+READING*200) != 0) strcat(kdic_line+READING*200,", ");
-	strcat(kdic_line+READING*200,tmpstr);
-    }
-    else switch (tmpstr[0])  {
-    case '-' : {
-      if (strlen(kdic_line+READING*200) != 0) strcat(kdic_line+READING*200,", ");
-      strcat(kdic_line+READING*200,tmpstr);
-      break;
-    }
-    case 'T': {
-      if (tmpstr[1] == '1') {
-	if (strlen(kdic_line+READING*200) != 0) 
-	  {
-	    strcat(kdic_line+READING*200,", ");
-	    strcat(kdic_line+READING*200,_("Name readings:"));
-	  }
-	
-	else strcat(kdic_line+READING*200,_("Name readings:"));
-	pos = get_word(kstr,tmpstr,pos);
-	strcat(kdic_line+READING*200,tmpstr);
-	break;
-      }
-      if (tmpstr[1] == '2') {
-	if (strlen(kdic_line+READING*200) != 0) strcat(kdic_line+READING*200,", Radical Name: ");
-	else strcat(kdic_line+READING*200,_("Radical name:"));
-	pos = get_word(kstr,tmpstr,pos);
-	strcat(kdic_line+READING*200,tmpstr);
-	break;
-	}
-    }
-    case '{': { // english meaning
-      if (strlen(kdic_line+ENGLISH*200) != 0 ) strcat(kdic_line+ENGLISH*200," ");
-      strcat(kdic_line+ENGLISH*200,tmpstr+1);
-      strcat(kdic_line+ENGLISH*200,";"); // put endmark: ;
-	break;
-      }
-    case 'B' : {
-      strcpy(kdic_line+BUSHU*200,tmpstr+1);
-      break;
-    }
-    case 'C' : {
-      strcpy(kdic_line+CLASSIC*200,tmpstr+1);
-      break;
-    }
-    case 'F' : {
-      strcpy(kdic_line+FREQ*200,tmpstr+1);
-      break;
-    }
-    case 'G' : {
-      strcpy(kdic_line+JOUYOU*200,tmpstr+1);
-      break;
-    }
-    case 'H' : {
-      strcpy(kdic_line+HINDEX*200,tmpstr+1);
-      break;
-      }
-    case 'N' : {
-      strcpy(kdic_line+NINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'V' : {
-      strcpy(kdic_line+VINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'D' : {
-      strcpy(kdic_line+DEROO*200,tmpstr+1);
-      break;
-    }
-    case 'P' : {
-      strcpy(kdic_line+SKIP*200,tmpstr+1);
-      break;
-    }
-    case 'S' : {
-      if (strlen(kdic_line+STROKES*200) == 0)	strcpy(kdic_line+STROKES*200,tmpstr+1);
-      else { 
-				strcat(kdic_line+STROKES*200,_(", Common miscount: "));
-				strcat(kdic_line+STROKES*200,tmpstr+1);
+     	if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
+				strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
 			}
-      break;
+			strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
     }
-    case 'U' : {
-      strcpy(kdic_line+UNI*200,tmpstr+1);
-      break;
-    }
-    case 'I' : {
-      strcpy(kdic_line+IINDEX*200,tmpstr+1);
-      break;
-      }
-    case 'Q' : {
-      strcpy(kdic_line+FOURC*200,tmpstr+1);
-      break;
-    }
-    case 'M' : {
-      if (tmpstr[1] == 'N') strcpy(kdic_line+MNINDEX*200,tmpstr+2);
-      else if (tmpstr[1] == 'P') strcpy(kdic_line+MPINDEX,tmpstr+2);
-      break;
-      }
-    case 'E' : {
-      strcpy(kdic_line+EINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'K' : {
-      strcpy(kdic_line+KINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'L' : {
-      strcpy(kdic_line+LINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'O' : {
-      strcpy(kdic_line+OINDEX*200,tmpstr+1);
-      break;
-    }
-    case 'W' : {
-      strcpy(kdic_line+KOREAN*200,tmpstr+1);
-      break;
-    }
-    case 'Y' : {
-      strcpy(kdic_line+PINYIN*200,tmpstr+1);
-      break;
-    }
-    case 'X' : {
-      strcpy(kdic_line+CREF*200,tmpstr+1);
-      break;
-    }
-    case 'Z' : 
-      strcpy(kdic_line+MISSC*200,tmpstr+1);
-      break;
-      }
-  }  
+    else switch (tmpstr[0]) {
+				case '-' : 
+					if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
+						strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+					}
+					strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+					break;
+
+        case 'T':
+					if (tmpstr[1] == '1') {
+						if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
+							strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+							strncat(kdic_line + READING * KBUFSIZE, _("Name readings:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						}
+						else {
+							strncat(kdic_line + READING * KBUFSIZE, _("Name readings:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						}
+						pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
+						strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						break;
+					}
+					if (tmpstr[1] == '2') {
+						if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
+							strncat(kdic_line + READING * KBUFSIZE, ", Radical Name: ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						}
+						else {
+							strncat(kdic_line + READING * KBUFSIZE, _("Radical name:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						}
+						pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
+						strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+						break;
+					}
+
+				case '{': // english meaning
+					if (strlen(kdic_line + ENGLISH * KBUFSIZE) != 0 ) {
+						strncat(kdic_line + ENGLISH * KBUFSIZE, " ", KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1);
+					}
+					strncat(kdic_line + ENGLISH * KBUFSIZE, tmpstr + 1, KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1);
+					strncat(kdic_line + ENGLISH * KBUFSIZE, ";", KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1); // put endmark: ;
+					break;
+				
+				case 'B':
+					strncpy(kdic_line + BUSHU * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'C':
+					strncpy(kdic_line + CLASSIC * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+			 
+				case 'F':
+					strncpy(kdic_line + FREQ * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'G':
+					strncpy(kdic_line + JOUYOU * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'H':
+					strncpy(kdic_line + HINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'N':
+					strncpy(kdic_line + NINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'V':
+					strncpy(kdic_line + VINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+				
+				case 'D':
+					strncpy(kdic_line + DEROO * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'P':
+					strncpy(kdic_line + SKIP * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'S':
+					if (strlen(kdic_line + STROKES * KBUFSIZE) == 0) {
+						strncpy(kdic_line + STROKES * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					}
+					else { 
+						strncat(kdic_line + STROKES * KBUFSIZE, _(", Common miscount: "), KBUFSIZE - strlen(kdic_line + STROKES * KBUFSIZE) - 1);
+						strncat(kdic_line + STROKES * KBUFSIZE, tmpstr + 1, KBUFSIZE - strlen(kdic_line + STROKES * KBUFSIZE) - 1);
+					}
+					break;
+				
+				case 'U':
+					strncpy(kdic_line + UNI * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'I':
+					strncpy(kdic_line + IINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+      
+				case 'Q':
+					strncpy(kdic_line + FOURC * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+    
+				case 'M':
+					if (tmpstr[1] == 'N') strncpy(kdic_line + MNINDEX * KBUFSIZE, tmpstr + 2, KBUFSIZE);
+					else if (tmpstr[1] == 'P') strncpy(kdic_line + MPINDEX, tmpstr + 2, KBUFSIZE);
+					break;
+      
+				case 'E':
+					strncpy(kdic_line + EINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+    
+				case 'K':
+					strncpy(kdic_line + KINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'L':
+					strncpy(kdic_line + LINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+    
+				case 'O':
+					strncpy(kdic_line + OINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'W':
+					strncpy(kdic_line + KOREAN * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+					
+				case 'Y':
+					strncpy(kdic_line + PINYIN * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+    
+				case 'X':
+					strncpy(kdic_line + CREF * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+    
+				case 'Z': 
+					strncpy(kdic_line + MISSC * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					break;
+		}
+	}
 }
 
 
@@ -302,15 +313,15 @@ void print_kanjinfo(gunichar kanji) {
 																							 ": ", -1, "blue_foreground", NULL);
 	    if (i == KANJI) {
 		    if (gjitenApp->conf->bigkanji == FALSE) {
-			    gtk_text_buffer_insert(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, kdic_line + i * 200, -1); 
+			    gtk_text_buffer_insert(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, kdic_line + i * KBUFSIZE, -1); 
 		    }
 		    else {
 			    gtk_text_buffer_insert_with_tags_by_name(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), 
-																									 &kanjiDic->kinfo_iter, kdic_line + i * 200, -1, "largefont", NULL);
+																									 &kanjiDic->kinfo_iter, kdic_line + i * KBUFSIZE, -1, "largefont", NULL);
 		    }
 	    }
 	    else {
-		    gtk_text_buffer_insert(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, kdic_line + i * 200, -1);
+		    gtk_text_buffer_insert(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, kdic_line + i * KBUFSIZE, -1);
 	    }
 	    gtk_text_buffer_insert(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), &kanjiDic->kinfo_iter, "\n", -1);
     }
@@ -654,7 +665,7 @@ void on_kanji_search() {
     }
     gtk_widget_show(kanji_result_button);
     g_signal_connect_swapped(G_OBJECT(kanji_result_button), "clicked", G_CALLBACK(kanji_selected), 
-			     (gpointer) &(node_ptr->kanji));
+			     (gpointer) (node_ptr->kanji));
     gtk_text_view_add_child_at_anchor(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), kanji_result_button, kanji_results_anchor);
     node_ptr = node_ptr->next;
   }
@@ -683,13 +694,13 @@ int radical_selected(gunichar *radical) {
     if (g_utf8_get_char(radline_ptr) != *radical) {
       for (j = 0; j < 6; j++) tmpchar[j] = 0; 
       g_unichar_to_utf8(g_utf8_get_char(radline_ptr), tmpchar);
-      strcat(newradline, tmpchar);
+      strncat(newradline, tmpchar, 5);
     }
     else removed = TRUE;  //if it's there then remove it
     radline_ptr = g_utf8_next_char(radline_ptr);
   }
   
-  if (removed == FALSE) strcat(newradline, radical_selected); //Add the radical to the line
+  if (removed == FALSE) strncat(newradline, radical_selected, 5); //Add the radical to the line
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry), newradline);
 
   g_free(newradline);
@@ -699,7 +710,6 @@ int radical_selected(gunichar *radical) {
 }
 
 void history_add(gunichar unicharkanji) {
-  //GSList *tmp_list_ptr = NULL;
   GtkWidget *history_kanji_button;
   GtkWidget *history_kanji_label;
   gchar history_kanji_labelstr[100];
@@ -718,8 +728,6 @@ void history_add(gunichar unicharkanji) {
  
   kanjiDic->kanji_history_list = g_slist_prepend(kanjiDic->kanji_history_list, unichar_list_elem);
 
-  //strcpy(last_kanji, kanji);
-  
   if (gjitenApp->conf->bigkanji == TRUE) {
     g_snprintf(history_kanji_labelstr, 100, "<span size=\"large\">%s</span>", kanji); 
     history_kanji_label = gtk_label_new(NULL);
@@ -739,7 +747,7 @@ void history_add(gunichar unicharkanji) {
   }
 
   g_signal_connect_swapped(G_OBJECT(history_kanji_button), "clicked", G_CALLBACK(kanji_selected), 
-			   (gpointer) (unichar_list_elem));
+			   (gpointer) (*unichar_list_elem));
   gtk_box_pack_start(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, FALSE, FALSE, 0);
   gtk_box_reorder_child(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, 0);
   gtk_widget_show(history_kanji_button);
@@ -749,9 +757,9 @@ void history_add(gunichar unicharkanji) {
 }
 
 
-void kanji_selected(gunichar* kanji) {
-  print_kanjinfo(*kanji);
-  history_add(*kanji);
+void kanji_selected(gunichar kanji) {
+  print_kanjinfo(kanji);
+  history_add(kanji);
   //printf("KANJI_SELECTED\n");
 }
 
@@ -779,7 +787,7 @@ void get_rad_of_kanji(gunichar kanji) {
   int rad_index, kanji_index, i;
   gchar *kdicline_ptr;
   
-  kdicline_ptr = kdic_line + RADICAL * 200;
+  kdicline_ptr = kdic_line + RADICAL * KBUFSIZE;
   for (rad_index = 0; rad_index < total_radicals; rad_index++) {
     for (kanji_index = radical_kanji_start[rad_index]; 
 	 kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
@@ -814,7 +822,7 @@ static gunichar jis_radical_to_unicode(gchar *radical) {
 }
 
 // Load the radical data from the file
-static void load_radkfile() {
+void load_radkfile() {
   int rad_index, rad_max, kanji_index;
   int error = FALSE;
   struct stat radk_stat;
@@ -1100,15 +1108,14 @@ KanjiDic *kanjidic_create() {
   load_radkfile();
 
   if (kanjiDic != NULL) {
-		gtk_widget_hide(kanjiDic->window);
-		gtk_widget_show(kanjiDic->window);
+		gtk_window_present(GTK_WINDOW(kanjiDic->window));
 		return kanjiDic;
   }
 
 	kanjiDic = g_new0(KanjiDic, 1);
 	gjitenApp->kanjidic = kanjiDic;
 
-  if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * 200);
+  if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * KBUFSIZE);
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
 
   kanjiDic->window = gnome_app_new("gjiten", _("Gjiten - KanjiDic"));
@@ -1259,6 +1266,7 @@ KanjiDic *kanjidic_create() {
   kanjiDic->kanji_results_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(kanjiDic->kanji_results_view));
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), GTK_WRAP_CHAR);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), FALSE);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), FALSE);
   gtk_widget_show(kanjiDic->kanji_results_view);
   gtk_container_add(GTK_CONTAINER(scrolledwin_kresults), kanjiDic->kanji_results_view);
   gtk_widget_set_size_request(kanjiDic->kanji_results_view, -1, 66);

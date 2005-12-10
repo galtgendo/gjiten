@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* worddic.h
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
   
-   Copyright (C) 1999 - 2003 Botond Botyanszki <boti@rocketmail.com>
+   Copyright (C) 1999 - 2005 Botond Botyanszki <boti@rocketmail.com>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by
@@ -21,7 +22,6 @@
  */
 #ifndef __WORDDIC_H__
 #define __WORDDIC_H__
-
 typedef struct _WordDic WordDic;
 
 struct _WordDic {
@@ -31,6 +31,7 @@ struct _WordDic {
 	GtkWidget *combo_entry;
 	GtkWidget *text_results_view;
 	GtkTextBuffer *text_results_buffer;
+	GtkTextBuffer *info_buffer;
 	GtkWidget *menu_selectdic;
 	GtkWidget *combo_entry_dictfile;
 	GtkWidget *checkb_verb;
@@ -51,8 +52,11 @@ struct _WordDic {
 	GtkTextIter iter;
 	GtkWidget *appbar_mainwin;
 	GList *combo_entry_glist;
-  GtkWidget *dicselection_menu;
+	GtkWidget *dicselection_menu;
 	GtkTextTag *tag_large_font;
+	GdkCursor *selection_cursor;
+	GdkCursor *regular_cursor;
+	gboolean is_cursor_regular;
 };
 
 

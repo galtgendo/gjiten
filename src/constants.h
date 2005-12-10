@@ -1,3 +1,5 @@
+#ifndef __CONSTANTS_H__
+#define __CONSTANTS_H__
 
 #define DEFWORDFONTNAME "-*-fixed-medium-r-normal-*-14-*-*-*-*-*-jisx0208.1983-0"
 #define DEFBIGFONTNAME "-*-fixed-medium-r-normal-*-24-*-*-*-*-*-jisx0208.1983-0";
@@ -26,3 +28,4 @@
 #define SRCH_CONT	3
 
 
+#endif

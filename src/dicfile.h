@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* dicfile.h
    
    GJITEN : A JAPANESE DICTIONARY FOR GNOME
   
-   Copyright (C) 1999-2003 Botond Botyanszki <boti at rocketmail dot com>
+   Copyright (C) 1999-2005 Botond Botyanszki <boti at rocketmail dot com>
    
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by

@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* conf.c
    
    GJITEN : A JAPANESE DICTIONARY FOR GNOME
   
-   Copyright (C) 1999-2003 Botond Botyanszki <boti at rocketmail dot com>
+   Copyright (C) 1999-2005 Botond Botyanszki <boti at rocketmail dot com>
    
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by
@@ -37,11 +38,11 @@ GjitenConfig conf;
 GConfClient *gconf_client;
 
 GjitenConfig *conf_load() {
-  gchar dicprefix[] = "/apps/gjiten/general/dic";
+  gchar *dicprefix = "/apps/gjiten/general/dic";
   gchar *tmpstrg;
   gchar historystr[31];
   gchar *tmpptr, *endptr;
-  gchar gnomekcfg[] = "/apps/gjiten/kanjidic/";
+  gchar *gnomekcfg = "/apps/gjiten/kanjidic/";
   int i;
 	GjitenDicfile *dicfile;
 	GSList *gconf_diclist = NULL;
@@ -164,9 +165,7 @@ GjitenConfig *conf_load() {
 
   //Load kanji info settings
   for (i = 0; i < KCFGNUM; i++) { 
-	  tmpptr = g_malloc(strlen(gnomekcfg) + strlen(kanjidicstrg[i]) + 1); //FIXME: g_strdup_printf	
-	  strcpy(tmpptr, gnomekcfg);
-    strcat(tmpptr, kanjidicstrg[i]);
+		tmpptr = g_strdup_printf("%s%s", gnomekcfg, kanjidicstrg[i]);
     if (gconf_client_get_bool(gconf_client, tmpptr, NULL)) {
       conf->kdiccfg[i] = TRUE;
       /* printf("%s : %d\n",kanjidicstrg[i], conf->kdiccfg[i]); */
@@ -186,7 +185,7 @@ GjitenConfig *conf_load() {
 }
 
 void conf_save(GjitenConfig *conf) {
-  gchar gnomekcfg[] = "/apps/gjiten/kanjidic/";
+  gchar *gnomekcfg = "/apps/gjiten/kanjidic/";
   int i;
   gchar *confpath, *tmpstrg;
 	GConfValue *gconfList;
@@ -197,9 +196,7 @@ void conf_save(GjitenConfig *conf) {
   gconf_client_set_string(gconf_client, "/apps/gjiten/general/version", VERSION, NULL);
   //Save kanjidic display options
   for (i = 0; i < KCFGNUM; i++) { 
-    confpath = g_malloc(strlen(gnomekcfg) + strlen(kanjidicstrg[i]) + 1);
-    strcpy(confpath, gnomekcfg);
-    strcat(confpath, kanjidicstrg[i]);
+		confpath = g_strdup_printf("%s%s", gnomekcfg, kanjidicstrg[i]);
     gconf_client_set_bool(gconf_client, confpath, conf->kdiccfg[i], NULL);
     g_free(confpath);
   }
@@ -207,7 +204,7 @@ void conf_save(GjitenConfig *conf) {
   //gconf_client_set_bool(gconf_client, "/apps/gjiten/general/tooltips", conf->tooltips, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/menubar", conf->menubar, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/toolbar", conf->toolbar, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/dictpath", conf->dictpath, NULL);
+  gconf_client_set_string(gconf_client, "/apps/gjiten/general/dictpath", conf->dictpath == NULL ? "" : conf->dictpath, NULL);
   gconf_client_set_string(gconf_client, "/apps/gjiten/kanjidic/kanjidicfile", conf->kanjidic->path, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/kanjidic/unicode_radicals", conf->unicode_radicals, NULL);
 
@@ -220,8 +217,8 @@ void conf_save(GjitenConfig *conf) {
 
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/bigwords", conf->bigwords, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/bigkanji", conf->bigkanji, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/largefont", conf->largefont, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/normalfont", conf->normalfont, NULL);
+  gconf_client_set_string(gconf_client, "/apps/gjiten/general/largefont", conf->largefont == NULL ? "" : conf->largefont, NULL);
+  gconf_client_set_string(gconf_client, "/apps/gjiten/general/normalfont", conf->normalfont == NULL ? "" : conf->normalfont, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/gdk_use_xft", conf->gdk_use_xft, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_ja_JP", conf->force_ja_JP, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_language_c", conf->force_language_c, NULL);

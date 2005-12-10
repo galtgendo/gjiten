@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* dicutil.c
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
   
-   Copyright (C) 1999 - 2003 Botond Botyanszki <boti@rocketmail.com>
+   Copyright (C) 1999 - 2005 Botond Botyanszki <boti@rocketmail.com>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by
@@ -94,7 +95,7 @@ void dicutil_unload_dic() {
 }
 
 gint search4string(gint srchtype, GjitenDicfile *dicfile, gchar *srchstrg, guint32 *res_index, gint *hit_pos, gint *res_len, gchar *res_str) { 
-	gint search_result;
+  gint search_result;
   gchar *linestart, *lineend; 
   gint copySize = 1023;
   static gchar *linsrchptr;
@@ -182,29 +183,31 @@ int get_jp_match_type(gchar *line, gchar *srchstrg, int offset) {
 }
 
 
-int get_word(char *src, char *dest, int pos) { /*0 if no more words in src, else new pos*/
+int get_word(char *dest, char *src, int size, int pos) { /*0 if no more words in src, else new pos*/
 
   int k,j;
   
   k = pos;
-  if (src[k] == ' ')  k++;
+  while (src[k] == ' ')  k++;
   if ( (int) (strlen(src) - 1) <= k) return(0);
   
   j = 0;
   if (src[k] == '{') {
-	  while (src[k] != '}') {
+	  while ((src[k] != '}') && (j < size))  {
 		  dest[j] = src[k];
 		  j++;
 		  k++;
 	  }
   }
-  else while (src[k] != ' ') {
+  else while ((src[k] != ' ') && (j < size)) {
     dest[j] = src[k];
     j++;
     k++;
   }
-  dest[j] = 0;
-  return(k);
+	if (j == size) dest[size - 1] = 0;
+	else dest[j] = 0;
+
+  return k;
 }
 
 

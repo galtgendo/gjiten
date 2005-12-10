@@ -1,9 +1,10 @@
 /* -*- Mode: C; tab-width: 2; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* vi: set ts=2 sw=2: */
 /* dicutil.h
 
    GJITEN : A GTK+/GNOME BASED JAPANESE DICTIONARY
   
-   Copyright (C) 1999 - 2003 Botond Botyanszki <boti@rocketmail.com>
+   Copyright (C) 1999 - 2005 Botond Botyanszki <boti@rocketmail.com>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published  by
@@ -35,7 +36,7 @@ gint search4string(gint type, GjitenDicfile *dicfile, gchar *srchstrg,
 									 guint32 *res_index, gint *hit_pos, gint *res_len, gchar *res_str);
 
 gchar *get_eof_line(gchar *ptr, gchar *end_ptr);
-int get_word(char *src, char *dest, int pos);
+int get_word(char *dest, char *src, int size, int pos);
 int strg_end_compare(gchar *strg1, gchar *strg2);
 int get_jp_match_type(gchar *line, gchar *srchstrg, int offset);
 gboolean is_kanji_only(gchar *line);

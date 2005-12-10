@@ -1,4 +1,7 @@
 v2.5 ()
+    - Kanji can be clicked in WordDic for KanjiDic lookup. (Mboso Sampson)
+    - Regenerated autoconf scripts for kfreebsd support.
+    - Fixed possible buffer overflows.
     - Fixed stroke count search when irrelevant results showed up. 
     - History buffer overrun fixed (John Thacker).
     - Updated spec for FC3
