@@ -135,12 +135,13 @@ void do_kdicline(gchar *kstr) {
   
   g_unichar_to_utf8(g_utf8_get_char(kstr), &kdic_line[KANJI * KBUFSIZE] ); //KANJI
   get_rad_of_kanji(g_utf8_get_char(kdic_line + KANJI * KBUFSIZE)); //RADICAL
-  
+
   get_word(kdic_line + JIS * KBUFSIZE, kstr, KBUFSIZE, 3);
   pos = 7;
-  //printf("%s\n",kstr);
+
   while (pos != 0) {
     pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
+
     if ((tmpstr[0] >> 7)) {       // jap char   //FIXME
      	if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
 				strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
@@ -248,7 +249,7 @@ void do_kdicline(gchar *kstr) {
     
 				case 'M':
 					if (tmpstr[1] == 'N') strncpy(kdic_line + MNINDEX * KBUFSIZE, tmpstr + 2, KBUFSIZE);
-					else if (tmpstr[1] == 'P') strncpy(kdic_line + MPINDEX, tmpstr + 2, KBUFSIZE);
+					else if (tmpstr[1] == 'P') strncpy(kdic_line + MPINDEX * KBUFSIZE, tmpstr + 2, KBUFSIZE);
 					break;
       
 				case 'E':
@@ -297,7 +298,6 @@ void print_kanjinfo(gunichar kanji) {
   for (i = 0; i < 6; i++) kanjistr[i] = 0;
   g_unichar_to_utf8(kanji, kanjistr);
 
-  
   gtk_text_buffer_set_text(GTK_TEXT_BUFFER(kanjiDic->text_kanjinfo_buffer), "", 0);
   gtk_text_buffer_get_start_iter(kanjiDic->text_kanjinfo_buffer, &kanjiDic->kinfo_iter);
 
@@ -760,7 +760,7 @@ void history_add(gunichar unicharkanji) {
 void kanji_selected(gunichar kanji) {
   print_kanjinfo(kanji);
   history_add(kanji);
-  //printf("KANJI_SELECTED\n");
+  GJITEN_DEBUG("KANJI_SELECTED\n");
 }
 
 static void radical_window_close() {
@@ -790,14 +790,15 @@ void get_rad_of_kanji(gunichar kanji) {
   kdicline_ptr = kdic_line + RADICAL * KBUFSIZE;
   for (rad_index = 0; rad_index < total_radicals; rad_index++) {
     for (kanji_index = radical_kanji_start[rad_index]; 
-	 kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
-	 kanji_index++) {
+				 kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
+				 kanji_index++) {
       if (kanji == radical_kanji[kanji_index]) {
-	for (i = 0; i < 6; i++) kdicline_ptr[i] = 0;
-	g_unichar_to_utf8(radicals[rad_index].radical, kdicline_ptr);
-	kdicline_ptr = g_utf8_next_char(kdicline_ptr);
-	g_unichar_to_utf8(' ', kdicline_ptr);
-	kdicline_ptr = g_utf8_next_char(kdicline_ptr);
+				for (i = 0; i < 6; i++) kdicline_ptr[i] = 0;
+				if (kdicline_ptr >= kdic_line + RADICAL * KBUFSIZE + KBUFSIZE - 7) return;
+				g_unichar_to_utf8(radicals[rad_index].radical, kdicline_ptr);
+				kdicline_ptr = g_utf8_next_char(kdicline_ptr);
+				g_unichar_to_utf8(' ', kdicline_ptr);
+				kdicline_ptr = g_utf8_next_char(kdicline_ptr);
       }
     }
   }

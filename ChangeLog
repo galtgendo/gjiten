@@ -1,4 +1,7 @@
-v2.5 ()
+v2.6 ()
+    - Radicals show up again in KanjiDic
+
+v2.5 (2005-12-18)
     - Kanji can be clicked in WordDic for KanjiDic lookup. (Mboso Sampson)
     - Regenerated autoconf scripts for kfreebsd support.
     - Fixed possible buffer overflows.
@@ -7,7 +10,7 @@ v2.5 ()
     - Updated spec for FC3
     - Fixed segfault with invalid dicfile in the schema.
 
-v2.4 (06/05/2005)
+v2.4 (2005-06-05)
     - Gettext fix for kanji info pref dialog. (Daichi Kawahata)
     - KanjiDic segv on CTRL-Q fixed. (Alexis S. L. Carvalho)
     - Japanese translation fixes and desktop file i18n. (Daichi Kawahata)
@@ -21,13 +24,13 @@ v2.4 (06/05/2005)
     - Gconf schema for system-wide settings.
     - Fixed help menu.
 
-v2.3 (10/06/2004)
+v2.3 (2004-10-06)
     - Fixed segv when kanjipad entry is NULL.
     - Made search result textviews non-editable.
     - Segv after dicfile preferences change fixed.
     - Added Show/Hide search options button to the toolbar.
 
-v2.2 (06/13/2004)
+v2.2 (2004-06-13)
     - Search hiragana on katakana input and vice versa.
     - Major code cleanup.
     - Fix 'whole expression' matching with newer edict files (ignore metadata in parenthesis).
@@ -37,12 +40,12 @@ v2.2 (06/13/2004)
     - Unlimited number of dictionary files.
     - radkfile updated.
 
-v2.1 (05/05/2003)
+v2.1 (2003-05-05)
     - GConf crash fixed.
     - Set icon with GNOME.
     - German translation.
 
-v2.0 (01/04/2003)
+v2.0 (2003-01-04)
     - Almost full rewrite:
     - xjdic code removed, no more index files.
     - Now uses GConf for storing configuration
@@ -51,7 +54,7 @@ v2.0 (01/04/2003)
     - Full unicode support, dictionary files need to be utf-8.
     - Manual updated, now works with GNOME2 help system.
     
-v1.0 (01/19/2002)
+v1.0 (2002-01-19)
     - "Reply overrun" crashes with the JP-German GDICT fixed.
     - Search options are saved on exit.
     - Limit search results in word dictionary. 
@@ -61,7 +64,7 @@ v1.0 (01/19/2002)
     - Bigger fonts for KanjiDic. 
     - Word dictionary fonts also customizable in preferences. 
     
-v0.9 (10/25/2001)
+v0.9 (2001-10-25)
     - History saving (up to 50 entries) on exit. 
     - Auto adjust search options if no match is found.
     - Now starts up properly with gnome/gtk specific cmd line options.
@@ -75,7 +78,7 @@ v0.9 (10/25/2001)
     - Segfault on unconfigured exit fixed.
     - Numerous small bugfixes.
         
-v0.8 (05/01/2001)
+v0.8 (2001-05-01)
     - Debianized source. =>Debian packages.
     - Documentation updated and converted to DocBook sgml.
     - Makefile updates.
@@ -89,7 +92,7 @@ v0.8 (05/01/2001)
     - Fixed memory leaks.
     - Popup window behaviour fixed.    
     
-v0.7 (11/03/2000)
+v0.7 (2000-11-03)
     - Various small fixes, code cleanups.
     - It's more user friendly on first startup now.
     - $prefix is correctly substituted in source.
@@ -100,7 +103,7 @@ v0.7 (11/03/2000)
     - Gnome menu entry under Applications (gjiten.desktop file).
     - Linear Search fixed.
                 
-v0.6 (05/21/2000)
+v0.6 (2000-05-21)
     - Linear search added: slower but more accurate. 
     - Makefile fixes for compiling under Debian.
     - Documentation updates (both ja and en). 
@@ -109,7 +112,7 @@ v0.6 (05/21/2000)
     - Copy, paste buttons.
     - Lots of other fixes.
 
-v0.5 (04/19/2000)	
+v0.5 (2000-04-19)	
     - Togglebuttons in Pref/kanjidic should work okay now. 
     - Widget shading in KanjiDic via checkbuttons.
     - README converted to html, added as Help/help.
@@ -122,7 +125,7 @@ v0.5 (04/19/2000)
     - Code reorganized, misc fixes.
     - Added Japanese documentation.
         
-v0.4 (03/02/2000)
+v0.4 (2000-03-02)
     - Verb deinflection works now.
     - Small cleanups and fixes. Preferences changed.
     - Config file changed to GNOME style.
@@ -131,16 +134,16 @@ v0.4 (03/02/2000)
     - Text Entry widgets replaced with Combo Entry widgets [search history]. 
     -"Extra character after highlighted text" bug fixed.
 
-v0.3 (01/09/2000)
+v0.3 (2000-01-09)
     -Added an option for using more than one dictionary file.
     -Added missing radkfile.
     
-v0.2 (12/28/1999)
+v0.2 (1999-12-28)
     -Added a Kanji dictionary with some nice features.
     -Added more options to preferences.
     -Word dictionary lookup functions rewritten. Verb inflection feature is not 
      implemented yet.
     -More bugs, known ones killed ;)
        
-v0.1 (12/25/1999) 
+v0.1 (1999-12-25) 
     -First release. 
