@@ -899,6 +899,12 @@ static gboolean kanji_clicked(GtkWidget *text_view, GdkEventButton *event, gpoin
 
   if (event->button != 1) return FALSE;
 
+	if (gtk_text_buffer_get_selection_bounds(wordDic->text_results_buffer, NULL, NULL) == TRUE )
+	{
+		// don't look up kanji if it is in a selection
+		return FALSE;
+	}
+
   gtk_text_view_window_to_buffer_coords(GTK_TEXT_VIEW (text_view), 
 																				GTK_TEXT_WINDOW_WIDGET,
 																				event->x, event->y, &x, &y);
@@ -909,7 +915,6 @@ static gboolean kanji_clicked(GtkWidget *text_view, GdkEventButton *event, gpoin
 		kanjidic_create();
 		kanji_selected(kanji);
 	}
-
 
   return FALSE;
 }

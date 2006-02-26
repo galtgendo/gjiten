@@ -3,6 +3,7 @@ v2.6 ()
     - DTD location changed in docbook doc (John Thacker).
     - rpm .spec file fix (John Thacker).
     - getdics.pl update (John Thacker).
+    - Don't look up kanji if there is a selection.
 
 v2.5 (2005-12-18)
     - Kanji can be clicked in WordDic for KanjiDic lookup. (Mboso Sampson)
