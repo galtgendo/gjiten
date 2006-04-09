@@ -9,6 +9,6 @@ all: $(top_srcdir)/README
 dist-hook: app-dist-hook
 
 $(top_srcdir)/README: gjiten.xml
-	docbook2txt -u gjiten.xml >gjiten.txt
+	xmlto txt gjiten.xml
 	-mv gjiten.txt $(top_srcdir)/README
 

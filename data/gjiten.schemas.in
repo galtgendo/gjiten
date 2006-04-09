@@ -5,30 +5,6 @@ GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults /usr/bin/gconftool - -mak
 <gconfschemafile>
   <schemalist>
 
-    <schema>
-      <key>/schemas/apps/gjiten/general/toolbar</key>
-      <applyto>/apps/gjiten/general/toolbar</applyto>
-      <owner>gjiten</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-       <short></short>
-       <long></long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gjiten/general/menubar</key>
-      <applyto>/apps/gjiten/general/menubar</applyto>
-      <owner>gjiten</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-       <short></short>
-       <long></long>
-      </locale>
-    </schema>
-
 <!--
     <schema>
       <key>/schemas/apps/gjiten/general/envvar_override</key>

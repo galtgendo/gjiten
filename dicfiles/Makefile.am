@@ -1,1 +1,2 @@
-pkgdata_DATA	= getdics.pl
+EXTRA_DIST = getdics.pl
+

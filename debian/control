@@ -3,13 +3,14 @@ Section: gnome
 Priority: optional
 Maintainer: Botond Botyanszki <b0ti@users.sourceforge.net>
 Uploaders: Ludovic Drolez <ldrolez@debian.org>
-Build-Depends: cdbs, debhelper (>> 4.2.0), libgnomeui-dev, scrollkeeper, libxml-parser-perl, libgnutls11-dev, libgcrypt11-dev
-Standards-Version: 3.6.0
+Build-Depends: cdbs, debhelper (>> 4.2.0), libgnomeui-dev, scrollkeeper, libxml-parser-perl, libgnutls-dev, libgcrypt-dev, docbook-utils
+Standards-Version: 3.6.2
 
 Package: gjiten
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, gconf2, kanjidic, edict
+Depends: ${shlibs:Depends}, ${misc:Depends}, kanjidic, edict
 Suggests: enamdict
+Recommends: ttf-sazanami-mincho | ttf-kochi-mincho
 Description: Japanese dictionary for GNOME
  Gjiten is a Japanese dictionary for GNOME with advanced word and kanji lookup
  features. Requires dictionary files (edict, kanjidic) to function.

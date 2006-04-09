@@ -1,8 +1,10 @@
 gjiten (2.5-1) unstable; urgency=low
 
-  * New upstream release. See ChangeLog.
+  * New upstream release. See ChangeLog. Closes: #342412, #335755
+  * docbook-utils was missing from build-depends (LD).
+  * watch file re-added (LD).
 
- -- Botond Botyanszki <b0ti@users.sourceforge.net>  Sun, 18 Dec 2005 14:28:13 +0200
+ -- Ludovic Drolez <ldrolez@debian.org>  Sun, 18 Dec 2005 14:28:13 +0200
 
 gjiten (2.4-1) unstable; urgency=low
 
@@ -12,11 +14,23 @@ gjiten (2.4-1) unstable; urgency=low
   
  -- Botond Botyanszki <b0ti@users.sourceforge.net>  Sat, 4 Jun 2005 12:10:13 +0200
 
-gjiten (2.3-1) unstable; urgency=low
+gjiten (2.3-2) unstable; urgency=medium
+
+  * Segfault patch applied (Many thanks to Alexis S. L. Carvalho)
+    Closes: Bug#283112
+  * Urgency set to medium since a serious bug has been fixed.
+
+ -- Ludovic Drolez <ldrolez@debian.org>  Sat, 27 Nov 2004 17:16:21 +0100
+
+gjiten (2.3-1) unstable; urgency=medium
 
   * New upstream release. See ChangeLog. Closes Bug#261309
-  
- -- Botond Botyanszki <b0ti@users.sourceforge.net>  Thu, 6 Oct 2004 13:13:22 +0200
+  * Added some japanese ttf fonts to 'recommends'. If you do not have these
+    you'll see hex numbers instead of nice kanjis.
+  * watch file added.
+  * urgency set to medium since a serious bug has been fixed.
+
+ -- Ludovic Drolez <ldrolez@debian.org>  Sat, 13 Nov 2004 22:28:30 +0100
 
 gjiten (2.2-2) unstable; urgency=low
 

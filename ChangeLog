@@ -1,9 +1,11 @@
 v2.6 ()
-    - Radicals show up again in KanjiDic
+    - Radicals show up again in KanjiDic.
     - DTD location changed in docbook doc (John Thacker).
     - rpm .spec file fix (John Thacker).
     - getdics.pl update (John Thacker).
     - Don't look up kanji if there is a selection.
+    - Configurable toolbar/menubar was causing problems, removed.
+    - Automake fixes.
 
 v2.5 (2005-12-18)
     - Kanji can be clicked in WordDic for KanjiDic lookup. (Mboso Sampson)

@@ -10,7 +10,7 @@ schemas_DATA     = $(schemas_in_files:.schemas.in=.schemas)
 
 CLEANFILES = *.bak *.gladep $(schemas_DATA)
 
-EXTRA_DIST = $(schemas_in_files) $(glade_DATA)
+EXTRA_DIST = $(schemas_in_files) $(glade_DATA) radkfile.utf8 vconj.utf8
 
 if GCONF_SCHEMAS_INSTALL
 install-data-local: $(schemas_DATA)

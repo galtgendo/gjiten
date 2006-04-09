@@ -982,52 +982,45 @@ WordDic *worddic_create() {
   dock_main = GNOME_APP(wordDic->window)->dock;
   gtk_widget_show(dock_main);
 
-  if (gjitenApp->conf->menubar) gnome_app_create_menus(GNOME_APP(wordDic->window), menubar_uiinfo);
+  gnome_app_create_menus(GNOME_APP(wordDic->window), menubar_uiinfo);
 
-  if (gjitenApp->conf->toolbar) {
-    toolbar = gtk_toolbar_new();
-    gtk_widget_show(toolbar);
+	toolbar = gtk_toolbar_new();
+	gtk_widget_show(toolbar);
 
-    gnome_app_set_toolbar(GNOME_APP(wordDic->window), GTK_TOOLBAR(toolbar));
-    
-    button_exit = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_CLOSE,
-																					 _("Close Gjiten"), "Close", NULL, NULL, -1);
-		g_signal_connect_swapped(G_OBJECT(button_exit), "clicked", 
-														 G_CALLBACK(gtk_widget_destroy), wordDic->window);
+	gnome_app_set_toolbar(GNOME_APP(wordDic->window), GTK_TOOLBAR(toolbar));
+	
+	button_exit = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_CLOSE,
+																				 _("Close Gjiten"), "Close", NULL, NULL, -1);
+	g_signal_connect_swapped(G_OBJECT(button_exit), "clicked", 
+													 G_CALLBACK(gtk_widget_destroy), wordDic->window);
+	
+	wordDic->button_back = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_BACK,
+																									_("Previous search result"), "Back", 
+																									on_back_clicked, NULL, -1);
+	gtk_widget_set_sensitive(wordDic->button_back, FALSE);
 
-    wordDic->button_back = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_BACK,
-																										_("Previous search result"), "Back", 
-																										on_back_clicked, NULL, -1);
-    gtk_widget_set_sensitive(wordDic->button_back, FALSE);
+	wordDic->button_forward = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_FORWARD,
+																										 _("Next search result"), "Forward", 
+																										 on_forward_clicked, NULL, -1);
+	gtk_widget_set_sensitive(wordDic->button_forward, FALSE);
 
-    wordDic->button_forward = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_GO_FORWARD,
-																											 _("Next search result"), "Forward", 
-																											 on_forward_clicked, NULL, -1);
-    gtk_widget_set_sensitive(wordDic->button_forward, FALSE);
+	tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjidic.png");
+	button_kanjidic = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiDic"),
+																						_("Launch KanjiDic"), "KanjiDic", tmpimage,
+																						G_CALLBACK(kanjidic_create), NULL);
 
+	tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
+	button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiPad"),
+																						_("Launch KanjiPad"), "KanjiPad", tmpimage,
+																						G_CALLBACK(gjiten_start_kanjipad), NULL);
 
-    tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjidic.png");
-    button_kanjidic = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiDic"),
-																							_("Launch KanjiDic"), "KanjiDic", tmpimage,
-																							G_CALLBACK(kanjidic_create), NULL);
+	button_srch = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_FIND,
+																				 _("Search for entered expression"), "Search", 
+																				 on_text_entered, NULL, -1);
 
-    tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
-    button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("KanjiPad"),
-																							_("Launch KanjiPad"), "KanjiPad", tmpimage,
-																							G_CALLBACK(gjiten_start_kanjipad), NULL);
-
-    button_srch = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_FIND,
-																					 _("Search for entered expression"), "Search", 
-																					 on_text_entered, NULL, -1);
-
-		/*
-		gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar), GTK_STOCK_NO, 
-														 _("Show/Hide options"), "Show/Hide options",
-														 G_CALLBACK(worddic_show_hide_options), NULL, -1);
-		*/
-		gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Show/Hide\noptions"),
-														_("Show/Hide options"), "Show/Hide options", NULL,
-														G_CALLBACK(worddic_show_hide_options), NULL);
+	gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), _("Show/Hide\noptions"),
+													_("Show/Hide options"), "Show/Hide options", NULL,
+													G_CALLBACK(worddic_show_hide_options), NULL);
 
     /*
     button_srch = gtk_toolbar_insert_item(GTK_TOOLBAR(toolbar), _("Search"), "Search", "Search", 
@@ -1051,9 +1044,7 @@ WordDic *worddic_create() {
     g_signal_connect(G_OBJECT(button_paste), "clicked",G_CALLBACK(worddic_paste), NULL);
 
     */   
-    gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
-
-  }    
+	//gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
 
   vbox_main = gtk_vbox_new(FALSE, 0);
   gtk_widget_show(vbox_main);
