@@ -45,7 +45,7 @@
 #include "gjiten.h"
 #include "dicutil.h"
 
-GjitenApp *gjitenApp;
+GjitenApp *gjitenApp = NULL;
 
 static void parse_an_arg(poptContext state,
 												 enum poptCallbackReason reason,
@@ -149,7 +149,7 @@ void gjiten_start_kanjipad() {
   char *kpad_cmd;
 	int32_t len;
 
-  kanjipad_binary = fopen(gjitenApp->conf->kanjipad,"r");
+  kanjipad_binary = fopen(gjitenApp->conf->kanjipad, "r");
   if (kanjipad_binary == NULL) {
     gjiten_print_error(_("Couldn't find the KanjiPad executable!\n"
 												 "Please make sure you have it installed on your system \n"

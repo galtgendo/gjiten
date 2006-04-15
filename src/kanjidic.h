@@ -94,7 +94,7 @@ struct _KanjiDic {
  	GtkWidget *scrolledwin_history;
 	GSList *kanji_history_list;
 	GtkTextTag *tag_large_font;
-
+	GHashTable *radbuttonhash;
 };
 
 
