@@ -8,6 +8,7 @@ v2.6 ()
     - Automake fixes.
     - Add de_CH translation and close debian bug #314089.
     - Japanese translation update (Daichi Kawahata).
+    - Shade unavailable radicals in radical window
     
 v2.5 (2005-12-18)
     - Kanji can be clicked in WordDic for KanjiDic lookup. (Mboso Sampson)

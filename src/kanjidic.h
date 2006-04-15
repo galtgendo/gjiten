@@ -63,6 +63,17 @@
 
 typedef struct _KanjiDic KanjiDic;
 
+typedef struct _RadInfo {
+	gunichar radical;
+	gint strokes;
+	GList *kanji_info_list;
+} RadInfo;
+
+typedef struct _KanjiInfo {
+	gunichar kanji;
+	GList *rad_info_list;
+} KanjiInfo;
+
 struct _KanjiDic {
 /* GTK variables */
 	GtkWidget *window;
@@ -76,8 +87,6 @@ struct _KanjiDic {
 	GtkWidget *kanji_results_view;
 	GtkTextBuffer *kanji_results_buffer;
 	GtkTextIter kanji_results_iter;
-	gchar *radlist_line[RADLISTLEN];
-	gchar radlist_linestr[RADLISTLEN*5];
 	GtkWidget *appbar_kanji;
 	GList *combo_entry_key_glist;
 	GList *combo_entry_radical_glist;
@@ -94,9 +103,11 @@ struct _KanjiDic {
  	GtkWidget *scrolledwin_history;
 	GSList *kanji_history_list;
 	GtkTextTag *tag_large_font;
-	GHashTable *radbuttonhash;
+	GHashTable *rad_button_hash;
+	GHashTable *kanji_info_hash;
+	GHashTable *rad_info_hash;
+	GList *rad_info_list;
 };
-
 
 KanjiDic *kanjidic_create();
 void print_kanjinfo(gunichar kanji);

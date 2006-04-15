@@ -46,7 +46,6 @@
 #include "radical-convtable.h"
 
 /*====== Prototypes========================================================*/
-int get_radical_index(gunichar radical);
 void get_rad_of_kanji(gunichar kanji);
 
 static void kanjidic_close();
@@ -59,14 +58,6 @@ guint32 radkfile_size;
 extern guint32 srchpos;
 
 GList *klinklist = NULL, *tmpklinklist = NULL;
-
-struct radical_info {
-  gunichar radical;
-  int strokes;
-} radicals[300];
-
-gunichar *radical_kanji = NULL;
-int total_radicals, radical_kanji_start[300], radical_kanji_count[300];
 
 KanjiDic *kanjiDic;
 extern gchar *strginfo[];
@@ -325,27 +316,6 @@ void print_kanjinfo(gunichar kanji) {
 }
   
 
-/*
-//this is only for debugging 
-void klist_print(struct knode *list) { 
-  gchar kanji[6];
-  int i;
-  struct knode *nodeptr;
-  
-  i = 0;
-  printf("Elements in list:\n");
-  nodeptr = list;
-  while (nodeptr != NULL) {
-    g_unichar_to_utf8(*(nodeptr->kanji), kanji);
-    printf("%s ", kanji);
-    nodeptr = nodeptr->next;
-    i++;
-  }
-  printf("\n----TOTAL: %d-----\n", i);
-}
-*/
-
-
 /* compares two lists and combines the matching kanji into one */
 void klists_merge(void) {
   GList *ptr1, *ptr2, *nextptr;
@@ -372,8 +342,7 @@ void klists_merge(void) {
 	tmpklinklist = NULL;
 }
 
-
-void findk_by_key(gchar *srchkey, GList *list)  {
+void findk_by_key(gchar *srchkey, GList **list)  {
   gint srch_resp, roff, rlen;
   gchar repstr[1024];
   guint32 respos, oldrespos; 
@@ -384,7 +353,7 @@ void findk_by_key(gchar *srchkey, GList *list)  {
   //printf("F: Returning:srch_resp:%d\n respos:%ld\n roff:%d rlen:%d\n repstr:%s\n", srch_resp,respos,roff,rlen,repstr); 
   if (srch_resp != SRCH_OK) return; // (FALSE);
   oldrespos = srchpos = respos;
-  list = g_list_prepend(list, (gpointer) g_utf8_get_char(repstr));
+  *list = g_list_prepend(*list, (gpointer) g_utf8_get_char(repstr));
   
   while (roff != 0) {
     oldrespos = respos;
@@ -394,11 +363,11 @@ void findk_by_key(gchar *srchkey, GList *list)  {
     //printf("srch_resp:%d\n respos:%ld\n roff:%d rlen:%d\n repstr:%s\n",srch_resp,respos,roff,rlen,repstr);
     if (srch_resp != SRCH_OK) break;
     if (oldrespos == respos) continue;
-    list = g_list_prepend(list, (gpointer) g_utf8_get_char(repstr));
+    *list = g_list_prepend(*list, (gpointer) g_utf8_get_char(repstr));
   }
 }
 
-void findk_by_stroke(int stroke, int plusmin, GList *list) {
+void findk_by_stroke(int stroke, int plusmin, GList **list) {
   static char srchkey[10];
   int i, lowerlim, upperlim;
  
@@ -414,36 +383,42 @@ void findk_by_stroke(int stroke, int plusmin, GList *list) {
 }
 
 void findk_by_radical(gchar *radstrg) { 
-  int i, rad_index, kanji_index, radnum;
+  gint i, radnum;
+	RadInfo *rad_info;
+	GList *kanji_info_list;
+	gchar *tmprad;
   gchar *radstr_ptr;
 
   if (g_utf8_strlen(radstrg, -1) == 0) return;
 
-  rad_index = get_radical_index(g_utf8_get_char(radstrg));
-  if (rad_index < 0) {
+	radstr_ptr = radstrg;
+	rad_info = g_hash_table_lookup(kanjiDic->rad_info_hash, (gpointer) g_utf8_get_char(radstr_ptr));
+  if (rad_info == NULL) {
     gjiten_print_error(_("Invalid radical!\n"));
     return;
   }
-  for (kanji_index = radical_kanji_start[rad_index]; 
-       kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
-       kanji_index++) {
-    klinklist = g_list_prepend(klinklist, (gpointer) radical_kanji[kanji_index]);
+
+  for (kanji_info_list = rad_info->kanji_info_list;
+			 kanji_info_list != NULL;
+			 kanji_info_list = g_list_next(kanji_info_list)) {
+    klinklist = g_list_prepend(klinklist, (gpointer) ((KanjiInfo *) kanji_info_list->data)->kanji);
   }
+
   // if we have more than 1 radical 
   radnum = g_utf8_strlen(radstrg, -1); 
   if (radnum > 1) {
-    radstr_ptr = radstrg;
     for (i = 1; i <= radnum; i++) {
-      rad_index = get_radical_index(g_utf8_get_char(radstr_ptr));
-      if (rad_index < 0) {
-				gjiten_print_error(_("I don't seem to recognize this radical: '%s' !!!\n"),
-													 g_strndup(radstr_ptr, sizeof(gunichar)));
+      rad_info = g_hash_table_lookup(kanjiDic->rad_info_hash, (gpointer) g_utf8_get_char(radstr_ptr));
+      if (rad_info == NULL) {
+				tmprad = g_strndup(radstr_ptr, sizeof(gunichar));
+				gjiten_print_error(_("I don't seem to recognize this radical: '%s' !!!\n"), tmprad);
+				g_free(tmprad);
 				return;
       }
-      for (kanji_index = radical_kanji_start[rad_index]; 
-					 kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
-					 kanji_index++) {
-				tmpklinklist = g_list_prepend(tmpklinklist, (gpointer) radical_kanji[kanji_index]);
+			for (kanji_info_list = rad_info->kanji_info_list;
+					 kanji_info_list != NULL;
+					 kanji_info_list = g_list_next(kanji_info_list)) {
+				tmpklinklist = g_list_prepend(tmpklinklist, (gpointer) ((KanjiInfo *) kanji_info_list->data)->kanji);
       }
       klists_merge();
       radstr_ptr = g_utf8_next_char(radstr_ptr);
@@ -451,11 +426,20 @@ void findk_by_radical(gchar *radstrg) {
   }
 }
 
+void set_radical_button_sensitive(gpointer radical, RadInfo *rad_info, gpointer user_data) {
+	GtkWidget *rad_button = g_hash_table_lookup(kanjiDic->rad_button_hash, radical);
+	if (GTK_IS_WIDGET(rad_button)) gtk_widget_set_sensitive(rad_button, TRUE);
+}
+
+void set_radical_button_unsensitive(gunichar radical, GtkWidget *rad_button, gpointer user_data) {
+	if (GTK_IS_WIDGET(rad_button)) gtk_widget_set_sensitive(rad_button, FALSE);
+}
+
 
 void on_kanji_search() {
   static gchar *kentry, *radentry;
   int found;
-  int i, j;
+  int i;
   int stroke, plus_min;
   GList *node_ptr;
   gchar kappbarmsg[100];
@@ -466,6 +450,11 @@ void on_kanji_search() {
   GtkWidget *kanji_result_label;
 	GtkTextChildAnchor *kanji_results_anchor;
 	gint result_num = 0;
+	GList *rad_info_list = NULL;
+	GList *kanji_list = NULL;
+	GList *kanji_list_ptr = NULL;
+	GHashTable *rad_info_hash = NULL;
+	KanjiInfo *kanji_info;
 
   gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),_("Searching..."));
   kappbarmsg[0] = 0;
@@ -481,7 +470,6 @@ void on_kanji_search() {
     }
 	}
   kentry = g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_key)->entry)));
-  //printf("KEY:%s\n", kentry);
   if (kentry != NULL) {
     if ((strlen(kentry) > 0) && (push == TRUE) ) {
       kanjiDic->combo_entry_key_glist = g_list_prepend(kanjiDic->combo_entry_key_glist, kentry);
@@ -530,7 +518,7 @@ void on_kanji_search() {
 				return;
     }
     if (klinklist == NULL) {
-      findk_by_stroke(stroke, plus_min, klinklist);  // this should! give results
+      findk_by_stroke(stroke, plus_min, &klinklist);  // this should! give results
       if (klinklist == NULL ) {
 				gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
 				_("Stroke search didn't find any match :-O "));
@@ -538,7 +526,7 @@ void on_kanji_search() {
       }
     }
     else {
-      findk_by_stroke(stroke, plus_min, tmpklinklist);
+      findk_by_stroke(stroke, plus_min, &tmpklinklist);
       klists_merge(); 
       if (klinklist == NULL) {  
 				found = FALSE; 
@@ -551,9 +539,9 @@ void on_kanji_search() {
 
   //FIND BY KEY
   if ((found) && (GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active) && (strlen(kentry) >= 1)) {
-    if (klinklist == NULL) findk_by_key(kentry, klinklist);
+    if (klinklist == NULL) findk_by_key(kentry, &klinklist);
     else {
-      findk_by_key(kentry, tmpklinklist);
+      findk_by_key(kentry, &tmpklinklist);
       klists_merge();
     }
     if (klinklist == NULL) {    
@@ -573,7 +561,8 @@ void on_kanji_search() {
   node_ptr = klinklist;
   i = 0;
   while (node_ptr != NULL) { 
-    for (j = 0; j < 5; j++) kanji_result_str[j] = 0;
+		kanji_list = g_list_prepend(kanji_list, node_ptr->data);
+		memset(kanji_result_str, 0, sizeof(kanji_result_str));
     g_unichar_to_utf8((gunichar) node_ptr->data, kanji_result_str);
     //printf("%s\n", kanji_result_str);
     g_snprintf(kanji_result_labelstr, 100, "<span size=\"xx-large\">%s</span>", kanji_result_str); 
@@ -601,10 +590,30 @@ void on_kanji_search() {
     gtk_text_view_add_child_at_anchor(GTK_TEXT_VIEW(kanjiDic->kanji_results_view), kanji_result_button, kanji_results_anchor);
     node_ptr = g_list_next(node_ptr);
   }
+
+	// find all different radicals in all the kanji found
+	if ((kanji_list != NULL) && (GTK_IS_WIDGET(kanjiDic->window_radicals))) {
+		rad_info_hash = g_hash_table_new(NULL, NULL);
+		for (kanji_list_ptr = kanji_list;
+				 kanji_list_ptr != NULL;
+				 kanji_list_ptr = g_list_next(kanji_list_ptr)) {
+			kanji_info = g_hash_table_lookup(kanjiDic->kanji_info_hash, kanji_list_ptr->data);
+			for (rad_info_list = kanji_info->rad_info_list;
+					 rad_info_list != NULL;
+					 rad_info_list = g_list_next(rad_info_list)) {
+				g_hash_table_insert(rad_info_hash, (gpointer) ((RadInfo *) rad_info_list->data)->radical, rad_info_list->data);
+			}
+		}
+		g_hash_table_foreach(kanjiDic->rad_button_hash, (GHFunc) set_radical_button_unsensitive, NULL);
+
+		g_hash_table_foreach(rad_info_hash, (GHFunc) set_radical_button_sensitive, NULL);
+		g_hash_table_destroy(rad_info_hash);
+		g_list_free(kanji_list);
+	}
 }
 
 
-int radical_selected(gunichar *radical) {
+int radical_selected(gunichar radical) {
   int i, j;
   gchar radical_selected[6];
   gchar tmpchar[6];
@@ -613,7 +622,7 @@ int radical_selected(gunichar *radical) {
   int radline_length = 0;
 
   for (j = 0; j < 6; j++) radical_selected[j] = 0; 
-  g_unichar_to_utf8(*radical, radical_selected);
+  g_unichar_to_utf8(radical, radical_selected);
 
   radline_ptr = (gchar*) gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry));
   newradline = g_strndup(radline_ptr, strlen(radline_ptr) + 6); //Enough space for one more character
@@ -623,7 +632,7 @@ int radical_selected(gunichar *radical) {
 
   removed = FALSE;
   for (i = 0; i < radline_length; i++) {  //Check if we already have the radical in the line
-    if (g_utf8_get_char(radline_ptr) != *radical) {
+    if (g_utf8_get_char(radline_ptr) != radical) {
       for (j = 0; j < 6; j++) tmpchar[j] = 0; 
       g_unichar_to_utf8(g_utf8_get_char(radline_ptr), tmpchar);
       strncat(newradline, tmpchar, 5);
@@ -703,37 +712,27 @@ static void radical_window_close() {
 }
 
 
-int get_radical_index(gunichar radical) {
-  int rad_index;
-  
-  for (rad_index = 0; rad_index < total_radicals + 1; rad_index++) {
-    if (radicals[rad_index].radical == radical) {
-      return rad_index; //we found it
-    }
-  }
-  return -1; //didn't find it
-}
-
 //get all radicals that the kanji has
 void get_rad_of_kanji(gunichar kanji) {
-  int rad_index, kanji_index, i;
   gchar *kdicline_ptr;
-  
+	KanjiInfo *kanji_info;
+	GList *rad_info_list;
+
   kdicline_ptr = kdic_line + RADICAL * KBUFSIZE;
-  for (rad_index = 0; rad_index < total_radicals; rad_index++) {
-    for (kanji_index = radical_kanji_start[rad_index]; 
-				 kanji_index < radical_kanji_start[rad_index] + radical_kanji_count[rad_index]; 
-				 kanji_index++) {
-      if (kanji == radical_kanji[kanji_index]) {
-				for (i = 0; i < 6; i++) kdicline_ptr[i] = 0;
-				if (kdicline_ptr >= kdic_line + RADICAL * KBUFSIZE + KBUFSIZE - 7) return;
-				g_unichar_to_utf8(radicals[rad_index].radical, kdicline_ptr);
-				kdicline_ptr = g_utf8_next_char(kdicline_ptr);
-				g_unichar_to_utf8(' ', kdicline_ptr);
-				kdicline_ptr = g_utf8_next_char(kdicline_ptr);
-      }
-    }
-  }
+
+	kanji_info = g_hash_table_lookup(kanjiDic->kanji_info_hash, (gconstpointer) kanji);
+	if (kanji_info != NULL) {
+		for (rad_info_list = kanji_info->rad_info_list;
+				 rad_info_list != NULL;
+				 rad_info_list = g_list_next(rad_info_list)) {
+			memset(kdicline_ptr, 0, 6);
+			if (kdicline_ptr >= kdic_line + RADICAL * KBUFSIZE + KBUFSIZE - 7) return;
+			g_unichar_to_utf8(((RadInfo *) rad_info_list->data)->radical, kdicline_ptr);
+			kdicline_ptr = g_utf8_next_char(kdicline_ptr);
+			g_unichar_to_utf8(' ', kdicline_ptr);
+			kdicline_ptr = g_utf8_next_char(kdicline_ptr);
+		}
+	}
 }
 
 static gunichar jis_radical_to_unicode(gchar *radical) {
@@ -756,15 +755,17 @@ static gunichar jis_radical_to_unicode(gchar *radical) {
 
 // Load the radical data from the file
 void load_radkfile() {
-  int rad_index, rad_max, kanji_index;
   int error = FALSE;
   struct stat radk_stat;
-  
+  gint rad_cnt = 0;
   gchar *radkfile_name = RADKFILE_NAME;
   gchar *radkfile_ptr;
   gchar *radkfile_end;
   int fd = 0;
-  
+  RadInfo *rad_info = NULL;
+	KanjiInfo *kanji_info;
+	gunichar kanji;
+
   if (radkfile != NULL) {
     //printf("radkfile already initialized.\n");
     return;
@@ -779,11 +780,8 @@ void load_radkfile() {
     g_error("**ERROR** radkfile: open()\n");
     error = TRUE;
   }
-  // printf("SIZE: %d\n", radkfile_size);
   radkfile = (gchar *) mmap(NULL, radkfile_size, PROT_READ, MAP_SHARED, fd, 0);
   if (radkfile == NULL) gjiten_abort_with_msg("mmap() failed for radkfile\n");
-
-  //  printf("STRLEN: %d\n", strlen(radkfile));
 
   if (error == TRUE) {
 		gjiten_print_error(_("Error opening %s.\n "\
@@ -792,40 +790,39 @@ void load_radkfile() {
 		return;
   }
 
-  radical_kanji = g_malloc(radkfile_size * sizeof(gunichar));
-  if (radical_kanji==NULL) gjiten_abort_with_msg("malloc failed for radical tables!\n");
-  
-  radkfile_end = radkfile + strlen(radkfile);
+  radkfile_end = radkfile + strlen(radkfile); //FIXME: lseek
   radkfile_ptr = radkfile;
-
-  rad_index = -1;
-  kanji_index = 0;
-  rad_max = 0;
   
+	if (kanjiDic->kanji_info_hash == NULL) {
+		kanjiDic->kanji_info_hash = g_hash_table_new(NULL, NULL);
+	}
+	if (kanjiDic->rad_info_hash == NULL) {
+		kanjiDic->rad_info_hash = g_hash_table_new(NULL, NULL);
+	}
+
   while((radkfile_ptr < radkfile_end) && (radkfile_ptr != NULL)) {
     if (*radkfile_ptr == '#') {  //find $ as first char on the line
       radkfile_ptr = get_eof_line(radkfile_ptr, radkfile_end); //Goto next line
       continue;
     }
     if (*radkfile_ptr == '$') {  //Radical info line
-      rad_index++;                         //Increase number of radicals found
+      rad_cnt++;          //Increase number of radicals found
       radkfile_ptr = g_utf8_next_char(radkfile_ptr);
-      while (g_unichar_iswide(g_utf8_get_char(radkfile_ptr)) == FALSE) //Find radical
+      while (g_unichar_iswide(g_utf8_get_char(radkfile_ptr)) == FALSE) { //Find radical
 				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+			}
 
-      radicals[rad_index].radical = jis_radical_to_unicode(radkfile_ptr); //store radical
+			rad_info = g_new0(RadInfo, 1);
+			rad_info->radical = jis_radical_to_unicode(radkfile_ptr); //store radical
 
-      while (g_ascii_isdigit(*radkfile_ptr) == FALSE) //Find stroke number
+      while (g_ascii_isdigit(*radkfile_ptr) == FALSE) { //Find stroke number
 				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
+			}
 
-      radicals[rad_index].strokes = atoi(radkfile_ptr);  //Store the stroke number
-      radical_kanji_start[rad_index] = kanji_index;
-      radical_kanji_count[rad_index] = 0;
-      if (rad_index != 0) {
-				if (radical_kanji_count[rad_index - 1] > rad_max) 
-					rad_max = radical_kanji_count[rad_index - 1];  // find largest kanji count for a given radical
-      }
-      radkfile_ptr = get_eof_line(radkfile_ptr, radkfile_end); //Goto next line
+      rad_info->strokes = atoi(radkfile_ptr);  //Store the stroke number
+			kanjiDic->rad_info_list = g_list_append(kanjiDic->rad_info_list, rad_info);
+			g_hash_table_insert(kanjiDic->rad_info_hash, (gpointer) rad_info->radical, rad_info);
+			radkfile_ptr = get_eof_line(radkfile_ptr, radkfile_end); //Goto next line
     }
     else {   //Kanji
       while ((*radkfile_ptr != '$') && (radkfile_ptr < radkfile_end)) {
@@ -833,25 +830,31 @@ void load_radkfile() {
 					radkfile_ptr++;
 					continue;
 				}
-				//printf("KANJI_INDEX: %d \n", kanji_index);
-				radical_kanji[kanji_index] = g_utf8_get_char(radkfile_ptr); //Store kanji
+				kanji = g_utf8_get_char(radkfile_ptr);
+				kanji_info = g_hash_table_lookup(kanjiDic->kanji_info_hash, (gconstpointer) kanji);
+				if (kanji_info == NULL) {
+					kanji_info = g_new0(KanjiInfo, 1);
+					kanji_info->kanji = kanji;
+					g_hash_table_insert(kanjiDic->kanji_info_hash, (gpointer) kanji, (gpointer) kanji_info);
+				}
+				kanji_info->rad_info_list = g_list_prepend(kanji_info->rad_info_list, rad_info);
+				rad_info->kanji_info_list = g_list_prepend(rad_info->kanji_info_list, kanji_info);
 				radkfile_ptr = g_utf8_next_char(radkfile_ptr);
-				radical_kanji_count[rad_index]++;
-				kanji_index++; 
       }
     }
   }
-  total_radicals = rad_index;
 }
 
 static GtkWidget *create_window_radicals () {
-  int i = 0, j = 0, k = 0, rad_index = 0;
+  int i = 0, j = 0;
   int curr_strokecount = 0;
   GtkWidget *radtable; 
   GtkWidget *tmpwidget = NULL;
   GtkWidget *radical_label;
   gchar *strokenum_label;
   gchar radical[6];
+	RadInfo *rad_info = NULL;
+	GList *rad_info_list;
 
 	load_radkfile(); 
 
@@ -860,12 +863,12 @@ static GtkWidget *create_window_radicals () {
     gtk_widget_show(kanjiDic->window_radicals);
     return kanjiDic->window_radicals;
   }
-	if (kanjiDic->radbuttonhash != NULL)	{
-		g_hash_table_destroy(kanjiDic->radbuttonhash);
-		kanjiDic->radbuttonhash = NULL;
+	if (kanjiDic->rad_button_hash != NULL)	{
+		g_hash_table_destroy(kanjiDic->rad_button_hash);
+		kanjiDic->rad_button_hash = NULL;
 	}
 	
-	kanjiDic->radbuttonhash = g_hash_table_new_full(NULL, NULL, NULL, NULL);
+	kanjiDic->rad_button_hash = g_hash_table_new_full(NULL, NULL, NULL, NULL);
 	
   kanjiDic->window_radicals = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(kanjiDic->window_radicals), _("Radicals"));
@@ -875,13 +878,14 @@ static GtkWidget *create_window_radicals () {
   gtk_container_add(GTK_CONTAINER(kanjiDic->window_radicals), radtable);
   gtk_widget_show(radtable);
 
-	for (rad_index = 0; rad_index <= total_radicals; rad_index++) {
+	for (rad_info_list = kanjiDic->rad_info_list; rad_info_list != NULL; rad_info_list = g_list_next(rad_info_list)) {
     if (i == RADLISTLEN) {
       i = 0;
       j++;
     }
-    if (curr_strokecount != radicals[rad_index].strokes) {
-      curr_strokecount = radicals[rad_index].strokes;
+		rad_info = (RadInfo *) rad_info_list->data;
+    if (curr_strokecount != rad_info->strokes) {
+      curr_strokecount = rad_info->strokes;
       strokenum_label = g_strdup_printf("<b>%d</b>", curr_strokecount); //Make a label with the strokenumber
       tmpwidget = gtk_label_new(""); //radical stroke number label
       gtk_label_set_markup(GTK_LABEL(tmpwidget), strokenum_label);
@@ -893,8 +897,8 @@ static GtkWidget *create_window_radicals () {
       gtk_widget_show(tmpwidget);
       i++;    
     }
-    for (k = 0; k < 6; k++) radical[k] = 0;
-    g_unichar_to_utf8(radicals[rad_index].radical, radical);
+    memset(radical, 0, sizeof(radical));
+    g_unichar_to_utf8(rad_info->radical, radical);
     radical_label = gtk_label_new(radical);
     gtk_widget_show(radical_label);
     tmpwidget = gtk_button_new();
@@ -904,14 +908,14 @@ static GtkWidget *create_window_radicals () {
     }
     
     g_signal_connect_swapped(GTK_OBJECT(tmpwidget), "clicked", GTK_SIGNAL_FUNC(radical_selected), 
-			      (GtkObject*)(&(radicals[rad_index].radical)));
+														 (gpointer)(rad_info->radical));
     
     gtk_table_attach(GTK_TABLE(radtable), tmpwidget , i, i+1, j, j+1,
 		     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
 		     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     //      gtk_widget_set_usize(tmpwidget,20,20);
     gtk_widget_show(tmpwidget);
-		g_hash_table_insert(kanjiDic->radbuttonhash, (gpointer) radicals[rad_index].radical, tmpwidget);
+		g_hash_table_insert(kanjiDic->rad_button_hash, (gpointer) rad_info->radical, tmpwidget);
     i++;
   }  
   gtk_widget_show(kanjiDic->window_radicals);
@@ -1045,8 +1049,6 @@ KanjiDic *kanjidic_create() {
   GtkWidget *tmpimage;
 	GtkWidget *vpane;
 
-  load_radkfile();
-
   if (kanjiDic != NULL) {
 		gtk_window_present(GTK_WINDOW(kanjiDic->window));
 		return kanjiDic;
@@ -1054,6 +1056,8 @@ KanjiDic *kanjidic_create() {
 
 	kanjiDic = g_new0(KanjiDic, 1);
 	gjitenApp->kanjidic = kanjiDic;
+
+  load_radkfile();
 
   if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * KBUFSIZE);
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
