@@ -24,8 +24,7 @@
 
 #include <gtk/gtk.h>
 
-#define RADLISTLEN 24
-#define KANJLISTLEN 13
+#define RADLISTLEN 19
 
 #define KEY 0
 #define KANJI 0

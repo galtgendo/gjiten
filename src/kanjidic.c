@@ -894,17 +894,21 @@ static GtkWidget *create_window_radicals () {
     }
 		rad_info = (RadInfo *) rad_info_list->data;
     if (curr_strokecount != rad_info->strokes) {
+			if (i == RADLISTLEN - 1) {
+				i = 0;
+				j++;
+			}
       curr_strokecount = rad_info->strokes;
       strokenum_label = g_strdup_printf("<b>%d</b>", curr_strokecount); //Make a label with the strokenumber
       tmpwidget = gtk_label_new(""); //radical stroke number label
       gtk_label_set_markup(GTK_LABEL(tmpwidget), strokenum_label);
 			g_free(strokenum_label);
 
-      gtk_table_attach(GTK_TABLE(radtable), tmpwidget , i, i+1, j, j+1,
-		       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
-		       (GtkAttachOptions)(0), 0, 0);
+      gtk_table_attach(GTK_TABLE(radtable), tmpwidget, i, i+1, j, j+1,
+											 (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
+											 (GtkAttachOptions)(0), 0, 0);
       gtk_widget_show(tmpwidget);
-      i++;    
+      i++;
     }
     memset(radical, 0, sizeof(radical));
     g_unichar_to_utf8(rad_info->radical, radical);
