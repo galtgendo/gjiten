@@ -1,4 +1,4 @@
-v2.6 ()
+v2.6 (2006-10-28)
     - Radicals show up again in KanjiDic.
     - DTD location changed in docbook doc (John Thacker).
     - rpm .spec file fix (John Thacker).

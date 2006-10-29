@@ -428,11 +428,15 @@ void findk_by_radical(gchar *radstrg) {
 
 void set_radical_button_sensitive(gpointer radical, RadInfo *rad_info, gpointer user_data) {
 	GtkWidget *rad_button = g_hash_table_lookup(kanjiDic->rad_button_hash, radical);
-	if (GTK_IS_WIDGET(rad_button)) gtk_widget_set_sensitive(rad_button, TRUE);
+	if (GTK_IS_WIDGET(rad_button) && (GTK_WIDGET_SENSITIVE(rad_button) != TRUE)) {
+		gtk_widget_set_sensitive(rad_button, TRUE);
+	}
 }
 
 void set_radical_button_unsensitive(gunichar radical, GtkWidget *rad_button, gboolean sensitive) {
-	if (GTK_IS_WIDGET(rad_button)) gtk_widget_set_sensitive(rad_button, sensitive);
+	if (GTK_IS_WIDGET(rad_button) && (GTK_WIDGET_SENSITIVE(rad_button) != sensitive)) {
+		gtk_widget_set_sensitive(rad_button, sensitive);
+	}
 }
 
 
@@ -615,7 +619,7 @@ void on_kanji_search() {
 			g_hash_table_destroy(rad_info_hash);
 			g_list_free(kanji_list);
 		}
-		else { // none found, so set everything sesnisitve
+		else { // none found, so set everything sensitive
 			g_hash_table_foreach(kanjiDic->rad_button_hash, (GHFunc) set_radical_button_unsensitive, (gpointer) TRUE);
 		}
 	}
@@ -654,6 +658,7 @@ int radical_selected(gunichar radical) {
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry), newradline);
 
   g_free(newradline);
+
   on_kanji_search();
   
   return 0;
@@ -919,7 +924,6 @@ static GtkWidget *create_window_radicals () {
     if ((gjitenApp->conf->normalfont != NULL) && gjitenApp->conf->normalfont_desc != NULL) {
       gtk_widget_modify_font(radical_label, gjitenApp->conf->normalfont_desc);
     }
-    
     g_signal_connect_swapped(GTK_OBJECT(tmpwidget), "clicked", GTK_SIGNAL_FUNC(radical_selected), 
 														 (gpointer)(rad_info->radical));
     
@@ -953,16 +957,16 @@ static void kanjidic_close() {
 }
 
 void shade_kanjidic_widgets() {
-  gtk_widget_set_sensitive(kanjiDic->spinb_strokenum,GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
-  gtk_widget_set_sensitive(kanjiDic->spinb_plusmin,GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
-  gtk_widget_set_sensitive(kanjiDic->label_plusmin,GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
+  gtk_widget_set_sensitive(kanjiDic->spinb_strokenum, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
+  gtk_widget_set_sensitive(kanjiDic->spinb_plusmin, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
+  gtk_widget_set_sensitive(kanjiDic->label_plusmin, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
 
-  gtk_widget_set_sensitive(kanjiDic->button_clearrad,GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
-  gtk_widget_set_sensitive(kanjiDic->button_radtable,GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
-  gtk_widget_set_sensitive(kanjiDic->combo_entry_radical,GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
+  gtk_widget_set_sensitive(kanjiDic->button_clearrad, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
+  gtk_widget_set_sensitive(kanjiDic->button_radtable, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
+  gtk_widget_set_sensitive(kanjiDic->combo_entry_radical, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
      
-  gtk_widget_set_sensitive(kanjiDic->button_cleark,GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
-  gtk_widget_set_sensitive(kanjiDic->combo_entry_key,GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
+  gtk_widget_set_sensitive(kanjiDic->button_cleark, GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
+  gtk_widget_set_sensitive(kanjiDic->combo_entry_key, GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
 }
 
 

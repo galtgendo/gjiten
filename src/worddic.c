@@ -925,13 +925,10 @@ WordDic *worddic_create() {
   GtkWidget *dock_main;
   GtkWidget *toolbar;
   GtkWidget *button_exit;
-  //  GtkWidget *button_pref;
   GtkWidget *button_kanjipad;
   GtkWidget *button_kanjidic;
   GtkWidget *button_clear;
   GtkWidget *button_srch;
-  //  GtkWidget *button_copy;
-  //  GtkWidget *button_paste;
   GtkWidget *frame_japopt;
   GtkWidget *vbox_japopt;
   GSList *vbox_japopt_group = NULL;

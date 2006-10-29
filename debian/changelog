@@ -1,3 +1,9 @@
+gjiten (2.6-1) unstable; urgency=low
+
+  * New upstream release. See ChangeLog. Closes: Bug#314089
+
+ -- Botond Botyanszki <b0ti@users.sourceforge.net>  Sun, 29 Oct 2006 19:11:24 +0200
+
 gjiten (2.5-1) unstable; urgency=low
 
   * New upstream release. See ChangeLog. Closes: #342412, #335755
