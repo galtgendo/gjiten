@@ -1,3 +1,4 @@
+-case insensitive search
 -system wide dictionaries should appear automatically.
 -auto-adjust should revert the options (optional)
 -use gnome history for gnome_entry
