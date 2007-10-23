@@ -1,3 +1,8 @@
+v2.7 ()
+    - Fixed a bug when the radical window contents didn't appear (debian bug #438054)
+    - Worddic segfaulted after search-close-reopen-search (debian bug #445042)
+    - Added Hadamitzky Kanji&Kana Index to Kanjidic display options
+
 v2.6 (2006-10-28)
     - Radicals show up again in KanjiDic.
     - DTD location changed in docbook doc (John Thacker).

@@ -45,17 +45,18 @@
 #define NINDEX 15
 #define VINDEX 16
 #define IINDEX 17
-#define MNINDEX 18
-#define MPINDEX 19
-#define EINDEX 20
-#define KINDEX 21
-#define LINDEX 22
-#define OINDEX 23
-#define CREF 24
-#define MISSC 25
-#define UNI 26 
-#define JIS 27
-#define KCFGNUM 28
+#define ININDEX 18
+#define MNINDEX 19
+#define MPINDEX 20
+#define EINDEX 21
+#define KINDEX 22
+#define LINDEX 23
+#define OINDEX 24
+#define CREF 25
+#define MISSC 26
+#define UNI 27 
+#define JIS 28
+#define KCFGNUM 29
 
 #define KBUFSIZE 500
 

@@ -74,6 +74,7 @@ gchar *strginfo[] = { //FIXME: change this to EnumPair
 	N_("Index in Nelson's \"Modern Reader's Char Dict\""),
 	N_("\"The New Nelson Char Dict\" index"), 
 	N_("Spahn&Hadamitzky index"), 
+	N_("Hadamitzky Kana&Kanji index"), 
 	N_("Morohashi \"Daikanwajiten\" index"), 
 	N_("Morohashi \"Daikanwajiten\" volume.page number"), 
 	N_("\"A Guide To Remembering Jap. Chars\" index"), 
@@ -470,14 +471,14 @@ void create_dialog_preferences() {
 
   tmpwidget = GETWIDGET("table_kanji_info");
 
-  for (tcol = 0; (tcol * 14 + trow < KCFGNUM) || (tcol < 3); tcol++) {
-    for (trow = 0; (tcol * 14 + trow < KCFGNUM) && (trow < 14); trow++) {
-      checkb_prefs[tcol * 14 + trow] = gtk_check_button_new_with_label(_(strginfo[tcol * 14 + trow]));
-      gtk_widget_show(checkb_prefs[tcol * 14 + trow]);
-      gtk_table_attach(GTK_TABLE(tmpwidget), checkb_prefs[tcol * 14 + trow], tcol, tcol + 1, trow, trow + 1,
+  for (tcol = 0; (tcol * 15 + trow < KCFGNUM) || (tcol < 3); tcol++) {
+    for (trow = 0; (tcol * 15 + trow < KCFGNUM) && (trow < 15); trow++) {
+      checkb_prefs[tcol * 15 + trow] = gtk_check_button_new_with_label(_(strginfo[tcol * 15 + trow]));
+      gtk_widget_show(checkb_prefs[tcol * 15 + trow]);
+      gtk_table_attach(GTK_TABLE(tmpwidget), checkb_prefs[tcol * 15 + trow], tcol, tcol + 1, trow, trow + 1,
 											 (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
-      if (gjitenApp->conf->kdiccfg[tcol * 14 + trow] == TRUE) 
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkb_prefs[tcol * 14 + trow]), TRUE);
+      if (gjitenApp->conf->kdiccfg[tcol * 15 + trow] == TRUE) 
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkb_prefs[tcol * 15 + trow]), TRUE);
     }
 	}
 

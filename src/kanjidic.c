@@ -229,7 +229,13 @@ void do_kdicline(gchar *kstr) {
 					break;
 					
 				case 'I':
-					strncpy(kdic_line + IINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					if (tmpstr[1] == 'N') {
+						strncpy(kdic_line + ININDEX * KBUFSIZE, tmpstr + 2, KBUFSIZE);
+					}
+					else
+					{
+						strncpy(kdic_line + IINDEX * KBUFSIZE, tmpstr + 1, KBUFSIZE);
+					}
 					break;
       
 				case 'Q':

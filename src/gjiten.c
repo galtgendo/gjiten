@@ -60,7 +60,7 @@ gchar *clipboard_text = NULL;
 gchar *kanjidicstrg[] = { "kanji", "radical", "strokes", "reading", "korean", 
 													"pinyin", "english", "bushu", "classic", "freq", "jouyou",
 													"deroo", "skip", "fourc", "hindex", "nindex", "vindex",
-													"iindex", "mnindex", "mpindex", "eindex", "kindex", 
+													"iindex", "inindex", "mnindex", "mpindex", "eindex", "kindex", 
 													"lindex", "oindex", "cref", "missc", "unicode", "jisascii" };
 
 
