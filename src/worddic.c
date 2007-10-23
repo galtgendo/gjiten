@@ -783,6 +783,7 @@ static void worddic_close() {
 		//FIXME: clear combo_entry_glist
 		wordDic = NULL;
 		gjitenApp->worddic = NULL;
+		current_glist_word = NULL;
 	}
 	gjiten_exit();
 
