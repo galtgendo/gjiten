@@ -435,13 +435,13 @@ void findk_by_radical(gchar *radstrg) {
 
 void set_radical_button_sensitive(gpointer radical, RadInfo *rad_info, gpointer user_data) {
 	GtkWidget *rad_button = g_hash_table_lookup(kanjiDic->rad_button_hash, radical);
-	if (GTK_IS_WIDGET(rad_button) && (GTK_WIDGET_SENSITIVE(rad_button) != TRUE)) {
+	if (GTK_IS_WIDGET(rad_button) && (gtk_widget_get_sensitive(rad_button) != TRUE)) {
 		gtk_widget_set_sensitive(rad_button, TRUE);
 	}
 }
 
 void set_radical_button_unsensitive(gunichar radical, GtkWidget *rad_button, gboolean sensitive) {
-	if (GTK_IS_WIDGET(rad_button) && (GTK_WIDGET_SENSITIVE(rad_button) != sensitive)) {
+	if (GTK_IS_WIDGET(rad_button) && (gtk_widget_get_sensitive(rad_button) != sensitive)) {
 		gtk_widget_set_sensitive(rad_button, sensitive);
 	}
 }
@@ -714,7 +714,7 @@ void history_add(gunichar unicharkanji) {
   gtk_box_reorder_child(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, 0);
   gtk_widget_show(history_kanji_button);
 
-	if (GTK_WIDGET_VISIBLE(kanjiDic->scrolledwin_history) != TRUE)
+	if (gtk_widget_get_visible(kanjiDic->scrolledwin_history) != TRUE)
 		gtk_widget_show(kanjiDic->scrolledwin_history);
 }
 
@@ -896,7 +896,7 @@ static GtkWidget *create_window_radicals () {
 	
   kanjiDic->window_radicals = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(kanjiDic->window_radicals), _("Radicals"));
-  g_signal_connect(GTK_OBJECT(kanjiDic->window_radicals), "destroy", GTK_SIGNAL_FUNC(radical_window_close), NULL);
+  g_signal_connect(G_OBJECT(kanjiDic->window_radicals), "destroy", G_CALLBACK(radical_window_close), NULL);
 
   radtable = gtk_table_new(11, RADLISTLEN, TRUE); 
   gtk_container_add(GTK_CONTAINER(kanjiDic->window_radicals), radtable);
@@ -934,7 +934,7 @@ static GtkWidget *create_window_radicals () {
     if ((gjitenApp->conf->normalfont != NULL) && gjitenApp->conf->normalfont_desc != NULL) {
       gtk_widget_modify_font(radical_label, gjitenApp->conf->normalfont_desc);
     }
-    g_signal_connect_swapped(GTK_OBJECT(tmpwidget), "clicked", GTK_SIGNAL_FUNC(radical_selected), 
+    g_signal_connect_swapped(G_OBJECT(tmpwidget), "clicked", G_CALLBACK(radical_selected),
 														 (gpointer)(rad_info->radical));
     
     gtk_table_attach(GTK_TABLE(radtable), tmpwidget , i, i+1, j, j+1,
@@ -1023,7 +1023,7 @@ void history_init() {
     gtk_box_pack_start(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, FALSE, FALSE, 0);
     // gtk_box_reorder_child(GTK_BOX(kanjiDic->vbox_history), history_kanji_button, 0);
     gtk_widget_show(history_kanji_button);
-		if (GTK_WIDGET_VISIBLE(kanjiDic->scrolledwin_history) != TRUE)
+		if (gtk_widget_get_visible(kanjiDic->scrolledwin_history) != TRUE)
 			gtk_widget_show(kanjiDic->scrolledwin_history);
     tmp_list_ptr = g_slist_next(tmp_list_ptr);
   }
@@ -1104,7 +1104,7 @@ KanjiDic *kanjidic_create() {
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
 
   kanjiDic->window = gnome_app_new("gjiten", _("Gjiten - KanjiDic"));
-  GTK_WIDGET_SET_FLAGS(kanjiDic->window, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default(kanjiDic->window, TRUE);
   g_signal_connect(G_OBJECT(kanjiDic->window), "destroy", G_CALLBACK(kanjidic_close), NULL);
   gtk_window_set_default_size(GTK_WINDOW(kanjiDic->window), 500, 500);
 
@@ -1137,7 +1137,7 @@ KanjiDic *kanjidic_create() {
     tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
     button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar_kanji), _("KanjiPad"),
 					      _("Launch KanjiPad"), "KanjiPad", tmpimage,
-					      GTK_SIGNAL_FUNC(gjiten_start_kanjipad), NULL);
+					      G_CALLBACK(gjiten_start_kanjipad), NULL);
     
     button_searchk = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar_kanji), GTK_STOCK_FIND,
 					      _("Search entered Kanji"), "Search", 
@@ -1157,29 +1157,29 @@ KanjiDic *kanjidic_create() {
   gtk_widget_show(kanjiDic->checkb_stroke);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->checkb_stroke, 0, 1, 0, 1,
 									 (GtkAttachOptions)(GTK_FILL),(GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(GTK_OBJECT(kanjiDic->checkb_stroke), "toggled", 
-									 GTK_SIGNAL_FUNC(shade_kanjidic_widgets), NULL);
+  g_signal_connect(G_OBJECT(kanjiDic->checkb_stroke), "toggled",
+									 G_CALLBACK(shade_kanjidic_widgets), NULL);
 
   kanjiDic->checkb_radical = gtk_check_button_new_with_mnemonic(_("Search By _Radical:"));  
   gtk_widget_show(kanjiDic->checkb_radical);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->checkb_radical, 0, 1, 1, 2,
                     (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect (GTK_OBJECT(kanjiDic->checkb_radical), "toggled", 
-		      GTK_SIGNAL_FUNC(shade_kanjidic_widgets), NULL);
+  g_signal_connect (G_OBJECT(kanjiDic->checkb_radical), "toggled",
+		      G_CALLBACK(shade_kanjidic_widgets), NULL);
  
   kanjiDic->checkb_ksearch = gtk_check_button_new_with_mnemonic(_("Search By _Key:"));
   gtk_widget_show(kanjiDic->checkb_ksearch);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->checkb_ksearch, 0, 1, 2, 3,
                     (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(GTK_OBJECT(kanjiDic->checkb_ksearch), "toggled", 
-		      GTK_SIGNAL_FUNC(shade_kanjidic_widgets), NULL);
+  g_signal_connect(G_OBJECT(kanjiDic->checkb_ksearch), "toggled",
+		      G_CALLBACK(shade_kanjidic_widgets), NULL);
 
   hbox_spinb = gtk_hbox_new(FALSE, 0);
   gtk_widget_show(hbox_spinb);
   gtk_table_attach(GTK_TABLE(table_koptions), hbox_spinb, 1, 2, 0, 1,
                     (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
 
-  spinb_strokenum_adj = gtk_adjustment_new(1, 1, 30, 1, 2, 2);
+  spinb_strokenum_adj = gtk_adjustment_new(1, 1, 30, 1, 2, 0);
   kanjiDic->spinb_strokenum = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_strokenum_adj), 1, 0);
   gtk_widget_show(kanjiDic->spinb_strokenum);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->spinb_strokenum, FALSE, FALSE, 0);
@@ -1188,7 +1188,7 @@ KanjiDic *kanjidic_create() {
   gtk_widget_show(kanjiDic->label_plusmin);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->label_plusmin, FALSE, FALSE, 0);
 
-  spinb_plusmin_adj = gtk_adjustment_new(0, 0, 10, 1, 10, 10);
+  spinb_plusmin_adj = gtk_adjustment_new(0, 0, 10, 1, 10, 0);
   kanjiDic->spinb_plusmin = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_plusmin_adj), 1, 0);
   gtk_widget_show(kanjiDic->spinb_plusmin);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->spinb_plusmin, FALSE, FALSE, 0);
@@ -1197,40 +1197,40 @@ KanjiDic *kanjidic_create() {
   gtk_widget_show(kanjiDic->button_radtable);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->button_radtable, 3, 4, 1, 2,
                     (GtkAttachOptions)(0), (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(GTK_OBJECT(kanjiDic->button_radtable), "clicked", 
-		      GTK_SIGNAL_FUNC(create_window_radicals), NULL);
+  g_signal_connect(G_OBJECT(kanjiDic->button_radtable), "clicked",
+		      G_CALLBACK(create_window_radicals), NULL);
 
   kanjiDic->combo_entry_radical = gtk_combo_new();
   gtk_widget_show(kanjiDic->combo_entry_radical);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->combo_entry_radical, 1, 2, 1, 2,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),  (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(GTK_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry), 
-		      "activate", GTK_SIGNAL_FUNC(on_kanji_search), NULL);
+  g_signal_connect(G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry),
+		      "activate", G_CALLBACK(on_kanji_search), NULL);
   gtk_combo_disable_activate(GTK_COMBO(kanjiDic->combo_entry_radical));
 
   kanjiDic->combo_entry_key = gtk_combo_new();
   gtk_widget_show(kanjiDic->combo_entry_key);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->combo_entry_key, 1, 2, 2, 3,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(GTK_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry), 
-		      "activate", GTK_SIGNAL_FUNC(on_kanji_search), NULL);
+  g_signal_connect(G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry),
+		      "activate", G_CALLBACK(on_kanji_search), NULL);
   gtk_combo_disable_activate(GTK_COMBO(kanjiDic->combo_entry_key));
 
   kanjiDic->button_clearrad = gtk_button_new_with_label(_("Clear"));
   gtk_widget_show(kanjiDic->button_clearrad);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->button_clearrad, 2, 3, 1, 2,
                     (GtkAttachOptions)(0), (GtkAttachOptions)(0), 5, 0);
-  g_signal_connect_swapped(GTK_OBJECT(kanjiDic->button_clearrad), "clicked", 
-													 GTK_SIGNAL_FUNC(clear_radical_entry_box), 
-													 GTK_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry));
+  g_signal_connect_swapped(G_OBJECT(kanjiDic->button_clearrad), "clicked",
+													 G_CALLBACK(clear_radical_entry_box),
+													 G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry));
 
   kanjiDic->button_cleark = gtk_button_new_with_label(_("Clear"));
   gtk_widget_show(kanjiDic->button_cleark);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->button_cleark, 2, 3, 2, 3,
 									 (GtkAttachOptions)(0), (GtkAttachOptions)(0), 5, 0);
-  g_signal_connect_swapped(GTK_OBJECT(kanjiDic->button_cleark), "clicked", 
-													 GTK_SIGNAL_FUNC(gjiten_clear_entry_box), 
-													 GTK_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry));
+  g_signal_connect_swapped(G_OBJECT(kanjiDic->button_cleark), "clicked",
+													 G_CALLBACK(gjiten_clear_entry_box),
+													 G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry));
 
   hseparator = gtk_hseparator_new();
   gtk_widget_show(hseparator);
@@ -1301,10 +1301,10 @@ KanjiDic *kanjidic_create() {
 
   shade_kanjidic_widgets();
 
-  g_signal_connect(GTK_OBJECT(GTK_ADJUSTMENT(spinb_strokenum_adj)), 
-				  "value_changed", GTK_SIGNAL_FUNC(on_kanji_search), NULL);
-  g_signal_connect(GTK_OBJECT(GTK_ADJUSTMENT(spinb_plusmin_adj)), 
-				  "value_changed", GTK_SIGNAL_FUNC(on_kanji_search), NULL);
+  g_signal_connect(G_OBJECT(spinb_strokenum_adj),
+				  "value_changed", G_CALLBACK(on_kanji_search), NULL);
+  g_signal_connect(G_OBJECT(spinb_plusmin_adj),
+				  "value_changed", G_CALLBACK(on_kanji_search), NULL);
 
   gtk_text_buffer_create_tag(kanjiDic->text_kanjinfo_buffer, "blue_foreground", "foreground", "blue", NULL);  
 

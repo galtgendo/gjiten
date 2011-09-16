@@ -26,6 +26,7 @@
 #endif
 
 #include <string.h>
+#include <locale.h>
 #include <libgnome/libgnome.h>
 #include <libgnomeui/libgnomeui.h>
 #include <gconf/gconf-client.h>
@@ -261,9 +262,9 @@ int main (int argc, char **argv) {
 		if (gjitenApp->conf->force_language_c == TRUE) putenv("LANGUAGE=C");
 	}
 
-  gtk_set_locale();  
 
 #ifdef ENABLE_NLS
+  setlocale(LC_ALL, "");
   bindtextdomain(PACKAGE, GJITEN_LOCALE_DIR);
   bind_textdomain_codeset(PACKAGE, "UTF-8");
   textdomain(PACKAGE);

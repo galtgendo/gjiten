@@ -749,7 +749,7 @@ static gboolean set_focus_on_entry(GtkWidget *window, GdkEventKey *key, GtkWidge
 	if (key->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_MOD3_MASK | GDK_MOD4_MASK)) return FALSE; 
 	if ((key->keyval >= GDK_exclam && key->keyval <= GDK_overline) ||
 			(key->keyval >= GDK_KP_Space && key->keyval <= GDK_KP_9)) { 
-		if (GTK_WIDGET_HAS_FOCUS(entry) != TRUE) {
+		if (gtk_widget_has_focus(entry) != TRUE) {
 			gtk_widget_grab_focus(entry);
 		}
 	}
@@ -791,7 +791,7 @@ static void worddic_close() {
 
 static void worddic_show_hide_options() {
 	GJITEN_DEBUG("worddic_show_hide_options()\n");
-	if (GTK_WIDGET_VISIBLE(wordDic->hbox_options) == TRUE) {
+	if (gtk_widget_get_visible(wordDic->hbox_options) == TRUE) {
 		gtk_widget_hide(wordDic->hbox_options);
 	}
 	else gtk_widget_show(wordDic->hbox_options);
@@ -973,7 +973,7 @@ WordDic *worddic_create() {
   Verbinit(); //FIXME: On demand
 
   wordDic->window = gnome_app_new("gjiten", _("Gjiten - WordDic"));
-  GTK_WIDGET_SET_FLAGS(wordDic->window, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default(wordDic->window, TRUE);
   g_signal_connect(G_OBJECT(wordDic->window), "destroy", G_CALLBACK(worddic_close), NULL);
   gtk_window_set_default_size(GTK_WINDOW(wordDic->window), 500, 500);
 
@@ -1164,7 +1164,7 @@ WordDic *worddic_create() {
 									 G_CALLBACK(checkb_searchlimit_toggled), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), gjitenApp->conf->searchlimit_enabled);
 
-	spinb_searchlimit_adj = gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 2);
+	spinb_searchlimit_adj = gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
   wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
   gtk_widget_show(wordDic->spinb_searchlimit);
   gtk_box_pack_start(GTK_BOX(hbox_searchlimit), wordDic->spinb_searchlimit, FALSE, FALSE, 0);
@@ -1199,7 +1199,7 @@ WordDic *worddic_create() {
     gtk_combo_set_popdown_strings(GTK_COMBO(wordDic->combo_entry), wordDic->combo_entry_glist);
     gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), "");
   }
-  GTK_WIDGET_SET_FLAGS(GTK_COMBO(wordDic->combo_entry)->entry, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default(GTK_COMBO(wordDic->combo_entry)->entry, TRUE);
   gtk_widget_grab_focus(GTK_COMBO(wordDic->combo_entry)->entry);
   gtk_widget_grab_default(GTK_COMBO(wordDic->combo_entry)->entry);
   
