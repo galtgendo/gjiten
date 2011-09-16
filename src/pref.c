@@ -272,7 +272,7 @@ static void up_dict(GtkWidget *button) {
 			gtk_list_store_swap(GTK_LIST_STORE(model), &iter, &tmpiter);
 		}
 	}
-	g_free(treepath);
+	gtk_tree_path_free(treepath);
 }
 
 
