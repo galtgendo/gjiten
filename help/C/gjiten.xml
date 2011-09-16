@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
   <!ENTITY appversion "2.0">
   <!ENTITY app "gjiten">
@@ -8,11 +8,16 @@
      
 <article id="index" lang="en">
   <articleinfo> 
+    <abstract role="description">
+      User manual for gjiten.
+    </abstract>
 	 <title>&app; Manual V&appversion;</title>
 	  <copyright>
 	    <year>1999 - 2001</year>
 	    <holder>Botond Botyanszki</holder>
 	  </copyright>
+	  <pubdate>30 December 2002</pubdate>
+	  <edition>1</edition>
 
   <!-- translators: uncomment this:
   <copyright>
@@ -24,7 +29,7 @@
 &legal; 
 
 	 <authorgroup> 
-		<author> 
+		<author role="maintainer">
 		  <firstname>Botond</firstname>
 		  <surname>Botyanszki</surname> 
 		  <affiliation> 
