@@ -516,7 +516,7 @@ void create_dialog_preferences() {
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override")), gjitenApp->conf->envvar_override);	
 	checkbutton_envvar_cb(NULL);
 
-	g_signal_connect(GTK_OBJECT(GETWIDGET("checkbutton_envvar_override")), "toggled",
+	g_signal_connect(G_OBJECT(GETWIDGET("checkbutton_envvar_override")), "toggled",
 									 G_CALLBACK(checkbutton_envvar_cb), NULL);
 
 

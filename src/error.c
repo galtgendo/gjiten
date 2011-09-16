@@ -43,9 +43,9 @@ int gjiten_print_error(const char *fmt, ... ) {
 	if (pstr != NULL) {
 	  dialog = gtk_message_dialog_new(NULL, 0, GTK_MESSAGE_ERROR,  GTK_BUTTONS_OK, "%s", pstr );
 
-		g_signal_connect_swapped(GTK_OBJECT(dialog), "response", 
+		g_signal_connect_swapped(G_OBJECT(dialog), "response",
 														 G_CALLBACK(gtk_widget_destroy),
-														 GTK_OBJECT(dialog));
+														 G_OBJECT(dialog));
 		
 		gtk_widget_show_all(dialog);
 	  g_free(pstr);
