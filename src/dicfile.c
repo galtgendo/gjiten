@@ -25,7 +25,8 @@
 #  include <config.h>
 #endif
 
-#include <libgnome/libgnome.h>
+#include <stdio.h>
+#include <glib/gi18n.h>
 #include <unistd.h>
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>

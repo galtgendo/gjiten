@@ -27,8 +27,9 @@
 
 #include <string.h>
 #include <locale.h>
-#include <libgnome/libgnome.h>
-#include <libgnomeui/libgnomeui.h>
+#include <stdlib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
@@ -47,11 +48,6 @@
 #include "dicutil.h"
 
 GjitenApp *gjitenApp = NULL;
-
-static void parse_an_arg(poptContext state,
-												 enum poptCallbackReason reason,
-												 const struct poptOption *opt,
-												 const char *arg, void *data);
 
 /***************** VARIABLES ***********************/
 
@@ -73,27 +69,34 @@ enum {
   CLIP_WORD_KEY       = -5
 };
 
+static gboolean run_kdic = FALSE;
+static gboolean run_kdic_clip = FALSE;
+static gboolean run_wdic_clip = FALSE;
+static gchar *k_to_lookup;
+static gchar *w_to_lookup;
+static gchar *remaining_args;
+
 /* Command line arguments via popt */
-static struct poptOption arg_options [] = {
-  { NULL, '\0', POPT_ARG_CALLBACK, (gpointer)parse_an_arg, 0,
-    NULL, NULL },
+static GOptionEntry arg_options [] = {
+	{ "kanjidic", 'k', 0, G_OPTION_ARG_NONE, &run_kdic,
+		N_("Start up Kanjidic instead of Word dictionary"), NULL },
 
-  { "kanjidic", 'k', POPT_ARG_NONE, NULL, KANJIDIC_KEY,
-    N_("Start up Kanjidic instead of Word dictionary"), NULL },
+	{ "word-lookup", 'w', 0, G_OPTION_ARG_STRING, &w_to_lookup,
+		N_("Look up WORD in first dictionary"), N_("WORD") },
 
-  { "word-lookup", 'w', POPT_ARG_STRING, NULL, WORD_LOOKUP_KEY,
-    N_("Look up WORD in first dictionary"), N_("WORD") },
+	{ "kanji-lookup", 'l', 0, G_OPTION_ARG_STRING, &k_to_lookup,
+		N_("Look up KANJI in kanji dictionary"), N_("KANJI") },
 
-  { "kanji-lookup", 'l', POPT_ARG_STRING, NULL, KANJI_LOOKUP_KEY,
-    N_("Look up KANJI in kanji dictionary"), N_("KANJI") },
+	{ "clip-kanji", 'c', 0, G_OPTION_ARG_NONE, &run_kdic_clip,
+		N_("Look up kanji from clipboard"), NULL },
 
-  { "clip-kanji", 'c', POPT_ARG_NONE, NULL, CLIP_KANJI_KEY,
-    N_("Look up kanji from clipboard"), NULL },
+	{ "clip-word", 'v', 0, G_OPTION_ARG_NONE, &run_wdic_clip,
+		N_("Look up word from clipboard"), NULL },
 
-  { "clip-word", 'v', POPT_ARG_NONE, NULL, CLIP_WORD_KEY,
-    N_("Look up word from clipboard"), NULL },
+	{ G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY,
+		&remaining_args, NULL},
 
-  { NULL, '\0', 0, NULL, 0, NULL, NULL }
+	{ NULL }
 
 };
 
@@ -136,35 +139,6 @@ register_my_stock_icons(void)
 
 /*================ Functions ===============================================*/
 
-static void parse_an_arg(poptContext state,
-												 enum poptCallbackReason reason,
-												 const struct poptOption *opt,
-												 const char *arg, void *data) {
-
-  
-  switch (opt->val) {
-  case KANJIDIC_KEY:
-    gjitenApp->conf->startkanjidic = TRUE;
-    break;
-  case WORD_LOOKUP_KEY:
-    gjitenApp->conf->word_to_lookup = (gchar *)arg;
-    break;
-  case KANJI_LOOKUP_KEY:
-    gjitenApp->conf->kanji_to_lookup = (gchar *)arg;
-    break;
-  case CLIP_KANJI_KEY:
-    gjitenApp->conf->clip_kanji_lookup = TRUE;
-    gjitenApp->conf->clip_word_lookup = FALSE;
-    break;
-  case CLIP_WORD_KEY:
-    gjitenApp->conf->clip_word_lookup = TRUE;
-    gjitenApp->conf->clip_kanji_lookup = FALSE;
-    break;
-  default:
-    break;
-  }
-}
-
 void gjiten_clear_entry_box(gpointer entrybox) {
   gtk_entry_set_text(GTK_ENTRY(entrybox), "");
 }
@@ -206,11 +180,10 @@ void gjiten_start_kanjipad() {
 void gjiten_display_manual(GtkWidget *widget, void *data) {
   GtkWidget *window = data;
   GError *err = NULL;
-  gboolean retval = FALSE;
 
-  retval = gnome_help_display("gjiten.xml", NULL, &err);
+  gtk_show_uri(NULL, "ghelp:gjiten", gtk_get_current_event_time (), &err);
   
-  if (retval == FALSE) {
+  if (err != NULL) {
     GtkWidget *dialog;
     dialog = gtk_message_dialog_new(GTK_WINDOW(window),
 																		GTK_DIALOG_DESTROY_WITH_PARENT,       
@@ -222,11 +195,11 @@ void gjiten_display_manual(GtkWidget *widget, void *data) {
     g_signal_connect(G_OBJECT(dialog), "response",
 										 G_CALLBACK(gtk_widget_destroy),
 										 NULL);
-    
+
     gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
-    
-    gtk_widget_show(dialog);
-    
+
+    gtk_window_present(GTK_WINDOW(dialog));
+
     g_error_free(err);
   }
 }
@@ -236,14 +209,7 @@ void gjiten_create_about() {
   const gchar *authors[] = { "Botond Botyanszki <boti@rocketmail.com>", NULL };
   const gchar *documenters[] = { NULL };
   const gchar *translator = _("TRANSLATORS! PUT YOUR NAME HERE");
-  static GtkWidget *about = NULL;
   GdkPixbuf *pixbuf = NULL;
-
-  if (about != NULL) {
-    gdk_window_show(about->window);
-    gdk_window_raise(about->window);
-    return;
-  }
 
   if (pixbuf != NULL) {
     GdkPixbuf* temp_pixbuf = NULL;
@@ -264,18 +230,15 @@ void gjiten_create_about() {
     _("Released under the terms of the GNU GPL.\n"
     "Check out http://gjiten.sourceforge.net for updates"), 
   */
-  about = gnome_about_new("gjiten", VERSION, "Copyright \xc2\xa9 1999-2005 Botond Botyanszki",
-			  _("gjiten is a Japanese dictionary for Gnome"),
-			  (const char **)authors,
-			  (const char **)documenters,
-			  (const char *)translator,
-			  pixbuf);
+  gtk_show_about_dialog(NULL, "program-name", "gjiten", "version", VERSION,
+		"copyright", "Copyright \xc2\xa9 1999-2005 Botond Botyanszki",
+		"comments", _("gjiten is a Japanese dictionary for Gnome"),
+		"authors", (const char **)authors,
+		"documenters", (const char **)documenters,
+		"translator-credits", (const char *)translator,
+		"logo", pixbuf, NULL);
 
-  gtk_window_set_destroy_with_parent(GTK_WINDOW(about), TRUE);
   if (pixbuf != NULL)  g_object_unref (pixbuf);
-
-  g_signal_connect(G_OBJECT(about), "destroy", G_CALLBACK(gtk_widget_destroyed), &about);
-  gtk_widget_show(about);
 
 }
 
@@ -284,6 +247,7 @@ void gjiten_create_about() {
 /*********************** MAIN ***********************************/
 int main (int argc, char **argv) {
   char *icon_path = PIXMAPDIR"/jiten.png";
+  GError *error = NULL;
  
 	gjitenApp = g_new0(GjitenApp, 1);
   conf_init_handler();
@@ -305,19 +269,22 @@ int main (int argc, char **argv) {
   textdomain(PACKAGE);
 #endif
 
-  gnome_program_init("gjiten", VERSION, LIBGNOMEUI_MODULE, argc, argv, 
-										 GNOME_PARAM_POPT_TABLE, arg_options, 
-										 GNOME_PARAM_HUMAN_READABLE_NAME, _("gjiten"), 
-										 GNOME_PARAM_APP_DATADIR, GNOMEDATADIR,
-										 NULL);
+  if (!gtk_init_with_args(&argc, &argv, NULL, arg_options, PACKAGE, &error))
+    {printf("%s\n", error->message); exit(EXIT_FAILURE);}
 
   register_my_stock_icons();
 
-  if (! g_file_test (icon_path, G_FILE_TEST_EXISTS)) {
+  gjitenApp->conf->clip_kanji_lookup = run_kdic_clip;
+  gjitenApp->conf->clip_word_lookup = run_wdic_clip;
+  gjitenApp->conf->startkanjidic = run_kdic;
+  gjitenApp->conf->word_to_lookup = w_to_lookup;
+  gjitenApp->conf->kanji_to_lookup = k_to_lookup;
+
+  if (!g_file_test(icon_path, G_FILE_TEST_EXISTS)) {
     g_warning ("Could not find %s", icon_path);
   }
   else {
-    gnome_window_icon_set_default_from_file(icon_path);
+    gtk_window_set_default_icon_from_file(icon_path, &error);
   }
 
   /* the following is for clipboard lookup. */
@@ -349,7 +316,6 @@ int main (int argc, char **argv) {
     }
   }
 
-  if (argc > 1) {
     if (gjitenApp->conf->startkanjidic) {
       kanjidic_create();
     }
@@ -375,10 +341,6 @@ int main (int argc, char **argv) {
 			}
 			else if (!gjitenApp->conf->clip_kanji_lookup && !gjitenApp->conf->clip_word_lookup) 
 				gjitenApp->worddic = worddic_create();
-  }
-  else {
-    gjitenApp->worddic = worddic_create();
-  }
 	gjiten_flush_errors();
   gtk_main();
   return 0;

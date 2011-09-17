@@ -20,5 +20,5 @@ radical_convtable: radical-convtable.txt
 
 EXTRA_DIST = convtable.pl radical-convtable.txt
 
-gjiten_CFLAGS = $(GJITEN_CFLAGS) -Wall -Wunused @DEBUG_FLAGS@
+gjiten_CPPFLAGS = $(GJITEN_CFLAGS) -Wall @DEBUG_FLAGS@
 gjiten_LDADD = $(GJITEN_LIBS)

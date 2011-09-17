@@ -27,8 +27,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <gnome.h>
 #include <glade/glade.h>
+#include <glib/gi18n.h>
 
 #include "constants.h"
 #include "error.h"
@@ -99,22 +99,23 @@ enum {
 
 
 
-void font_set(GtkWidget *entry, gchar *arg1, GnomeFontPicker *fontpicker) {
+void font_set(GtkFontButton *fontpicker, GtkWidget *entry) {
   const gchar *fontname;
 
-  fontname = gnome_font_picker_get_font_name(GNOME_FONT_PICKER(fontpicker));
+  fontname = gtk_font_button_get_font_name(GTK_FONT_BUTTON(fontpicker));
   gtk_entry_set_text(GTK_ENTRY(entry), fontname);
 }
 
-static void add_dic_response_cb(GtkDialog *dialog, gint response, GnomeFileEntry *fileentry) {
+static void add_dic_response_cb(GtkDialog *dialog, gint response, GtkFileChooser *fileentry) {
 	GtkWidget *nameentry;
 	GjitenDicfile dicfile;
+	GError *error = NULL;
 
-  if (response != GTK_RESPONSE_CLOSE) {
+  if (response == GTK_RESPONSE_OK) {
 		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name");
 		dicfile.name = g_strdup(gtk_entry_get_text(GTK_ENTRY(nameentry)));
 
-		dicfile.path = gnome_file_entry_get_full_path(fileentry, TRUE);
+		dicfile.path = g_filename_from_uri(gtk_file_chooser_get_uri(fileentry), NULL, &error);
 
 		if (dicfile.path != NULL) {
 			if (dicfile_init(&dicfile) == FALSE) return;
@@ -135,13 +136,14 @@ static void add_dic_response_cb(GtkDialog *dialog, gint response, GnomeFileEntry
 	}
 }
 
-static void set_dic_name_cb(GnomeFileEntry *fileentry, GtkEntry *entry) {
+static void set_dic_name_cb(GtkFileChooser *fileentry, GtkEntry *entry) {
   gchar *filename, *dictf, *old;
 	const gchar *entrytext;
+	GError *error = NULL;
 
 	GJITEN_DEBUG("set_dic_name_cb()\n");
 
-  filename = gnome_file_entry_get_full_path(fileentry, TRUE);
+  filename = g_filename_from_uri(gtk_file_chooser_get_uri(fileentry), NULL, &error);
   old = dictf = strtok(filename, "/");
   while (dictf != NULL) {
     old = dictf;
@@ -155,22 +157,25 @@ static void set_dic_name_cb(GnomeFileEntry *fileentry, GtkEntry *entry) {
 
 static void add_dict() {
 	GtkWidget *fileselector;
+	GtkWidget *fsel_dialog;
 	GtkWidget *nameentry;
 
 	GJITEN_DEBUG("add_dict()\n");
 	if (dialog_add_dic != NULL) {
-		gtk_widget_hide(dialog_add_dic);
-		gtk_widget_show_all(dialog_add_dic);
+		gtk_window_present(GTK_WINDOW(dialog_add_dic));
 	}
 	else {
-		chdir(GJITEN_DICDIR);
 		gladexml_add_dic = glade_xml_new(GJITEN_DATADIR"/gjiten-settings.glade", "dialog_add_dic", NULL);
 		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name");
 		dialog_add_dic = glade_xml_get_widget(gladexml_add_dic, "dialog_add_dic");
  
-		fileselector = gnome_file_entry_new(NULL, _("Select dictionary file"));
-		g_signal_connect(G_OBJECT(fileselector), "activate", G_CALLBACK(set_dic_name_cb), nameentry);
-
+		fsel_dialog = gtk_file_chooser_dialog_new(_("Select dictionary file"),
+							    GTK_WINDOW(dialog_preferences), GTK_FILE_CHOOSER_ACTION_OPEN,
+							    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+							    GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+							    NULL);
+		fileselector = gtk_file_chooser_button_new_with_dialog(fsel_dialog);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(fileselector), GJITEN_DICDIR);
 
 		gtk_table_attach(GTK_TABLE(glade_xml_get_widget(gladexml_add_dic, "table_add_dic")), fileselector, 1, 2, 1, 2,
 										 (GtkAttachOptions)(GTK_FILL),
@@ -182,16 +187,17 @@ static void add_dict() {
 	}
 }
 
-static void change_dic_response_cb(GtkDialog *dialog, gint response, GnomeFileEntry *fileentry) {
+static void change_dic_response_cb(GtkDialog *dialog, gint response, GtkFileChooser *fileentry) {
   gchar *dicpath, *dicname;
 	GtkWidget *nameentry;
   GtkTreeSelection *selection;
+  GError *error = NULL;
 
-  if (response != GTK_RESPONSE_CLOSE) {
+  if (response == GTK_RESPONSE_OK) {
 		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name_change");
 		dicname = g_strdup(gtk_entry_get_text(GTK_ENTRY(nameentry)));
 
-		dicpath = gnome_file_entry_get_full_path(fileentry, TRUE);
+		dicpath = g_filename_from_uri(gtk_file_chooser_get_uri(fileentry), NULL, &error);
 		if (dicpath != NULL) {
 			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 			if (gtk_tree_selection_get_selected(selection, &model, &iter) == FALSE) return;
@@ -206,10 +212,12 @@ static void change_dic_response_cb(GtkDialog *dialog, gint response, GnomeFileEn
 
 static void change_dict() {
 	GtkWidget *fileselector;
+	GtkWidget *fsel_dialog;
 	gchar *dicpath, *dicname;
 	static GtkWidget *dialog = NULL;
 	GtkWidget *nameentry;
   GtkTreeSelection *selection;
+	GError *error = NULL;
 
 	//FIXME: segfault when called many times (click on row)
 
@@ -233,8 +241,14 @@ static void change_dict() {
 
 	if (dicname != NULL) gtk_entry_set_text(GTK_ENTRY(nameentry), dicname);
 
-	fileselector = gnome_file_entry_new(NULL, _("Select dictionary file"));
-	gnome_file_entry_set_filename(GNOME_FILE_ENTRY(fileselector), dicpath);
+	fsel_dialog = gtk_file_chooser_dialog_new(_("Select dictionary file"),
+			GTK_WINDOW(dialog_preferences),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			NULL);
+	fileselector = gtk_file_chooser_button_new_with_dialog (fsel_dialog);
+	if (dicpath != NULL) gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(fileselector), g_filename_to_uri(dicpath, NULL, &error));
 
   gtk_table_attach(GTK_TABLE(glade_xml_get_widget(gladexml_add_dic, "table_change_dic")), fileselector, 1, 2, 1, 2,
 									 (GtkAttachOptions)(GTK_FILL),
@@ -326,12 +340,12 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
     else gjitenApp->conf->kdiccfg[i] = FALSE; 
   }
 
-	kanjidic_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(gnome_entry_gtk_entry(GNOME_ENTRY(entry_kanjidic)))));
+	kanjidic_path = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(entry_kanjidic));
   if ((kanjidic_path != NULL) && strlen(kanjidic_path))  {
     gjitenApp->conf->kanjidic->path = kanjidic_path;
   }
 
-	kanjipad_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(gnome_entry_gtk_entry(GNOME_ENTRY(entry_kanjipad)))));
+	kanjipad_path = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(entry_kanjipad));
   if ((kanjipad_path != NULL) && strlen(kanjipad_path))  {
     gjitenApp->conf->kanjipad = kanjipad_path;
   }
@@ -395,6 +409,7 @@ void create_dialog_preferences() {
 	GtkWidget *button;
 	GtkWidget *tmpwidget;
   GtkWidget *fontpicker;
+  GtkWidget *fsel_dialog;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
 	GSList *dicfile_node;
@@ -459,15 +474,18 @@ void create_dialog_preferences() {
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_hira_on_kata")), gjitenApp->conf->search_hira_on_kata);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection")), gjitenApp->conf->verb_deinflection);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals")), gjitenApp->conf->unicode_radicals);	
-	
-	chdir(GJITEN_DICDIR);
-	//	gnome_file_entry_set_default_path(GNOME_FILE_ENTRY(tmpwidget), GJITEN_DICDIR);
-	tmpwidget = gnome_file_entry_new(NULL, _("Select KanjiDic"));
-	entry_kanjidic = gnome_file_entry_gnome_entry(GNOME_FILE_ENTRY(tmpwidget));
+
+	fsel_dialog = gtk_file_chooser_dialog_new( _("Select KanjiDic"), GTK_WINDOW(dialog_preferences),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			NULL);
+	entry_kanjidic = gtk_file_chooser_button_new_with_dialog (fsel_dialog);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(entry_kanjidic), GJITEN_DICDIR);
 	if (gjitenApp->conf->kanjidic && gjitenApp->conf->kanjidic->path) {
-		gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjidic->path);
+	    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(entry_kanjidic), gjitenApp->conf->kanjidic->path);
 	}
-  gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjidicfile")), tmpwidget, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjidicfile")), entry_kanjidic, TRUE, TRUE, 0);
 
   tmpwidget = GETWIDGET("table_kanji_info");
 
@@ -482,29 +500,25 @@ void create_dialog_preferences() {
     }
 	}
 
-	fontpicker = gnome_font_picker_new();
+	fontpicker = gtk_font_button_new();
   gtk_widget_show(fontpicker);
   if (gjitenApp->conf->normalfont != NULL) {
     gtk_entry_set_text(GTK_ENTRY(GETWIDGET("entry_normal_font")), gjitenApp->conf->normalfont);
     //gnome_font_picker_set_font_name(GNOME_FONT_PICKER(fontpicker), gjitenApp->conf->normalfont);
   }
 
-  gnome_font_picker_set_preview_text(GNOME_FONT_PICKER(fontpicker), fontteststrg);
-  gnome_font_picker_set_mode(GNOME_FONT_PICKER(fontpicker), GNOME_FONT_PICKER_MODE_PIXMAP);
-  g_signal_connect_swapped(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_normal_font"));
+  g_signal_connect(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_normal_font"));
   gtk_table_attach(GTK_TABLE(GETWIDGET("table_fonts")), fontpicker, 2, 3, 0, 1,
 									 (GtkAttachOptions)(0),
 									 (GtkAttachOptions)0, 0, 0);
 
-	fontpicker = gnome_font_picker_new();
+	fontpicker = gtk_font_button_new();
   gtk_widget_show(fontpicker);
   if (gjitenApp->conf->largefont != NULL) {
     gtk_entry_set_text(GTK_ENTRY(GETWIDGET("entry_large_font")), gjitenApp->conf->largefont);
     //gnome_font_picker_set_font_name(GNOME_FONT_PICKER(fontpicker), gjitenApp->conf->normalfont);
   }
 
-  gnome_font_picker_set_preview_text(GNOME_FONT_PICKER(fontpicker), fontteststrg);
-  gnome_font_picker_set_mode(GNOME_FONT_PICKER(fontpicker), GNOME_FONT_PICKER_MODE_PIXMAP);
   g_signal_connect_swapped(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_large_font"));
   gtk_table_attach(GTK_TABLE(GETWIDGET("table_fonts")), fontpicker, 2, 3, 1, 2,
 									 (GtkAttachOptions)(0),
@@ -526,15 +540,21 @@ void create_dialog_preferences() {
 
 
 
-	tmpwidget = gnome_file_entry_new(NULL, _("Select KanjiPad"));
-	entry_kanjipad = gnome_file_entry_gnome_entry(GNOME_FILE_ENTRY(tmpwidget));
+	fsel_dialog = gtk_file_chooser_dialog_new( _("Select KanjiPad"),
+			GTK_WINDOW(dialog_preferences),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			NULL);
+	entry_kanjipad = gtk_file_chooser_button_new_with_dialog(fsel_dialog);
 	if (gjitenApp->conf->kanjipad != NULL) {
-		gnome_file_entry_set_filename(GNOME_FILE_ENTRY(tmpwidget), gjitenApp->conf->kanjipad);
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(entry_kanjipad), gjitenApp->conf->kanjipad);
 	}
-  gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjipadfile")), tmpwidget, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GETWIDGET("hbox_kanjipadfile")), entry_kanjipad, TRUE, TRUE, 0);
 
 
   g_signal_connect_swapped(G_OBJECT(dialog_preferences), "response", G_CALLBACK(preferences_response_cb), NULL);
+  g_signal_connect(G_OBJECT(dialog_preferences), "destroy", G_CALLBACK(preferences_exit), NULL);
 
   gtk_widget_show_all(dialog_preferences);
 

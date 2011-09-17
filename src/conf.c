@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
-#include <libgnome/libgnome.h>
+#include <glib/gi18n.h>
 
 #include "conf.h"
 #include "constants.h"
