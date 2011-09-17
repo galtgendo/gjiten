@@ -97,6 +97,41 @@ static struct poptOption arg_options [] = {
 
 };
 
+static struct {
+	gchar *filename;
+	gchar *stock_id;
+} stock_icons[] = {
+	{ PIXMAPDIR"/kanjidic.png", "my-gjiten-icon" },
+	{ PIXMAPDIR"/kanjipad.png", "my-kanjipad-icon" },
+};
+
+static gint n_stock_icons = G_N_ELEMENTS (stock_icons);
+
+static void
+register_my_stock_icons(void)
+{
+	GtkIconFactory *icon_factory;
+	GtkIconSet *icon_set;
+	GtkIconSource *icon_source;
+	gint i;
+
+	icon_factory = gtk_icon_factory_new();
+
+	for (i = 0; i < n_stock_icons; i++)
+	{
+		icon_set = gtk_icon_set_new();
+		icon_source = gtk_icon_source_new();
+		gtk_icon_source_set_filename(icon_source, stock_icons[i].filename);
+		gtk_icon_set_add_source(icon_set, icon_source);
+		gtk_icon_source_free(icon_source);
+		gtk_icon_factory_add(icon_factory, stock_icons[i].stock_id, icon_set);
+		gtk_icon_set_unref(icon_set);
+	}
+
+	gtk_icon_factory_add_default(icon_factory);
+
+	g_object_unref(icon_factory);
+}
 
 
 /*================ Functions ===============================================*/
@@ -275,6 +310,8 @@ int main (int argc, char **argv) {
 										 GNOME_PARAM_HUMAN_READABLE_NAME, _("gjiten"), 
 										 GNOME_PARAM_APP_DATADIR, GNOMEDATADIR,
 										 NULL);
+
+  register_my_stock_icons();
 
   if (! g_file_test (icon_path, G_FILE_TEST_EXISTS)) {
     g_warning ("Could not find %s", icon_path);

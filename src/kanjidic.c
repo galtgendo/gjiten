@@ -28,7 +28,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <gnome.h>
+#include <stdlib.h>
+#include <glib/gi18n.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -49,6 +50,7 @@
 void get_rad_of_kanji(gunichar kanji);
 
 static void kanjidic_close();
+static void on_kanji_search();
 
 /* VARIABLES ************************/
 gchar *kdic_line = NULL;  /*size = KCFGNUM * KBUFSIZE */
@@ -64,50 +66,45 @@ KanjiDic *kanjiDic;
 extern gchar *strginfo[];
 extern GjitenApp *gjitenApp;
 
-static GnomeUIInfo kfile_menu_uiinfo[] = {
-  GNOMEUIINFO_MENU_EXIT_ITEM(GTK_SIGNAL_FUNC(kanjidic_close), NULL),
-  GNOMEUIINFO_END
+static const GtkActionEntry entries[] = {
+	{"FileMenu", NULL, N_("File")},
+	{"EditMenu", NULL, N_("Edit")},
+	{"ToolsMenu", NULL, N_("Tools")},
+	{"HelpMenu", NULL, N_("Help")},
+	{"Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Close Gjiten"), G_CALLBACK(kanjidic_close)},
+	{"Worddic", "my-gjiten-icon", N_("Worddic"), NULL, N_("Launch WordDic"), G_CALLBACK(worddic_create)},
+	{"Kanjipad", "my-kanjipad-icon", N_("Kanjipad"), NULL, N_("Launch KanjiPad"), G_CALLBACK(gjiten_start_kanjipad)},
+	{"Preferences", GTK_STOCK_PREFERENCES, NULL, NULL, NULL, G_CALLBACK(create_dialog_preferences)},
+	{"About", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK(gjiten_create_about)},
+	{"Help", GTK_STOCK_HELP, NULL, NULL, NULL, G_CALLBACK(gjiten_display_manual)},
+	{"Find", GTK_STOCK_FIND, NULL, NULL, N_("Search entered Kanji"), G_CALLBACK(on_kanji_search)},
 };
 
-static GnomeUIInfo kedit_menu_uiinfo[] = {
-  //GNOMEUIINFO_MENU_CUT_ITEM(NULL, NULL),
-  //GNOMEUIINFO_MENU_COPY_ITEM(gjiten_copy, NULL),
-  //GNOMEUIINFO_MENU_PASTE_ITEM(gjiten_paste, NULL),
-  //  GNOMEUIINFO_MENU_CLEAR_ITEM(NULL, NULL),
-  GNOMEUIINFO_SEPARATOR,
-  GNOMEUIINFO_MENU_PREFERENCES_ITEM(create_dialog_preferences, NULL),
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo ktools_menu_uiinfo[] = {
-  {
-    GNOME_APP_UI_ITEM, N_("KanjiPad"), NULL, gjiten_start_kanjipad, NULL, NULL,
-    GNOME_APP_PIXMAP_FILENAME, "kanjipad.png", 0, 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("WordDic"), NULL, worddic_create, NULL, NULL,
-    GNOME_APP_PIXMAP_FILENAME, "kanjidic.png", 0, 0, NULL
-  },
-  GNOMEUIINFO_END
-};
-
-static GnomeUIInfo khelp_menu_uiinfo[] = {
-	GNOMEUIINFO_HELP("gjiten"),
-	GNOMEUIINFO_SEPARATOR,
-	GNOMEUIINFO_MENU_ABOUT_ITEM(gjiten_create_about, NULL),
-	GNOMEUIINFO_END
-};
-
-static GnomeUIInfo kmenubar_uiinfo[] = {
-  GNOMEUIINFO_MENU_FILE_TREE(kfile_menu_uiinfo),
-  GNOMEUIINFO_MENU_EDIT_TREE(kedit_menu_uiinfo),
-  {
-    GNOME_APP_UI_SUBTREE, N_("Tools"), NULL, ktools_menu_uiinfo, NULL, 
-    NULL,  GNOME_APP_PIXMAP_NONE, N_("Tools"), 0, 0, NULL
-  },
-  GNOMEUIINFO_MENU_HELP_TREE(khelp_menu_uiinfo),
-  GNOMEUIINFO_END
-};
+static const char *ui_description =
+"<ui>"
+"<toolbar name='ToolBar' >"
+"<toolitem action='Quit' />"
+"<toolitem action='Worddic' />"
+"<toolitem action='Kanjipad' />"
+"<toolitem action='Find' />"
+"</toolbar>"
+"<menubar name='MenuBar'>"
+"<menu action='FileMenu' >"
+"<menuitem action='Quit' />"
+"</menu>"
+"<menu action='EditMenu' >"
+"<menuitem action='Preferences' />"
+"</menu>"
+"<menu action='ToolsMenu' >"
+"<menuitem action='Worddic' />"
+"<menuitem action='Kanjipad' />"
+"</menu>"
+"<menu action='HelpMenu' >"
+"<menuitem action='Help' />"
+"<menuitem action='About' />"
+"</menu>"
+"</menubar>"
+"</ui>";
 
 
 /* ************************************************************ */
@@ -447,7 +444,7 @@ void set_radical_button_unsensitive(gunichar radical, GtkWidget *rad_button, gbo
 }
 
 
-void on_kanji_search() {
+static void on_kanji_search() {
   static gchar *kentry, *radentry;
   int found;
   int i;
@@ -467,7 +464,8 @@ void on_kanji_search() {
 	GHashTable *rad_info_hash = NULL;
 	KanjiInfo *kanji_info;
 
-  gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),_("Searching..."));
+  gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+  gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("Searching..."));
   kappbarmsg[0] = 0;
 
   gtk_text_buffer_set_text(GTK_TEXT_BUFFER(kanjiDic->kanji_results_buffer), "", 0);
@@ -520,7 +518,8 @@ void on_kanji_search() {
   if ((GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active) && (g_utf8_strlen(radentry, -1) > 0)) {
     findk_by_radical(radentry); 
     if (klinklist == NULL) {
-      gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),_("No such kanji with this radical combination."));
+      gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+      gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("No such kanji with this radical combination."));
       return;
     }
   }
@@ -528,15 +527,15 @@ void on_kanji_search() {
   //FIND BY STROKE
   if (GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active) {
     if ((stroke < 1) || (stroke > 30)) {
-      	gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
-				_("Invalid stroke count :-P "));
-				return;
+	gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+	gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("Invalid stroke count :-P "));
+	return;
     }
     if (klinklist == NULL) {
       findk_by_stroke(stroke, plus_min, &klinklist);  // this should! give results
       if (klinklist == NULL ) {
-				gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
-				_("Stroke search didn't find any match :-O "));
+				gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+				gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("Stroke search didn't find any match :-O "));
 				return;
       }
     }
@@ -545,8 +544,8 @@ void on_kanji_search() {
       klists_merge(); 
       if (klinklist == NULL) {  
 				found = FALSE; 
-				gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji),
-																_("No such kanji with this stroke/radical combination.")); 
+				gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+				gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("No such kanji with this stroke/radical combination."));
 				return;
       }
     }
@@ -560,14 +559,16 @@ void on_kanji_search() {
       klists_merge();
     }
     if (klinklist == NULL) {    
-      gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji), _("No Matches found!"));
+      gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+      gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("No Matches found!"));
       return;
     }
   }
   
 	result_num = g_list_length(klinklist);
   snprintf(kappbarmsg, 100, _("Kanji found: %d"), result_num);
-  gnome_appbar_set_status(GNOME_APPBAR(kanjiDic->appbar_kanji), kappbarmsg);
+  gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
+  gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), kappbarmsg);
 
   if (result_num == 1) print_kanjinfo((gunichar) klinklist->data);
   
@@ -1073,10 +1074,7 @@ KanjiDic *kanjidic_create() {
   GtkWidget *hbox_spinb;
   GtkWidget *table_koptions;
   GtkWidget *toolbar_kanji;
-  GtkWidget *button_closek;
-  GtkWidget *button_kanjipad;
-  GtkWidget *button_worddic;
-  GtkWidget *button_searchk;
+  GtkWidget *menubar;
   GtkWidget *frame_koptions;
   GtkObject *spinb_strokenum_adj;
   GtkObject *spinb_plusmin_adj;
@@ -1084,11 +1082,13 @@ KanjiDic *kanjidic_create() {
   GtkWidget *frame_kresults;
   GtkWidget *scrolledwin_kresults;
   GtkWidget *scrolledwin_kinfo;
-  GtkWidget *dock_kanjidic;
   GtkWidget *hbox;
   GtkWidget *frame_kinfo;
-  GtkWidget *tmpimage;
 	GtkWidget *vpane;
+	GtkActionGroup *action_group;
+	GtkUIManager *ui_manager;
+	GtkAccelGroup *accel_group;
+	GError *error = NULL;
 
   if (kanjiDic != NULL) {
 		gtk_window_present(GTK_WINDOW(kanjiDic->window));
@@ -1103,45 +1103,44 @@ KanjiDic *kanjidic_create() {
   if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * KBUFSIZE);
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
 
-  kanjiDic->window = gnome_app_new("gjiten", _("Gjiten - KanjiDic"));
+  kanjiDic->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(kanjiDic->window), _("Gjiten - KanjiDic"));
   gtk_widget_set_can_default(kanjiDic->window, TRUE);
   g_signal_connect(G_OBJECT(kanjiDic->window), "destroy", G_CALLBACK(kanjidic_close), NULL);
   gtk_window_set_default_size(GTK_WINDOW(kanjiDic->window), 500, 500);
 
-  dock_kanjidic = GNOME_APP(kanjiDic->window)->dock;
-  gtk_widget_show(dock_kanjidic);
+  action_group = gtk_action_group_new ("MenuActions");
+  gtk_action_group_add_actions (action_group, entries, G_N_ELEMENTS (entries), GTK_WINDOW(kanjiDic->window));
 
-  if (gjitenApp->conf->menubar) gnome_app_create_menus(GNOME_APP(kanjiDic->window), kmenubar_uiinfo);
-  
+  ui_manager = gtk_ui_manager_new ();
+  gtk_ui_manager_insert_action_group (ui_manager, action_group, 0);
+
+  accel_group = gtk_ui_manager_get_accel_group (ui_manager);
+  gtk_window_add_accel_group (GTK_WINDOW (kanjiDic->window), accel_group);
+
+  error = NULL;
+  if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
+  {
+    g_message ("building menus failed: %s", error->message);
+    g_error_free (error);
+    exit (EXIT_FAILURE);
+  }
+
   vbox_maink = gtk_vbox_new(FALSE, 0);
   gtk_widget_show(vbox_maink);
-  gnome_app_set_contents(GNOME_APP(kanjiDic->window), vbox_maink);
+  gtk_container_add(GTK_CONTAINER(kanjiDic->window), vbox_maink);
+
+  if (gjitenApp->conf->menubar)
+  {
+    menubar = gtk_ui_manager_get_widget (ui_manager, "/MenuBar");
+    gtk_widget_show(menubar);
+    gtk_box_pack_start (GTK_BOX (vbox_maink), menubar, FALSE, FALSE, 0);
+  }
    
   if (gjitenApp->conf->toolbar) {
-    toolbar_kanji = gtk_toolbar_new();
+    toolbar_kanji = gtk_ui_manager_get_widget (ui_manager, "/ToolBar");
     gtk_widget_show(toolbar_kanji);
-
-    gnome_app_set_toolbar(GNOME_APP(kanjiDic->window), GTK_TOOLBAR(toolbar_kanji));
-    
-    button_closek = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar_kanji), GTK_STOCK_CLOSE,
-																						 _("Close KanjiDic"), "Close", 
-																						 NULL, NULL, -1);
-		g_signal_connect_swapped(G_OBJECT(button_closek), "clicked", 
-														 G_CALLBACK(gtk_widget_destroy), kanjiDic->window);
-
-    tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjidic.png");
-    button_worddic = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar_kanji), _("WordDic"),
-																						 _("Launch WordDic"), "WordDic", tmpimage,
-																						 G_CALLBACK(worddic_create), NULL);
-
-    tmpimage = gtk_image_new_from_file(PIXMAPDIR"/kanjipad.png");
-    button_kanjipad = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar_kanji), _("KanjiPad"),
-					      _("Launch KanjiPad"), "KanjiPad", tmpimage,
-					      G_CALLBACK(gjiten_start_kanjipad), NULL);
-    
-    button_searchk = gtk_toolbar_insert_stock(GTK_TOOLBAR(toolbar_kanji), GTK_STOCK_FIND,
-					      _("Search entered Kanji"), "Search", 
-					      on_kanji_search, NULL, -1);
+    gtk_box_pack_start (GTK_BOX (vbox_maink), toolbar_kanji, FALSE, FALSE, 0);
   }
   
   frame_koptions = gtk_frame_new(_("Kanji Search Options"));
@@ -1295,7 +1294,7 @@ KanjiDic *kanjidic_create() {
   gtk_paned_add2(GTK_PANED(vpane), frame_kinfo);
   gtk_box_pack_start(GTK_BOX(vbox_maink), vpane, TRUE, TRUE, 0);
 
-  kanjiDic->appbar_kanji = gnome_appbar_new(TRUE, TRUE, GNOME_PREFERENCES_NEVER);
+  kanjiDic->appbar_kanji = gtk_statusbar_new();
   gtk_widget_show(kanjiDic->appbar_kanji);
   gtk_box_pack_start(GTK_BOX(vbox_maink), kanjiDic->appbar_kanji, FALSE, FALSE, 0);
 
