@@ -1008,76 +1008,78 @@ WordDic *worddic_create() {
 
 	//gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
 
-  vbox_main = gtk_vbox_new(FALSE, 0);
+  vbox_main = gtk_grid_new();
   gtk_widget_show(vbox_main);
   gtk_container_add(GTK_CONTAINER(wordDic->window), vbox_main);
-  gtk_box_pack_start (GTK_BOX (vbox_main), menubar, FALSE, FALSE, 0);
+  gtk_grid_attach (GTK_GRID (vbox_main), menubar, 0, 0, 1, 1);
   toolbar = gtk_ui_manager_get_widget (ui_manager, "/ToolBar"); //gtk_toolbar_new();
   gtk_widget_show(toolbar);
-  gtk_box_pack_start (GTK_BOX (vbox_main), toolbar, FALSE, FALSE, 0);
+  gtk_grid_attach (GTK_GRID (vbox_main), toolbar, 0, 1, 1, 1);
 
-  wordDic->hbox_options = gtk_hbox_new(FALSE, 0);
+  wordDic->hbox_options = gtk_grid_new();
   gtk_widget_show(wordDic->hbox_options);
   exp_japopt = gtk_expander_new("");
+  gtk_widget_set_hexpand(exp_japopt, TRUE);
+  gtk_widget_set_halign (exp_japopt, GTK_ALIGN_CENTER);
   gtk_container_add(GTK_CONTAINER(exp_japopt), wordDic->hbox_options);
-  gtk_box_pack_start(GTK_BOX(vbox_main), exp_japopt, FALSE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_main), exp_japopt, 0, 2, 1, 1);
 
   frame_japopt = gtk_frame_new(_("Japanese Search Options: "));
   gtk_widget_show(frame_japopt);
-  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_japopt, TRUE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(wordDic->hbox_options), frame_japopt, 0, 0, 1, 1);
   gtk_container_set_border_width(GTK_CONTAINER(frame_japopt), 5);
 
-  vbox_japopt = gtk_vbox_new(FALSE, 0);
+  vbox_japopt = gtk_grid_new();
   gtk_widget_show(vbox_japopt);
   gtk_container_add(GTK_CONTAINER(frame_japopt), vbox_japopt);
 
   wordDic->radiob_jpexact = gtk_radio_button_new_with_mnemonic(vbox_japopt_group, _("E_xact Matches"));
   vbox_japopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_jpexact));
   gtk_widget_show(wordDic->radiob_jpexact);
-  gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->radiob_jpexact, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_japopt), wordDic->radiob_jpexact, 0, 0, 1, 1);
 
   wordDic->radiob_startw = gtk_radio_button_new_with_mnemonic(vbox_japopt_group, _("_Start With Expression"));
   vbox_japopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_startw));
   gtk_widget_show(wordDic->radiob_startw);
-  gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->radiob_startw, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_japopt), wordDic->radiob_startw, 0, 1, 1, 1);
 
   wordDic->radiob_endw = gtk_radio_button_new_with_mnemonic(vbox_japopt_group, _("E_nd With Expression"));
   vbox_japopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_endw));
   gtk_widget_show(wordDic->radiob_endw);
-  gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->radiob_endw, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_japopt), wordDic->radiob_endw, 0, 2, 1, 1);
 
   wordDic->radiob_any = gtk_radio_button_new_with_mnemonic(vbox_japopt_group, _("_Any Matches"));
   vbox_japopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_any));
   gtk_widget_show(wordDic->radiob_any);
-  gtk_box_pack_start(GTK_BOX(vbox_japopt), wordDic->radiob_any, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_japopt), wordDic->radiob_any, 0, 3, 1, 1);
 
   frame_engopt = gtk_frame_new(_("English Search Options: "));
   gtk_widget_show(frame_engopt);
-  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_engopt, TRUE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(wordDic->hbox_options), frame_engopt, 1, 0, 1, 1);
   gtk_container_set_border_width(GTK_CONTAINER(frame_engopt), 5);
 
-  vbox_engopt = gtk_vbox_new(FALSE, 0);
+  vbox_engopt = gtk_grid_new();
   gtk_widget_show(vbox_engopt);
   gtk_container_add(GTK_CONTAINER(frame_engopt), vbox_engopt);
 
   wordDic->radiob_engexact = gtk_radio_button_new_with_mnemonic(vbox_engopt_group, _("Wh_ole Expressions"));
   vbox_engopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_engexact));
   gtk_widget_show(wordDic->radiob_engexact);
-  gtk_box_pack_start(GTK_BOX(vbox_engopt), wordDic->radiob_engexact, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_engopt), wordDic->radiob_engexact, 0, 0, 1, 1);
 
   wordDic->radiob_words = gtk_radio_button_new_with_mnemonic(vbox_engopt_group, _("_Whole Words"));
   vbox_engopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_words));
   gtk_widget_show(wordDic->radiob_words);
-  gtk_box_pack_start(GTK_BOX(vbox_engopt), wordDic->radiob_words, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_engopt), wordDic->radiob_words, 0, 1, 1, 1);
 
   wordDic->radiob_partial = gtk_radio_button_new_with_mnemonic(vbox_engopt_group, _("Any _Matches"));
   vbox_engopt_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_partial));
   gtk_widget_show(wordDic->radiob_partial);
-  gtk_box_pack_start(GTK_BOX(vbox_engopt), wordDic->radiob_partial, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_engopt), wordDic->radiob_partial, 0, 2, 1, 1);
 
   frame_gopt = gtk_frame_new(_("General Options: "));
   gtk_widget_show(frame_gopt);
-  gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_gopt, TRUE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(wordDic->hbox_options), frame_gopt, 2, 0, 1, 1);
   gtk_container_set_border_width(GTK_CONTAINER(frame_gopt), 5);
 
   table_gopt = gtk_grid_new();
@@ -1085,7 +1087,6 @@ WordDic *worddic_create() {
   gtk_container_add(GTK_CONTAINER(frame_gopt), table_gopt);
 
   wordDic->radiob_searchdic = gtk_radio_button_new_with_mnemonic(dicssearch_group, _("Search _Dic:"));
-  gtk_widget_set_hexpand (wordDic->radiob_searchdic, TRUE);
   dicssearch_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_searchdic));
   gtk_widget_show(wordDic->radiob_searchdic);
   gtk_grid_attach(GTK_GRID(table_gopt), wordDic->radiob_searchdic, 0, 0, 1, 1);
@@ -1095,14 +1096,12 @@ WordDic *worddic_create() {
   // DICTFILE SELECTION MENU
 	
   wordDic->dicselection_menu = gtk_combo_box_text_new();
-  gtk_widget_set_hexpand (wordDic->dicselection_menu, TRUE);
 	worddic_update_dic_menu();
   g_signal_connect(G_OBJECT(wordDic->dicselection_menu), "changed", G_CALLBACK(on_dicselection_clicked), NULL);
  
   gtk_grid_attach(GTK_GRID(table_gopt), wordDic->dicselection_menu, 1, 0, 1, 1);
 
   wordDic->radiob_searchall = gtk_radio_button_new_with_mnemonic(dicssearch_group, _("Sea_rch All Dictionaries"));
-  gtk_widget_set_hexpand (wordDic->radiob_searchall, TRUE);
   gtk_widget_show(wordDic->radiob_searchall);
   gtk_grid_attach(GTK_GRID(table_gopt), wordDic->radiob_searchall, 0, 1, 2, 1);
   g_signal_connect_swapped(G_OBJECT(wordDic->radiob_searchall), "clicked", 
@@ -1110,7 +1109,6 @@ WordDic *worddic_create() {
 
 
   wordDic->checkb_autoadjust = gtk_check_button_new_with_mnemonic(_("A_uto Adjust Options"));
-  gtk_widget_set_hexpand (wordDic->checkb_autoadjust, TRUE);
   gtk_widget_show(wordDic->checkb_autoadjust);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), TRUE);
   gtk_grid_attach(GTK_GRID(table_gopt), wordDic->checkb_autoadjust, 0, 2, 2, 1);
@@ -1119,12 +1117,12 @@ WordDic *worddic_create() {
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), gjitenApp->conf->autoadjust_enabled);
 
   
-  hbox_searchlimit = gtk_hbox_new(FALSE, 0);
+  hbox_searchlimit = gtk_grid_new();
   gtk_widget_show(hbox_searchlimit);
   gtk_grid_attach(GTK_GRID(table_gopt), hbox_searchlimit, 0, 3, 2, 1);
   wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
   gtk_widget_show(wordDic->checkb_searchlimit);
-  gtk_box_pack_start(GTK_BOX(hbox_searchlimit), wordDic->checkb_searchlimit, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->checkb_searchlimit, 0, 0, 1, 1);
   g_signal_connect(G_OBJECT(wordDic->checkb_searchlimit), "toggled", 
 									 G_CALLBACK(checkb_searchlimit_toggled), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), gjitenApp->conf->searchlimit_enabled);
@@ -1132,26 +1130,31 @@ WordDic *worddic_create() {
 	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
   wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
   gtk_widget_show(wordDic->spinb_searchlimit);
-  gtk_box_pack_start(GTK_BOX(hbox_searchlimit), wordDic->spinb_searchlimit, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->spinb_searchlimit, 1, 0, 1, 1);
   gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
   g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
 									 G_CALLBACK(get_searchlimit), NULL);
   
 
-  hbox_entry = gtk_hbox_new(FALSE, 0);   
+  hbox_entry = gtk_grid_new();
   gtk_widget_show(hbox_entry);
-  gtk_box_pack_start(GTK_BOX(vbox_main), hbox_entry, FALSE, TRUE, 14);
+  g_object_set(hbox_entry, "margin-top", 14, NULL);
+  g_object_set(hbox_entry, "margin-bottom", 14, NULL);
+  gtk_grid_attach(GTK_GRID(vbox_main), hbox_entry, 0, 3, 1, 1);
   gtk_container_set_border_width(GTK_CONTAINER(hbox_entry), 3);
 
   label_enter = gtk_label_new(_("Enter expression :"));
+  g_object_set(label_enter, "margin-left", 5, NULL);
+  g_object_set(label_enter, "margin-right", 5, NULL);
   gtk_widget_show(label_enter);
-  gtk_box_pack_start(GTK_BOX(hbox_entry), label_enter, FALSE, TRUE, 5);
+  gtk_grid_attach(GTK_GRID(hbox_entry), label_enter, 0, 0, 1, 1);
   gtk_label_set_justify(GTK_LABEL(label_enter), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment(GTK_MISC(label_enter), 1, 0.5);
   gtk_misc_set_padding(GTK_MISC(label_enter), 7, 0);
 
   wordDic->combo_entry = gtk_combo_box_text_new_with_entry();
-  gtk_box_pack_start(GTK_BOX(hbox_entry), wordDic->combo_entry, TRUE, TRUE, 0);
+  gtk_widget_set_hexpand(wordDic->combo_entry, TRUE);
+  gtk_grid_attach(GTK_GRID(hbox_entry), wordDic->combo_entry, 1, 0, 1, 1);
   g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
 									 "activate", G_CALLBACK(on_text_entered), NULL);
   g_signal_connect(G_OBJECT(wordDic->window), "key_press_event",
@@ -1171,28 +1174,32 @@ WordDic *worddic_create() {
   gtk_widget_show(wordDic->combo_entry);
 
   button_search = gtk_button_new_with_label(_("Search"));
+  g_object_set(button_search, "margin-left", 7, NULL);
+  g_object_set(button_search, "margin-right", 7, NULL);
   gtk_widget_show(button_search);
-  gtk_box_pack_start(GTK_BOX(hbox_entry), button_search, FALSE, FALSE, 7);
+  gtk_grid_attach(GTK_GRID(hbox_entry), button_search, 2, 0, 1, 1);
   g_signal_connect(G_OBJECT(button_search), "clicked", G_CALLBACK(on_text_entered), NULL);
 
   button_clear = gtk_button_new_with_mnemonic(_("_Clear"));
   gtk_widget_show(button_clear);
-  gtk_box_pack_start(GTK_BOX(hbox_entry), button_clear, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(hbox_entry), button_clear, 3, 0, 1, 1);
   g_signal_connect_swapped(G_OBJECT(button_clear), "clicked", 
 													 G_CALLBACK(gjiten_clear_entry_box), 
 													 G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))));
 
   frame_results = gtk_frame_new(_("Search results :"));
   gtk_widget_show(frame_results);
-  gtk_box_pack_start(GTK_BOX(vbox_main), frame_results, TRUE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_main), frame_results, 0, 4, 1, 1);
   gtk_container_set_border_width(GTK_CONTAINER(frame_results), 5);
   gtk_frame_set_label_align(GTK_FRAME(frame_results), 0.03, 0.5);
 
-  vbox_results = gtk_vbox_new(FALSE, 0);
+  vbox_results = gtk_grid_new();
   gtk_widget_show(vbox_results);
   gtk_container_add(GTK_CONTAINER(frame_results), vbox_results);
 
   wordDic->text_results_view = gtk_text_view_new();
+  gtk_widget_set_hexpand (wordDic->text_results_view, TRUE);
+  gtk_widget_set_vexpand (wordDic->text_results_view, TRUE);
   wordDic->text_results_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(wordDic->text_results_view));
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(wordDic->text_results_view), GTK_WRAP_WORD);
 
@@ -1215,12 +1222,12 @@ WordDic *worddic_create() {
   gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwin_results), GTK_SHADOW_IN);
 
   gtk_container_add(GTK_CONTAINER(scrolledwin_results), wordDic->text_results_view);
-  gtk_box_pack_start(GTK_BOX(vbox_results), scrolledwin_results, TRUE, TRUE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_results), scrolledwin_results, 0, 0, 1, 1);
   gtk_widget_show(scrolledwin_results);
 
   wordDic->appbar_mainwin = gtk_statusbar_new();
   gtk_widget_show(wordDic->appbar_mainwin);
-  gtk_box_pack_end(GTK_BOX(vbox_results), wordDic->appbar_mainwin, FALSE, FALSE, 0);
+  gtk_grid_attach(GTK_GRID(vbox_results), wordDic->appbar_mainwin, 0, 1, 1, 1);
  
   gtk_widget_show_all(wordDic->window);
 
