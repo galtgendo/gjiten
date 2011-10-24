@@ -1079,44 +1079,40 @@ WordDic *worddic_create() {
   gtk_box_pack_start(GTK_BOX(wordDic->hbox_options), frame_gopt, TRUE, TRUE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(frame_gopt), 5);
 
-  table_gopt = gtk_table_new(3, 2, FALSE);
+  table_gopt = gtk_grid_new();
   gtk_widget_show(table_gopt);
   gtk_container_add(GTK_CONTAINER(frame_gopt), table_gopt);
 
   wordDic->radiob_searchdic = gtk_radio_button_new_with_mnemonic(dicssearch_group, _("Search _Dic:"));
+  gtk_widget_set_hexpand (wordDic->radiob_searchdic, TRUE);
   dicssearch_group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(wordDic->radiob_searchdic));
   gtk_widget_show(wordDic->radiob_searchdic);
-  gtk_table_attach(GTK_TABLE(table_gopt), wordDic->radiob_searchdic, 0, 1, 0, 1,
-                   (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 
-									 (GtkAttachOptions)(0), 0, 0);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->radiob_searchdic, 0, 0, 1, 1);
   g_signal_connect_swapped(G_OBJECT(wordDic->radiob_searchdic), "clicked", 
 													 G_CALLBACK(shade_worddic_widgets), NULL);
 
   // DICTFILE SELECTION MENU
 	
   wordDic->dicselection_menu = gtk_combo_box_text_new();
+  gtk_widget_set_hexpand (wordDic->dicselection_menu, TRUE);
 	worddic_update_dic_menu();
   g_signal_connect(G_OBJECT(wordDic->dicselection_menu), "changed", G_CALLBACK(on_dicselection_clicked), NULL);
  
-  gtk_table_attach(GTK_TABLE(table_gopt), wordDic->dicselection_menu, 1, 2, 0, 1,
-                   (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-									 (GtkAttachOptions)(0), 0, 0);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->dicselection_menu, 1, 0, 1, 1);
 
   wordDic->radiob_searchall = gtk_radio_button_new_with_mnemonic(dicssearch_group, _("Sea_rch All Dictionaries"));
+  gtk_widget_set_hexpand (wordDic->radiob_searchall, TRUE);
   gtk_widget_show(wordDic->radiob_searchall);
-  gtk_table_attach(GTK_TABLE(table_gopt), wordDic->radiob_searchall, 0, 2, 1, 2,
-                   (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-									 (GtkAttachOptions)(0), 0, 0);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->radiob_searchall, 0, 1, 2, 1);
   g_signal_connect_swapped(G_OBJECT(wordDic->radiob_searchall), "clicked", 
 													 G_CALLBACK(shade_worddic_widgets), NULL);
 
 
   wordDic->checkb_autoadjust = gtk_check_button_new_with_mnemonic(_("A_uto Adjust Options"));
+  gtk_widget_set_hexpand (wordDic->checkb_autoadjust, TRUE);
   gtk_widget_show(wordDic->checkb_autoadjust);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), TRUE);
-  gtk_table_attach(GTK_TABLE(table_gopt), wordDic->checkb_autoadjust, 0, 2, 2, 3,
-                   (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-									 (GtkAttachOptions)(0), 0, 0);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->checkb_autoadjust, 0, 2, 2, 1);
   g_signal_connect(G_OBJECT(wordDic->checkb_autoadjust), "toggled", 
 									 G_CALLBACK(shade_worddic_widgets), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), gjitenApp->conf->autoadjust_enabled);
@@ -1124,9 +1120,7 @@ WordDic *worddic_create() {
   
   hbox_searchlimit = gtk_hbox_new(FALSE, 0);
   gtk_widget_show(hbox_searchlimit);
-  gtk_table_attach(GTK_TABLE(table_gopt), hbox_searchlimit, 0, 2, 3, 4,
-                   (GtkAttachOptions)(GTK_FILL), 
-									 (GtkAttachOptions)(0), 0, 0);
+  gtk_grid_attach(GTK_GRID(table_gopt), hbox_searchlimit, 0, 3, 2, 1);
   wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
   gtk_widget_show(wordDic->checkb_searchlimit);
   gtk_box_pack_start(GTK_BOX(hbox_searchlimit), wordDic->checkb_searchlimit, FALSE, FALSE, 0);
