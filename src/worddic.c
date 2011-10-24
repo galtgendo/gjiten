@@ -800,11 +800,10 @@ static void worddic_close() {
 }
 
 static void worddic_show_hide_options() {
+	GtkWidget *widget = gtk_widget_get_parent(wordDic->hbox_options);
 	GJITEN_DEBUG("worddic_show_hide_options()\n");
-	if (gtk_widget_get_visible(wordDic->hbox_options) == TRUE) {
-		gtk_widget_hide(wordDic->hbox_options);
-	}
-	else gtk_widget_show(wordDic->hbox_options);
+	gtk_expander_set_expanded(GTK_EXPANDER(widget),
+		!gtk_expander_get_expanded(GTK_EXPANDER(widget)));
 }
 
 void worddic_update_dic_menu() {
@@ -1019,7 +1018,9 @@ WordDic *worddic_create() {
 
   wordDic->hbox_options = gtk_hbox_new(FALSE, 0);
   gtk_widget_show(wordDic->hbox_options);
-  gtk_box_pack_start(GTK_BOX(vbox_main), wordDic->hbox_options, FALSE, TRUE, 0);
+  exp_japopt = gtk_expander_new("");
+  gtk_container_add(GTK_CONTAINER(exp_japopt), wordDic->hbox_options);
+  gtk_box_pack_start(GTK_BOX(vbox_main), exp_japopt, FALSE, TRUE, 0);
 
   frame_japopt = gtk_frame_new(_("Japanese Search Options: "));
   gtk_widget_show(frame_japopt);
