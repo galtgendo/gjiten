@@ -1,7 +1,7 @@
 pkgdata_DATA = vconj.utf8 radkfile.utf8
 
 gladedir	= $(pkgdatadir)
-glade_DATA	= gjiten-settings.glade
+glade_DATA	= gjiten-settings.ui
 
 schemasdir       = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = gjiten.schemas.in gjiten-dicfiles.schemas.in

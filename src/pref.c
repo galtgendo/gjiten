@@ -27,7 +27,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 
 #include "constants.h"
@@ -39,15 +38,15 @@
 #include "gjiten.h"
 #include "dicutil.h"
 
-#define GETWIDGET(s) glade_xml_get_widget(gladexml, s)
-static GladeXML *gladexml;
-static GladeXML *gladexml_add_dic;
+#define GETWIDGET(s) GTK_WIDGET(gtk_builder_get_object(gladexml, s))
+static GtkBuilder *gladexml;
+static GtkBuilder *gladexml_add_dic;
 
 extern GjitenApp *gjitenApp;
 
 
 GtkWidget *dialog_preferences = NULL;
-static GtkWidget *dialog_add_dic = NULL;
+static GObject *dialog_add_dic = NULL;
 static GtkTreeModel *model;
 static GtkTreeIter iter;
 static GtkWidget *checkb_prefs[KCFGNUM];
@@ -107,12 +106,12 @@ void font_set(GtkFontButton *fontpicker, GtkWidget *entry) {
 }
 
 static void add_dic_response_cb(GtkDialog *dialog, gint response, GtkFileChooser *fileentry) {
-	GtkWidget *nameentry;
+	GObject *nameentry;
 	GjitenDicfile dicfile;
 	GError *error = NULL;
 
   if (response == GTK_RESPONSE_OK) {
-		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name");
+		nameentry = gtk_builder_get_object(gladexml_add_dic, "entry_dic_name");
 		dicfile.name = g_strdup(gtk_entry_get_text(GTK_ENTRY(nameentry)));
 
 		dicfile.path = g_filename_from_uri(gtk_file_chooser_get_uri(fileentry), NULL, &error);
@@ -158,16 +157,24 @@ static void set_dic_name_cb(GtkFileChooser *fileentry, GtkEntry *entry) {
 static void add_dict() {
 	GtkWidget *fileselector;
 	GtkWidget *fsel_dialog;
-	GtkWidget *nameentry;
+	GObject *nameentry;
+	gchar *dialog_objects[] = {"dialog_add_dic", NULL};
+	GError *error = NULL;
 
 	GJITEN_DEBUG("add_dict()\n");
 	if (dialog_add_dic != NULL) {
 		gtk_window_present(GTK_WINDOW(dialog_add_dic));
 	}
 	else {
-		gladexml_add_dic = glade_xml_new(GJITEN_DATADIR"/gjiten-settings.glade", "dialog_add_dic", NULL);
-		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name");
-		dialog_add_dic = glade_xml_get_widget(gladexml_add_dic, "dialog_add_dic");
+		gladexml_add_dic = gtk_builder_new();
+		if (!gtk_builder_add_objects_from_file(gladexml_add_dic, GJITEN_DATADIR"/gjiten-settings.ui", dialog_objects, &error))
+		{
+		  g_warning ("Couldn't load builder file: %s\n", error->message);
+		  g_error_free (error);
+		  return;
+		}
+		nameentry = gtk_builder_get_object(gladexml_add_dic, "entry_dic_name");
+		dialog_add_dic = gtk_builder_get_object(gladexml_add_dic, "dialog_add_dic");
  
 		fsel_dialog = gtk_file_chooser_dialog_new(_("Select dictionary file"),
 							    GTK_WINDOW(dialog_preferences), GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -177,24 +184,24 @@ static void add_dict() {
 		fileselector = gtk_file_chooser_button_new_with_dialog(fsel_dialog);
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(fileselector), GJITEN_DICDIR);
 
-		gtk_table_attach(GTK_TABLE(glade_xml_get_widget(gladexml_add_dic, "table_add_dic")), fileselector, 1, 2, 1, 2,
+		gtk_table_attach(GTK_TABLE(gtk_builder_get_object(gladexml_add_dic, "table_add_dic")), fileselector, 1, 2, 1, 2,
 										 (GtkAttachOptions)(GTK_FILL),
 										 (GtkAttachOptions)0, 0, 0);
 
 		g_signal_connect(G_OBJECT(dialog_add_dic), "response", G_CALLBACK(add_dic_response_cb), fileselector);
 
-		gtk_widget_show_all(dialog_add_dic);
+		gtk_widget_show_all(GTK_WIDGET(dialog_add_dic));
 	}
 }
 
 static void change_dic_response_cb(GtkDialog *dialog, gint response, GtkFileChooser *fileentry) {
   gchar *dicpath, *dicname;
-	GtkWidget *nameentry;
+	GObject *nameentry;
   GtkTreeSelection *selection;
   GError *error = NULL;
 
-  if (response == GTK_RESPONSE_OK) {
-		nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name_change");
+  if (response == GTK_RESPONSE_APPLY) {
+		nameentry = gtk_builder_get_object(gladexml_add_dic, "entry_dic_name_change");
 		dicname = g_strdup(gtk_entry_get_text(GTK_ENTRY(nameentry)));
 
 		dicpath = g_filename_from_uri(gtk_file_chooser_get_uri(fileentry), NULL, &error);
@@ -206,7 +213,7 @@ static void change_dic_response_cb(GtkDialog *dialog, gint response, GtkFileChoo
 		}
 		else gjiten_print_error(_("Dictionary file not found!"));
 	}
-	else gtk_widget_destroy(GTK_WIDGET(dialog));
+  gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
@@ -217,6 +224,7 @@ static void change_dict() {
 	static GtkWidget *dialog = NULL;
 	GtkWidget *nameentry;
   GtkTreeSelection *selection;
+	gchar *dialog_objects[] = {"dialog_change_dic", NULL};
 	GError *error = NULL;
 
 	//FIXME: segfault when called many times (click on row)
@@ -232,10 +240,16 @@ static void change_dict() {
 		return;
 	}
 
-	gladexml_add_dic = glade_xml_new(GJITEN_DATADIR"/gjiten-settings.glade", "dialog_change_dic", NULL);
-	dialog = glade_xml_get_widget(gladexml_add_dic, "dialog_change_dic");
+	gladexml_add_dic = gtk_builder_new();
+	if (!gtk_builder_add_objects_from_file(gladexml_add_dic, GJITEN_DATADIR"/gjiten-settings.ui", dialog_objects, &error))
+	{
+	  g_warning ("Couldn't load builder file: %s\n", error->message);
+	  g_error_free (error);
+	  return;
+	}
+	dialog = GTK_WIDGET(gtk_builder_get_object(gladexml_add_dic, "dialog_change_dic"));
 
-	nameentry = glade_xml_get_widget(gladexml_add_dic, "entry_dic_name_change");
+	nameentry = GTK_WIDGET(gtk_builder_get_object(gladexml_add_dic, "entry_dic_name_change"));
 	gtk_tree_model_get(model, &iter, COL_DICPATH, &dicpath, -1);
 	gtk_tree_model_get(model, &iter, COL_DICNAME, &dicname, -1);
 
@@ -249,8 +263,13 @@ static void change_dict() {
 			NULL);
 	fileselector = gtk_file_chooser_button_new_with_dialog (fsel_dialog);
 	if (dicpath != NULL) gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(fileselector), g_filename_to_uri(dicpath, NULL, &error));
+	if (error)
+	{
+	  g_warning ("Problem with loading the dictionary: %s\n", error->message);
+	  g_error_free (error);
+	}
 
-  gtk_table_attach(GTK_TABLE(glade_xml_get_widget(gladexml_add_dic, "table_change_dic")), fileselector, 1, 2, 1, 2,
+  gtk_table_attach(GTK_TABLE(gtk_builder_get_object(gladexml_add_dic, "table_change_dic")), fileselector, 1, 2, 1, 2,
 									 (GtkAttachOptions)(GTK_FILL),
 									 (GtkAttachOptions)0, 0, 0);
 
@@ -414,12 +433,20 @@ void create_dialog_preferences() {
   GtkTreeViewColumn *column;
 	GSList *dicfile_node;
 	GjitenDicfile *dicfile;
+	gchar *dialog_objects[] = {"gjiten_settings", NULL};
+	GError *error = NULL;
 
   int trow = 0, tcol = 0;
 
   if (dialog_preferences != NULL) return;
 
-  gladexml = glade_xml_new(GJITEN_DATADIR"/gjiten-settings.glade", "gjiten_settings", NULL);
+  gladexml = gtk_builder_new();
+  if (!gtk_builder_add_objects_from_file(gladexml, GJITEN_DATADIR"/gjiten-settings.ui", dialog_objects, &error))
+  {
+    g_warning("Couldn't load builder file: %s\n", error->message);
+    g_error_free(error);
+    return;
+  }
 
   dialog_preferences = GETWIDGET("gjiten_settings");
 
