@@ -504,7 +504,7 @@ void create_dialog_preferences() {
   gtk_widget_show(fontpicker);
   if (gjitenApp->conf->normalfont != NULL) {
     gtk_entry_set_text(GTK_ENTRY(GETWIDGET("entry_normal_font")), gjitenApp->conf->normalfont);
-    //gnome_font_picker_set_font_name(GNOME_FONT_PICKER(fontpicker), gjitenApp->conf->normalfont);
+    gtk_font_button_set_font_name(GTK_FONT_BUTTON(fontpicker), gjitenApp->conf->normalfont);
   }
 
   g_signal_connect(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_normal_font"));
@@ -516,7 +516,7 @@ void create_dialog_preferences() {
   gtk_widget_show(fontpicker);
   if (gjitenApp->conf->largefont != NULL) {
     gtk_entry_set_text(GTK_ENTRY(GETWIDGET("entry_large_font")), gjitenApp->conf->largefont);
-    //gnome_font_picker_set_font_name(GNOME_FONT_PICKER(fontpicker), gjitenApp->conf->normalfont);
+    gtk_font_button_set_font_name(GTK_FONT_BUTTON(fontpicker), gjitenApp->conf->largefont);
   }
 
   g_signal_connect_swapped(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_large_font"));
