@@ -322,7 +322,7 @@ int main (int argc, char **argv) {
     else  
       if (gjitenApp->conf->word_to_lookup) {
 				gjitenApp->worddic = worddic_create();
-				gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(gjitenApp->worddic->combo_entry)->entry), gjitenApp->conf->word_to_lookup);
+				gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gjitenApp->worddic->combo_entry))), gjitenApp->conf->word_to_lookup);
 				on_text_entered();
       }
       else if (gjitenApp->conf->kanji_to_lookup != NULL) {

@@ -473,32 +473,29 @@ static void on_kanji_search() {
 
   push = TRUE;
   if (kentry != NULL) { //Check if we need to save the key entry in the history
-    if (strcmp(kentry, gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_key)->entry))) == 0) {  
+    if (strcmp(kentry, gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_key))))) == 0) {
       push = FALSE;
       g_free(kentry);
     }
 	}
-  kentry = g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_key)->entry)));
+  kentry = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_key)))));
   if (kentry != NULL) {
     if ((strlen(kentry) > 0) && (push == TRUE) ) {
       kanjiDic->combo_entry_key_glist = g_list_prepend(kanjiDic->combo_entry_key_glist, kentry);
-      gtk_combo_set_popdown_strings(GTK_COMBO(kanjiDic->combo_entry_key),kanjiDic->combo_entry_key_glist);
     }
 	}
   push = TRUE;
   if (radentry != NULL) { //Check if we need to save the radical entry in the history
-    if (strcmp(radentry, gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry))) == 0) {  
+    if (strcmp(radentry, gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical))))) == 0) {
 			push = FALSE;
 			g_free(radentry);
 		}
   }
 
-  radentry = g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry)));
+  radentry = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical)))));
   if (radentry) {
     if ((strlen(radentry) > 0) && push) {
       kanjiDic->combo_entry_radical_glist = g_list_prepend(kanjiDic->combo_entry_radical_glist, radentry);
-      gtk_combo_set_popdown_strings(GTK_COMBO(kanjiDic->combo_entry_radical),
-				    kanjiDic->combo_entry_radical_glist);
     }
   }
 
@@ -645,7 +642,7 @@ int radical_selected(gunichar radical) {
   memset(radical_selected, 0, sizeof(radical_selected)); 
   g_unichar_to_utf8(radical, radical_selected);
 
-  radline_ptr = (gchar*) gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry));
+  radline_ptr = (gchar*) gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical))));
   newradline = g_strndup(radline_ptr, strlen(radline_ptr) + 6); //Enough space for one more character
   radline_length = g_utf8_strlen(newradline, -1);
 
@@ -663,7 +660,7 @@ int radical_selected(gunichar radical) {
   }
   
 	if (removed == FALSE) strncat(newradline, radical_selected, 5); //Add the radical to the line
-  gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(kanjiDic->combo_entry_radical)->entry), newradline);
+  gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical))), newradline);
 
   g_free(newradline);
 
@@ -1056,8 +1053,8 @@ void kanjidic_apply_fonts() {
 
     gtk_widget_modify_font(kanjiDic->kanji_results_view, gjitenApp->conf->normalfont_desc);
     gtk_widget_modify_font(kanjiDic->text_kanjinfo_view, gjitenApp->conf->normalfont_desc);
-    gtk_widget_modify_font(GTK_COMBO(kanjiDic->combo_entry_key)->entry, gjitenApp->conf->normalfont_desc);
-    gtk_widget_modify_font(GTK_COMBO(kanjiDic->combo_entry_radical)->entry, gjitenApp->conf->normalfont_desc);
+    gtk_widget_modify_font(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_key)), gjitenApp->conf->normalfont_desc);
+    gtk_widget_modify_font(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical)), gjitenApp->conf->normalfont_desc);
   }
 }
 
@@ -1199,21 +1196,19 @@ KanjiDic *kanjidic_create() {
   g_signal_connect(G_OBJECT(kanjiDic->button_radtable), "clicked",
 		      G_CALLBACK(create_window_radicals), NULL);
 
-  kanjiDic->combo_entry_radical = gtk_combo_new();
+  kanjiDic->combo_entry_radical = gtk_combo_box_text_new_with_entry();
   gtk_widget_show(kanjiDic->combo_entry_radical);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->combo_entry_radical, 1, 2, 1, 2,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),  (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry),
-		      "activate", G_CALLBACK(on_kanji_search), NULL);
-  gtk_combo_disable_activate(GTK_COMBO(kanjiDic->combo_entry_radical));
+  g_signal_connect(G_OBJECT(kanjiDic->combo_entry_radical),
+		      "changed", G_CALLBACK(on_kanji_search), NULL);
 
-  kanjiDic->combo_entry_key = gtk_combo_new();
+  kanjiDic->combo_entry_key = gtk_combo_box_text_new_with_entry();
   gtk_widget_show(kanjiDic->combo_entry_key);
   gtk_table_attach(GTK_TABLE(table_koptions), kanjiDic->combo_entry_key, 1, 2, 2, 3,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-  g_signal_connect(G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry),
+  g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_key))),
 		      "activate", G_CALLBACK(on_kanji_search), NULL);
-  gtk_combo_disable_activate(GTK_COMBO(kanjiDic->combo_entry_key));
 
   kanjiDic->button_clearrad = gtk_button_new_with_label(_("Clear"));
   gtk_widget_show(kanjiDic->button_clearrad);
@@ -1221,7 +1216,7 @@ KanjiDic *kanjidic_create() {
                     (GtkAttachOptions)(0), (GtkAttachOptions)(0), 5, 0);
   g_signal_connect_swapped(G_OBJECT(kanjiDic->button_clearrad), "clicked",
 													 G_CALLBACK(clear_radical_entry_box),
-													 G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_radical)->entry));
+													 G_OBJECT(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_radical))));
 
   kanjiDic->button_cleark = gtk_button_new_with_label(_("Clear"));
   gtk_widget_show(kanjiDic->button_cleark);
@@ -1229,7 +1224,7 @@ KanjiDic *kanjidic_create() {
 									 (GtkAttachOptions)(0), (GtkAttachOptions)(0), 5, 0);
   g_signal_connect_swapped(G_OBJECT(kanjiDic->button_cleark), "clicked",
 													 G_CALLBACK(gjiten_clear_entry_box),
-													 G_OBJECT(GTK_COMBO(kanjiDic->combo_entry_key)->entry));
+													 G_OBJECT(gtk_bin_get_child(GTK_BIN(kanjiDic->combo_entry_key))));
 
   hseparator = gtk_hseparator_new();
   gtk_widget_show(hseparator);
