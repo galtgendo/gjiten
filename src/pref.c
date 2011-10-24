@@ -182,11 +182,11 @@ static void add_dict() {
 							    GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 							    NULL);
 		fileselector = gtk_file_chooser_button_new_with_dialog(fsel_dialog);
+		gtk_widget_set_halign(fileselector, GTK_ALIGN_FILL);
+		gtk_widget_set_hexpand(fileselector, TRUE);
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(fileselector), GJITEN_DICDIR);
 
-		gtk_table_attach(GTK_TABLE(gtk_builder_get_object(gladexml_add_dic, "table_add_dic")), fileselector, 1, 2, 1, 2,
-										 (GtkAttachOptions)(GTK_FILL),
-										 (GtkAttachOptions)0, 0, 0);
+		gtk_grid_attach(GTK_GRID(gtk_builder_get_object(gladexml_add_dic, "table_add_dic")), fileselector, 1, 1, 1, 1);
 
 		g_signal_connect(G_OBJECT(dialog_add_dic), "response", G_CALLBACK(add_dic_response_cb), fileselector);
 
@@ -262,6 +262,8 @@ static void change_dict() {
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 			NULL);
 	fileselector = gtk_file_chooser_button_new_with_dialog (fsel_dialog);
+	gtk_widget_set_halign(fileselector, GTK_ALIGN_FILL);
+	gtk_widget_set_hexpand(fileselector, TRUE);
 	if (dicpath != NULL) gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(fileselector), g_filename_to_uri(dicpath, NULL, &error));
 	if (error)
 	{
@@ -269,9 +271,7 @@ static void change_dict() {
 	  g_error_free (error);
 	}
 
-  gtk_table_attach(GTK_TABLE(gtk_builder_get_object(gladexml_add_dic, "table_change_dic")), fileselector, 1, 2, 1, 2,
-									 (GtkAttachOptions)(GTK_FILL),
-									 (GtkAttachOptions)0, 0, 0);
+  gtk_grid_attach(GTK_GRID(gtk_builder_get_object(gladexml_add_dic, "table_change_dic")), fileselector, 1, 1, 1, 1);
 
 	g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(change_dic_response_cb), fileselector);
 
@@ -520,8 +520,7 @@ void create_dialog_preferences() {
     for (trow = 0; (tcol * 15 + trow < KCFGNUM) && (trow < 15); trow++) {
       checkb_prefs[tcol * 15 + trow] = gtk_check_button_new_with_label(_(strginfo[tcol * 15 + trow]));
       gtk_widget_show(checkb_prefs[tcol * 15 + trow]);
-      gtk_table_attach(GTK_TABLE(tmpwidget), checkb_prefs[tcol * 15 + trow], tcol, tcol + 1, trow, trow + 1,
-											 (GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (0), 0, 0);
+      gtk_grid_attach(GTK_GRID(tmpwidget), checkb_prefs[tcol * 15 + trow], tcol, trow, 1, 1);
       if (gjitenApp->conf->kdiccfg[tcol * 15 + trow] == TRUE) 
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkb_prefs[tcol * 15 + trow]), TRUE);
     }
@@ -535,9 +534,7 @@ void create_dialog_preferences() {
   }
 
   g_signal_connect(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_normal_font"));
-  gtk_table_attach(GTK_TABLE(GETWIDGET("table_fonts")), fontpicker, 2, 3, 0, 1,
-									 (GtkAttachOptions)(0),
-									 (GtkAttachOptions)0, 0, 0);
+  gtk_grid_attach(GTK_GRID(GETWIDGET("table_fonts")), fontpicker, 2, 0, 1, 1);
 
 	fontpicker = gtk_font_button_new();
   gtk_widget_show(fontpicker);
@@ -547,9 +544,7 @@ void create_dialog_preferences() {
   }
 
   g_signal_connect_swapped(G_OBJECT(fontpicker), "font-set", G_CALLBACK(font_set), (gpointer)GETWIDGET("entry_large_font"));
-  gtk_table_attach(GTK_TABLE(GETWIDGET("table_fonts")), fontpicker, 2, 3, 1, 2,
-									 (GtkAttachOptions)(0),
-									 (GtkAttachOptions)0, 0, 0);
+  gtk_grid_attach(GTK_GRID(GETWIDGET("table_fonts")), fontpicker, 2, 1, 1, 1);
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_worddic")), gjitenApp->conf->bigwords);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_kanjidic")), gjitenApp->conf->bigkanji);	

@@ -57,12 +57,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTable" id="table_add_dic">
+          <object class="GtkGrid" id="table_add_dic">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">10</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
             <property name="row_spacing">17</property>
             <child>
               <object class="GtkLabel" id="label11">
@@ -72,8 +70,6 @@
                 <property name="label" translatable="yes">Dictionary name:</property>
               </object>
               <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -85,9 +81,7 @@
               </object>
               <packing>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="left_attach">0</property>
               </packing>
             </child>
             <child>
@@ -101,8 +95,6 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -177,12 +169,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTable" id="table_change_dic">
+          <object class="GtkGrid" id="table_change_dic">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">10</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
             <property name="row_spacing">17</property>
             <child>
               <object class="GtkLabel" id="label13">
@@ -192,8 +182,6 @@
                 <property name="label" translatable="yes">Dictionary name:</property>
               </object>
               <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -205,9 +193,7 @@
               </object>
               <packing>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="left_attach">0</property>
               </packing>
             </child>
             <child>
@@ -221,8 +207,6 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options"></property>
               </packing>
             </child>
             <child>
@@ -662,11 +646,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTable" id="table_kanji_info">
+                  <object class="GtkGrid" id="table_kanji_info">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">14</property>
-                    <property name="n_columns">2</property>
                     <child>
                       <placeholder/>
                     </child>
@@ -788,12 +770,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
-                  <object class="GtkTable" id="table_fonts">
+                  <object class="GtkGrid" id="table_fonts">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="border_width">10</property>
-                    <property name="n_rows">4</property>
-                    <property name="n_columns">4</property>
                     <property name="row_spacing">10</property>
                     <child>
                       <object class="GtkLabel" id="label8">
@@ -804,8 +784,6 @@
                         <property name="label" translatable="yes">Normal font:</property>
                       </object>
                       <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -818,9 +796,7 @@
                       </object>
                       <packing>
                         <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="left_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -834,9 +810,6 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -850,11 +823,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -868,11 +837,9 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="right_attach">4</property>
+                        <property name="width">4</property>
                         <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="left_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -886,11 +853,9 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="right_attach">4</property>
+                        <property name="width">4</property>
                         <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="left_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -903,10 +868,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
                         <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
@@ -919,8 +881,6 @@
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
