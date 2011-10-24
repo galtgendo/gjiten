@@ -249,7 +249,7 @@ static void Verbinit() {
 
 static inline void print_matches_in(GjitenDicfile *dicfile) {
 	//Print dicfile name if all dictionaries are selected
-	if ((dicname_printed == FALSE) && (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active)) {
+	if ((dicname_printed == FALSE) && (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)))) {
 		gchar *tmpstr, *hl_start_ptr;
 		gint hl_start = 0;
 		gint hl_end = 0; 
@@ -450,15 +450,15 @@ static void search_in_dicfile(GjitenDicfile *dicfile, gchar *srchstrg) {
   if (gjitenApp->conf->verb_deinflection == TRUE) print_verb_inflections(dicfile, srchstrg);
 
   if (jpsrch == TRUE) {
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_jpexact)->active) match_criteria = EXACT_MATCH;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_startw)->active) match_criteria = START_WITH_MATCH;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_endw)->active) match_criteria = END_WITH_MATCH;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_any)->active) match_criteria = ANY_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_jpexact))) match_criteria = EXACT_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_startw))) match_criteria = START_WITH_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_endw))) match_criteria = END_WITH_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_any))) match_criteria = ANY_MATCH;
   }
   else {
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_engexact)->active) match_criteria = EXACT_MATCH;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_words)->active) match_criteria = WORD_MATCH;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_partial)->active) match_criteria = ANY_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_engexact))) match_criteria = EXACT_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_words))) match_criteria = WORD_MATCH;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_partial))) match_criteria = ANY_MATCH;
   }
 
   oldrespos = srchpos = 0;
@@ -550,32 +550,32 @@ static void search_in_dicfile(GjitenDicfile *dicfile, gchar *srchstrg) {
 }
 
 int lower_search_option() {
-  if (!(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust)->active))
+  if (!(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust))))
     return FALSE;
   if (jpsrch) { //Japanese srting
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_any)->active)
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_any)))
       return FALSE;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_jpexact)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_jpexact))) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->radiob_startw), TRUE);
       return TRUE;
     }
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_startw)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_startw))) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->radiob_endw), TRUE);
       return TRUE;
     }
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_endw)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_endw))) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->radiob_any), TRUE);
       return TRUE;
     }
   }
   else if (engsrch) { //English
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_partial)->active)
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_partial)))
       return FALSE;
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_engexact)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_engexact))) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->radiob_words), TRUE);
       return TRUE;
     }
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_words)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_words))) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->radiob_partial), TRUE);
       return TRUE;
     }
@@ -625,7 +625,7 @@ static void worddic_search(gchar *srchstrg) {
 
   truncated = 0;
   while (TRUE) {
-    if (GTK_TOGGLE_BUTTON(wordDic->radiob_searchall)->active) {
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_searchall))) {
 			dicfile_node = gjitenApp->conf->dicfile_list;
 			while (dicfile_node != NULL) {
 				if (dicfile_node->data != NULL ) {
@@ -734,7 +734,7 @@ static void on_dicselection_clicked(GtkComboBox* my_combo, gpointer data) {
 }
 
 static void checkb_searchlimit_toggled() {
-  int state = GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit)->active;
+  int state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit));
   if (wordDic->spinb_searchlimit != NULL) gtk_widget_set_sensitive(wordDic->spinb_searchlimit, state);
   gjitenApp->conf->searchlimit_enabled = state;
   if (gjitenApp->conf->maxwordmatches == 0) gjitenApp->conf->searchlimit_enabled = FALSE;
@@ -742,10 +742,10 @@ static void checkb_searchlimit_toggled() {
 
 static void shade_worddic_widgets() {
   if ((wordDic->menu_selectdic != NULL) && (wordDic->radiob_searchdic != NULL)) 
-    gtk_widget_set_sensitive(wordDic->menu_selectdic, GTK_TOGGLE_BUTTON(wordDic->radiob_searchdic)->active);
+    gtk_widget_set_sensitive(wordDic->menu_selectdic, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->radiob_searchdic)));
 
   if (wordDic->checkb_autoadjust != NULL)
-		gjitenApp->conf->autoadjust_enabled = (GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust)->active);
+		gjitenApp->conf->autoadjust_enabled = (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust)));
 }
 
 
@@ -757,8 +757,8 @@ static void get_searchlimit() {
 static gboolean set_focus_on_entry(GtkWidget *window, GdkEventKey *key, GtkWidget *entry) {
 	//Only set focus on the entry for real input
 	if (key->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_MOD3_MASK | GDK_MOD4_MASK)) return FALSE; 
-	if ((key->keyval >= GDK_exclam && key->keyval <= GDK_overline) ||
-			(key->keyval >= GDK_KP_Space && key->keyval <= GDK_KP_9)) { 
+	if ((key->keyval >= GDK_KEY_exclam && key->keyval <= GDK_KEY_overline) ||
+			(key->keyval >= GDK_KEY_KP_Space && key->keyval <= GDK_KEY_KP_9)) {
 		if (gtk_widget_has_focus(entry) != TRUE) {
 			gtk_widget_grab_focus(entry);
 		}
@@ -889,7 +889,7 @@ static gboolean result_view_motion(GtkWidget *text_view, GdkEventMotion *event) 
 		gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(text_view), GTK_TEXT_WINDOW_TEXT), wordDic->regular_cursor);
 		wordDic->is_cursor_regular = TRUE;
 	}
-	gdk_window_get_pointer(text_view->window, NULL, NULL, NULL);
+	gdk_window_get_pointer(gtk_widget_get_window(text_view), NULL, NULL, NULL);
 
   return FALSE;
 }
@@ -947,7 +947,7 @@ WordDic *worddic_create() {
   GtkWidget *frame_results;
   GtkWidget *vbox_results;
   GtkWidget *scrolledwin_results;
-  GtkObject *spinb_searchlimit_adj;
+  GtkAdjustment *spinb_searchlimit_adj;
   GtkActionGroup *action_group;
   GtkUIManager *ui_manager;
   GtkAccelGroup *accel_group;
@@ -1134,11 +1134,11 @@ WordDic *worddic_create() {
 									 G_CALLBACK(checkb_searchlimit_toggled), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), gjitenApp->conf->searchlimit_enabled);
 
-	spinb_searchlimit_adj = gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
+	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
   wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
   gtk_widget_show(wordDic->spinb_searchlimit);
   gtk_box_pack_start(GTK_BOX(hbox_searchlimit), wordDic->spinb_searchlimit, FALSE, FALSE, 0);
-  gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit)->active));
+  gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
   g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
 									 G_CALLBACK(get_searchlimit), NULL);
   

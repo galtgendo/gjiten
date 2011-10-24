@@ -512,7 +512,7 @@ static void on_kanji_search() {
 	}
 
   //FIND BY RADICAL
-  if ((GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active) && (g_utf8_strlen(radentry, -1) > 0)) {
+  if ((gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical))) && (g_utf8_strlen(radentry, -1) > 0)) {
     findk_by_radical(radentry); 
     if (klinklist == NULL) {
       gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
@@ -522,7 +522,7 @@ static void on_kanji_search() {
   }
 
   //FIND BY STROKE
-  if (GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active) {
+  if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke))) {
     if ((stroke < 1) || (stroke > 30)) {
 	gtk_statusbar_pop(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"));
 	gtk_statusbar_push(GTK_STATUSBAR(kanjiDic->appbar_kanji),gtk_statusbar_get_context_id(GTK_STATUSBAR(kanjiDic->appbar_kanji),"Search"), _("Invalid stroke count :-P "));
@@ -549,7 +549,7 @@ static void on_kanji_search() {
   }
 
   //FIND BY KEY
-  if ((found) && (GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active) && (strlen(kentry) >= 1)) {
+  if ((found) && (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch))) && (strlen(kentry) >= 1)) {
     if (klinklist == NULL) findk_by_key(kentry, &klinklist);
     else {
       findk_by_key(kentry, &tmpklinklist);
@@ -972,16 +972,16 @@ static void kanjidic_close() {
 }
 
 void shade_kanjidic_widgets() {
-  gtk_widget_set_sensitive(kanjiDic->spinb_strokenum, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
-  gtk_widget_set_sensitive(kanjiDic->spinb_plusmin, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
-  gtk_widget_set_sensitive(kanjiDic->label_plusmin, GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)->active);
+  gtk_widget_set_sensitive(kanjiDic->spinb_strokenum, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)));
+  gtk_widget_set_sensitive(kanjiDic->spinb_plusmin, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)));
+  gtk_widget_set_sensitive(kanjiDic->label_plusmin, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_stroke)));
 
-  gtk_widget_set_sensitive(kanjiDic->button_clearrad, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
-  gtk_widget_set_sensitive(kanjiDic->button_radtable, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
-  gtk_widget_set_sensitive(kanjiDic->combo_entry_radical, GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)->active);
+  gtk_widget_set_sensitive(kanjiDic->button_clearrad, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)));
+  gtk_widget_set_sensitive(kanjiDic->button_radtable, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)));
+  gtk_widget_set_sensitive(kanjiDic->combo_entry_radical, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_radical)));
      
-  gtk_widget_set_sensitive(kanjiDic->button_cleark, GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
-  gtk_widget_set_sensitive(kanjiDic->combo_entry_key, GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)->active);
+  gtk_widget_set_sensitive(kanjiDic->button_cleark, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)));
+  gtk_widget_set_sensitive(kanjiDic->combo_entry_key, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(kanjiDic->checkb_ksearch)));
 }
 
 
@@ -1073,8 +1073,8 @@ KanjiDic *kanjidic_create() {
   GtkWidget *toolbar_kanji;
   GtkWidget *menubar;
   GtkWidget *frame_koptions;
-  GtkObject *spinb_strokenum_adj;
-  GtkObject *spinb_plusmin_adj;
+  GtkAdjustment *spinb_strokenum_adj;
+  GtkAdjustment *spinb_plusmin_adj;
   GtkWidget *hseparator;
   GtkWidget *frame_kresults;
   GtkWidget *scrolledwin_kresults;
@@ -1175,7 +1175,7 @@ KanjiDic *kanjidic_create() {
   gtk_table_attach(GTK_TABLE(table_koptions), hbox_spinb, 1, 2, 0, 1,
                     (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
 
-  spinb_strokenum_adj = gtk_adjustment_new(1, 1, 30, 1, 2, 0);
+  spinb_strokenum_adj = (GtkAdjustment*)gtk_adjustment_new(1, 1, 30, 1, 2, 0);
   kanjiDic->spinb_strokenum = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_strokenum_adj), 1, 0);
   gtk_widget_show(kanjiDic->spinb_strokenum);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->spinb_strokenum, FALSE, FALSE, 0);
@@ -1184,7 +1184,7 @@ KanjiDic *kanjidic_create() {
   gtk_widget_show(kanjiDic->label_plusmin);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->label_plusmin, FALSE, FALSE, 0);
 
-  spinb_plusmin_adj = gtk_adjustment_new(0, 0, 10, 1, 10, 0);
+  spinb_plusmin_adj = (GtkAdjustment*)gtk_adjustment_new(0, 0, 10, 1, 10, 0);
   kanjiDic->spinb_plusmin = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_plusmin_adj), 1, 0);
   gtk_widget_show(kanjiDic->spinb_plusmin);
   gtk_box_pack_start(GTK_BOX(hbox_spinb), kanjiDic->spinb_plusmin, FALSE, FALSE, 0);

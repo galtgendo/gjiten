@@ -336,7 +336,7 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
   //gconf_client_add_dir(gconf_client, "/apps/gjiten", GCONF_CLIENT_PRELOAD_NONE, NULL);
 
   for (i = 0; i < KCFGNUM; i++) { 
-    if (GTK_TOGGLE_BUTTON(checkb_prefs[i])->active) gjitenApp->conf->kdiccfg[i] = TRUE;
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkb_prefs[i]))) gjitenApp->conf->kdiccfg[i] = TRUE;
     else gjitenApp->conf->kdiccfg[i] = FALSE; 
   }
 
@@ -350,19 +350,19 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
     gjitenApp->conf->kanjipad = kanjipad_path;
   }
 
-  gjitenApp->conf->bigwords = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_worddic"))->active;
-  gjitenApp->conf->bigkanji = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_kanjidic"))->active;
-  gjitenApp->conf->gdk_use_xft = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_use_xft"))->active;
-  gjitenApp->conf->force_ja_JP = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_lc_ctype"))->active;
-  gjitenApp->conf->force_language_c = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_language_c"))->active;
-  gjitenApp->conf->envvar_override = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override"))->active;
+  gjitenApp->conf->bigwords = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_worddic")));
+  gjitenApp->conf->bigkanji = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_kanjidic")));
+  gjitenApp->conf->gdk_use_xft = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_use_xft")));
+  gjitenApp->conf->force_ja_JP = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_lc_ctype")));
+  gjitenApp->conf->force_language_c = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_language_c")));
+  gjitenApp->conf->envvar_override = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override")));
   gjitenApp->conf->normalfont = g_strdup(gtk_entry_get_text(GTK_ENTRY(GETWIDGET("entry_normal_font"))));
   gjitenApp->conf->largefont = g_strdup(gtk_entry_get_text(GTK_ENTRY(GETWIDGET("entry_large_font"))));
 
-	gjitenApp->conf->search_kata_on_hira = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_kata_on_hira"))->active;	
-	gjitenApp->conf->search_hira_on_kata = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_hira_on_kata"))->active;	
-	gjitenApp->conf->verb_deinflection = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection"))->active;	
-	gjitenApp->conf->unicode_radicals = GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals"))->active;	
+	gjitenApp->conf->search_kata_on_hira = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_kata_on_hira")));
+	gjitenApp->conf->search_hira_on_kata = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_search_hira_on_kata")));
+	gjitenApp->conf->verb_deinflection = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection")));
+	gjitenApp->conf->unicode_radicals = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals")));
       
   gjitenApp->conf->numofdics = 0;
 
