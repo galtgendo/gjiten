@@ -138,11 +138,11 @@ void worddic_paste(WordDic *worddic) {
 
   // First try the current selection
   selection = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_SELECTION_PRIMARY));
-  if (selection != NULL) gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), selection);
+  if (selection != NULL) gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), selection);
   else {
     // if we didn't get anything, try the default clipboard
     selection = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
-      if (selection != NULL) gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), selection);
+      if (selection != NULL) gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), selection);
   }
 }
 
@@ -621,7 +621,7 @@ static void worddic_search(gchar *srchstrg) {
   while (g_ascii_isspace(srchstrg[strlen(srchstrg)-1]) != 0) srchstrg[strlen(srchstrg)-1] = 0;
 
   if (strlen(srchstrg) == 0) return;
-  gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), srchstrg);
+  gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), srchstrg);
 
   truncated = 0;
   while (TRUE) {
@@ -666,7 +666,7 @@ void on_text_entered() {
 	gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(wordDic->text_results_view), GTK_TEXT_WINDOW_TEXT), wordDic->regular_cursor);
 	wordDic->is_cursor_regular = TRUE;
 
-  new_entry_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry)));
+  new_entry_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)))));
   if (g_utf8_validate(new_entry_text, -1, NULL) == FALSE) {
     gjiten_print_error_and_wait(_("Invalid input: non-utf8\n")); 
     g_free(new_entry_text);
@@ -678,6 +678,7 @@ void on_text_entered() {
       if (!(strcmp((char*) g_list_find(wordDic->combo_entry_glist, current_glist_word)->data, new_entry_text) == 0)) {
 				current_glist_word = new_entry_text;
 				wordDic->combo_entry_glist = g_list_prepend(wordDic->combo_entry_glist, new_entry_text);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(wordDic->combo_entry), new_entry_text);
       }
     }
     else {
@@ -705,14 +706,12 @@ void on_text_entered() {
   
   if (append_to_history == FALSE)
     g_free(new_entry_text);
-  else 
-    gtk_combo_set_popdown_strings(GTK_COMBO(wordDic->combo_entry), wordDic->combo_entry_glist);
 }
 
 static void on_forward_clicked() { 
   append_to_history = FALSE;
   current_glist_word = (gchar*) g_list_previous(g_list_find(wordDic->combo_entry_glist, current_glist_word))->data;
-  gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), current_glist_word);
+  gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), current_glist_word);
   on_text_entered();  
   append_to_history = TRUE;
 }
@@ -720,13 +719,18 @@ static void on_forward_clicked() {
 static void on_back_clicked() {
   append_to_history = FALSE;
   current_glist_word = (gchar*) g_list_next(g_list_find(wordDic->combo_entry_glist, current_glist_word))->data;
-  gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), current_glist_word);
+  gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), current_glist_word);
   on_text_entered();
   append_to_history = TRUE;
 }
 
-static void on_dicselection_clicked(GjitenDicfile *selected) {
-  gjitenApp->conf->selected_dic = selected;
+static void on_dicselection_clicked(GtkComboBox* my_combo, gpointer data) {
+  GSList *dicfile_node;
+  gint position = gtk_combo_box_get_active(my_combo);
+  if (position < 0) return;
+  dicfile_node = gjitenApp->conf->dicfile_list;
+  for (; position > 0; position--) dicfile_node = g_slist_next(dicfile_node);
+	gjitenApp->conf->selected_dic = dicfile_node->data;
 }
 
 static void checkb_searchlimit_toggled() {
@@ -805,7 +809,6 @@ static void worddic_show_hide_options() {
 
 void worddic_update_dic_menu() {
 	GSList *dicfile_node;
-  GtkWidget *menu_dictfiles_item;
 	GjitenDicfile *dicfile;
 
 	if (wordDic == NULL) return;
@@ -818,22 +821,17 @@ void worddic_update_dic_menu() {
 		gtk_widget_destroy(wordDic->menu_selectdic);
 	}
 	*/
-  wordDic->menu_selectdic = gtk_menu_new();
 
 	dicfile_node = gjitenApp->conf->dicfile_list;
 	while (dicfile_node != NULL) {
 		if (dicfile_node->data != NULL) {
 			dicfile = dicfile_node->data;
-			menu_dictfiles_item = gtk_menu_item_new_with_label(dicfile->name);
-			gtk_menu_shell_append(GTK_MENU_SHELL(wordDic->menu_selectdic), menu_dictfiles_item);
-			g_signal_connect_swapped(G_OBJECT(menu_dictfiles_item), "activate", 
-															 G_CALLBACK(on_dicselection_clicked), (gpointer) dicfile);
-			gtk_widget_show(menu_dictfiles_item);
+			gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(wordDic->dicselection_menu), dicfile->name);
 		}
 		dicfile_node = g_slist_next(dicfile_node);
 	}
-  gtk_widget_show(wordDic->dicselection_menu);
-	gtk_option_menu_set_menu(GTK_OPTION_MENU(wordDic->dicselection_menu), wordDic->menu_selectdic);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(wordDic->dicselection_menu), 0);
+	gtk_widget_show_all(wordDic->dicselection_menu);
 	if (gjitenApp->conf->dicfile_list != NULL) gjitenApp->conf->selected_dic = gjitenApp->conf->dicfile_list->data;
 }
 
@@ -860,7 +858,7 @@ void worddic_apply_fonts() {
   if ((gjitenApp->conf->normalfont != NULL) && (strlen(gjitenApp->conf->normalfont) != 0)) {
     gjitenApp->conf->normalfont_desc = pango_font_description_from_string(gjitenApp->conf->normalfont);
 		gtk_widget_modify_font(wordDic->text_results_view, gjitenApp->conf->normalfont_desc);
-    gtk_widget_modify_font(GTK_COMBO(wordDic->combo_entry)->entry, gjitenApp->conf->normalfont_desc);
+    gtk_widget_modify_font(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)), gjitenApp->conf->normalfont_desc);
   }
 
 }
@@ -933,6 +931,7 @@ WordDic *worddic_create() {
   GtkWidget *toolbar;
   GtkWidget *button_clear;
   GtkWidget *frame_japopt;
+  GtkWidget *exp_japopt;
   GtkWidget *vbox_japopt;
   GSList *vbox_japopt_group = NULL;
   GSList *dicssearch_group = NULL;
@@ -1095,8 +1094,9 @@ WordDic *worddic_create() {
 
   // DICTFILE SELECTION MENU
 	
-  wordDic->dicselection_menu = gtk_option_menu_new();
+  wordDic->dicselection_menu = gtk_combo_box_text_new();
 	worddic_update_dic_menu();
+  g_signal_connect(G_OBJECT(wordDic->dicselection_menu), "changed", G_CALLBACK(on_dicselection_clicked), NULL);
  
   gtk_table_attach(GTK_TABLE(table_gopt), wordDic->dicselection_menu, 1, 2, 0, 1,
                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -1155,24 +1155,25 @@ WordDic *worddic_create() {
   gtk_misc_set_alignment(GTK_MISC(label_enter), 1, 0.5);
   gtk_misc_set_padding(GTK_MISC(label_enter), 7, 0);
 
-  wordDic->combo_entry = gtk_combo_new();
-  gtk_widget_show(wordDic->combo_entry);
+  wordDic->combo_entry = gtk_combo_box_text_new_with_entry();
   gtk_box_pack_start(GTK_BOX(hbox_entry), wordDic->combo_entry, TRUE, TRUE, 0);
-  g_signal_connect(G_OBJECT(GTK_COMBO(wordDic->combo_entry)->entry), 
+  g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
 									 "activate", G_CALLBACK(on_text_entered), NULL);
   g_signal_connect(G_OBJECT(wordDic->window), "key_press_event",
-									 G_CALLBACK(set_focus_on_entry), GTK_COMBO(wordDic->combo_entry)->entry);
+									 G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
 
-  gtk_combo_disable_activate(GTK_COMBO(wordDic->combo_entry));
-  gtk_combo_set_case_sensitive(GTK_COMBO(wordDic->combo_entry), TRUE);
   if (wordDic->combo_entry_glist != NULL) {
-    gtk_combo_set_popdown_strings(GTK_COMBO(wordDic->combo_entry), wordDic->combo_entry_glist);
-    gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(wordDic->combo_entry)->entry), "");
+	GList *my_list;
+	for (my_list = wordDic->combo_entry_glist; my_list != NULL && my_list->data != NULL; my_list = g_list_next(my_list))
+	{
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(wordDic->combo_entry), my_list->data);
+	}
+	gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))), "");
   }
-  gtk_widget_set_can_default(GTK_COMBO(wordDic->combo_entry)->entry, TRUE);
-  gtk_widget_grab_focus(GTK_COMBO(wordDic->combo_entry)->entry);
-  gtk_widget_grab_default(GTK_COMBO(wordDic->combo_entry)->entry);
-  
+  gtk_widget_set_can_default(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)), TRUE);
+  gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
+  gtk_widget_grab_default(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
+  gtk_widget_show(wordDic->combo_entry);
 
   button_search = gtk_button_new_with_label(_("Search"));
   gtk_widget_show(button_search);
@@ -1184,7 +1185,7 @@ WordDic *worddic_create() {
   gtk_box_pack_start(GTK_BOX(hbox_entry), button_clear, FALSE, FALSE, 0);
   g_signal_connect_swapped(G_OBJECT(button_clear), "clicked", 
 													 G_CALLBACK(gjiten_clear_entry_box), 
-													 G_OBJECT(GTK_COMBO(wordDic->combo_entry)->entry));
+													 G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))));
 
   frame_results = gtk_frame_new(_("Search results :"));
   gtk_widget_show(frame_results);
