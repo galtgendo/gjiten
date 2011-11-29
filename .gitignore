@@ -10,6 +10,7 @@ configure
 compile
 COPYING
 depcomp
+gnome-doc-utils.make
 install-sh
 intltool-extract
 intltool-extract.in
