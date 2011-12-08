@@ -5,7 +5,7 @@
   <!ENTITY app "gjiten">
 ]>
      
-<article id="index" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" >
+<article id="index" lang="en">
   <articleinfo> 
     <abstract role="description">
       <simpara>User manual for gjiten.</simpara>
@@ -25,7 +25,7 @@
   </copyright>
    -->
 
-<xi:include href="legal.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="legal.xml" />
 
 	 <authorgroup> 
 		<author role="maintainer">
