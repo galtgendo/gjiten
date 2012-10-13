@@ -888,7 +888,6 @@ static gboolean result_view_motion(GtkWidget *text_view, GdkEventMotion *event) 
 		gdk_window_set_cursor(gtk_text_view_get_window(GTK_TEXT_VIEW(text_view), GTK_TEXT_WINDOW_TEXT), wordDic->regular_cursor);
 		wordDic->is_cursor_regular = TRUE;
 	}
-	gdk_window_get_pointer(gtk_widget_get_window(text_view), NULL, NULL, NULL);
 
   return FALSE;
 }
