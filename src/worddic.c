@@ -809,6 +809,7 @@ static void worddic_show_hide_options() {
 void worddic_update_dic_menu() {
 	GSList *dicfile_node;
 	GjitenDicfile *dicfile;
+	GtkTreeModel *model;
 
 	if (wordDic == NULL) return;
 
@@ -820,6 +821,9 @@ void worddic_update_dic_menu() {
 		gtk_widget_destroy(wordDic->menu_selectdic);
 	}
 	*/
+
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(wordDic->dicselection_menu));
+	gtk_list_store_clear(GTK_LIST_STORE(model));
 
 	dicfile_node = gjitenApp->conf->dicfile_list;
 	while (dicfile_node != NULL) {
