@@ -82,10 +82,6 @@ GjitenConfig *conf_load() {
   conf->bigkanji = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/bigkanji", NULL);
   conf->largefont = gconf_client_get_string(gconf_client, "/apps/gjiten/general/largefont", NULL);
   conf->normalfont = gconf_client_get_string(gconf_client, "/apps/gjiten/general/normalfont", NULL);
-  conf->gdk_use_xft = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/gdk_use_xft", NULL);
-  conf->force_ja_JP = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/force_ja_JP", NULL);
-  conf->force_language_c = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/force_language_c", NULL);
-  conf->envvar_override = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/envvar_override", NULL);
 
   conf->searchlimit_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/searchlimit_enabled", NULL);
   conf->maxwordmatches = gconf_client_get_int(gconf_client, "/apps/gjiten/general/maxwordmatches", NULL);
@@ -219,10 +215,6 @@ void conf_save(GjitenConfig *conf) {
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/bigkanji", conf->bigkanji, NULL);
   gconf_client_set_string(gconf_client, "/apps/gjiten/general/largefont", conf->largefont == NULL ? "" : conf->largefont, NULL);
   gconf_client_set_string(gconf_client, "/apps/gjiten/general/normalfont", conf->normalfont == NULL ? "" : conf->normalfont, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/gdk_use_xft", conf->gdk_use_xft, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_ja_JP", conf->force_ja_JP, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/force_language_c", conf->force_language_c, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/envvar_override", conf->envvar_override, NULL);
 
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_kata_on_hira", conf->search_kata_on_hira, NULL);
   gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_hira_on_kata", conf->search_hira_on_kata, NULL);

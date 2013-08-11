@@ -371,10 +371,6 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
 
   gjitenApp->conf->bigwords = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_worddic")));
   gjitenApp->conf->bigkanji = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_kanjidic")));
-  gjitenApp->conf->gdk_use_xft = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_use_xft")));
-  gjitenApp->conf->force_ja_JP = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_lc_ctype")));
-  gjitenApp->conf->force_language_c = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_language_c")));
-  gjitenApp->conf->envvar_override = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override")));
   gjitenApp->conf->normalfont = g_strdup(gtk_entry_get_text(GTK_ENTRY(GETWIDGET("entry_normal_font"))));
   gjitenApp->conf->largefont = g_strdup(gtk_entry_get_text(GTK_ENTRY(GETWIDGET("entry_large_font"))));
 
@@ -409,19 +405,6 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
 	kanjidic_apply_fonts();
 
 	if (response == GTK_RESPONSE_OK) preferences_exit();
-}
-
-static void checkbutton_envvar_cb(GtkWidget *button) {
-	gboolean enabled;
-
-	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override")));
-	
-	gtk_widget_set_sensitive(GETWIDGET("label_envvar_warning"), enabled);
-	gtk_widget_set_sensitive(GETWIDGET("checkbutton_use_xft"), enabled);
-	gtk_widget_set_sensitive(GETWIDGET("checkbutton_lc_ctype"), enabled);
-	gtk_widget_set_sensitive(GETWIDGET("checkbutton_language_c"), enabled);
-
-
 }
 
 void create_dialog_preferences() {
@@ -548,17 +531,6 @@ void create_dialog_preferences() {
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_worddic")), gjitenApp->conf->bigwords);	
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_largefont_kanjidic")), gjitenApp->conf->bigkanji);	
-
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_envvar_override")), gjitenApp->conf->envvar_override);	
-	checkbutton_envvar_cb(NULL);
-
-	g_signal_connect(G_OBJECT(GETWIDGET("checkbutton_envvar_override")), "toggled",
-									 G_CALLBACK(checkbutton_envvar_cb), NULL);
-
-
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_use_xft")), gjitenApp->conf->gdk_use_xft);	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_lc_ctype")), gjitenApp->conf->force_ja_JP);	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_language_c")), gjitenApp->conf->force_language_c);	
 
 
 

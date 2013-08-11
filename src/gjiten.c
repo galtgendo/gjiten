@@ -253,14 +253,6 @@ int main (int argc, char **argv) {
   conf_init_handler();
 	gjitenApp->conf = conf_load();
 
-	if (gjitenApp->conf->envvar_override == TRUE) {
-		if (gjitenApp->conf->gdk_use_xft == TRUE) putenv("GDK_USE_XFT=1");
-		else putenv("GDK_USE_XFT=0");
-		/* if (gjitenApp->conf->force_ja_JP == TRUE) putenv("LC_CTYPE=ja_JP"); */
-		if (gjitenApp->conf->force_ja_JP == TRUE) putenv("LC_ALL=ja_JP");
-		if (gjitenApp->conf->force_language_c == TRUE) putenv("LANGUAGE=C");
-	}
-
 
 #ifdef ENABLE_NLS
   setlocale(LC_ALL, "");
