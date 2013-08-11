@@ -57,10 +57,6 @@ struct _GjitenConfig {
   int maxwordmatches;
   gchar *largefont;
   gchar *normalfont;
-  gboolean gdk_use_xft;
-  gboolean force_ja_JP;
-  gboolean force_language_c;
-	gboolean envvar_override;
 	gboolean search_kata_on_hira;
 	gboolean search_hira_on_kata;
   gboolean verb_deinflection;
