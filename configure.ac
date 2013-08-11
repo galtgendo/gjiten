@@ -56,7 +56,6 @@ AC_DEFINE_UNQUOTED(PIXMAPDIR, "$PIXMAPDIR", ["$PIXMAPDIR"])
 
 AC_CONFIG_FILES([ Makefile
 	    pixmaps/Makefile
-	    rpm/gjiten.spec 
 	    src/Makefile
 	    data/Makefile 
 	    help/Makefile 
