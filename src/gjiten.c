@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif

@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<schemalist>
+  <schema id="apps.gjiten" path="/apps/gjiten/">
+    <child name="general" schema="apps.gjiten.general"/>
+    <child name="kanjidic" schema="apps.gjiten.kanjidic"/>
+  </schema>
+  <schema id="apps.gjiten.general" path="/apps/gjiten/general/">
+    <key name="toolbar" type="b">
+      <default>true</default>
+    </key>
+    <key name="menubar" type="b">
+      <default>true</default>
+    </key>
+    <key name="search-kata-on-hira" type="b">
+      <default>true</default>
+    </key>
+    <key name="search-hira-on-kata" type="b">
+      <default>false</default>
+    </key>
+    <key name="autoadjust-enabled" type="b">
+      <default>true</default>
+    </key>
+    <key name="deinflection-enabled" type="b">
+      <default>false</default>
+    </key>
+    <key name="searchlimit-enabled" type="b">
+      <default>false</default>
+    </key>
+    <key name="maxwordmatches" type="u">
+      <default>0</default>
+    </key>
+    <key name="bigwords" type="b">
+      <default>false</default>
+    </key>
+    <key name="bigkanji" type="b">
+      <default>false</default>
+    </key>
+    <key name="normalfont" type="s">
+      <default>''</default>
+    </key>
+    <key name="largefont" type="s">
+      <default>''</default>
+    </key>
+    <key name="dictionaries" type="a(ss)">
+      <default>[ ('/usr/share/gjiten/dics/edict', 'English-main'),
+      ('/usr/share/gjiten/dics/compdic', 'Computers') ]</default>
+      <summary>List of dictionary files (paths and names)</summary>
+      <description>List of dictionary files. Format is:  [/path/to/dicfile1\ndictionary_name1,/path/to/dicfile2\ndictionary_name2] Don't put a space after the comma!</description>
+    </key>
+    <key name="history" type="as">
+      <default>[]</default>
+    </key>
+  </schema>
+  <schema id="apps.gjiten.kanjidic" path="/apps/gjiten/kanjidic/">
+    <key name="unicode-radicals" type="b">
+      <default>false</default>
+    </key>
+    <key name="english" type="b">
+      <default>true</default>
+    </key>
+    <key name="freq" type="b">
+      <default>true</default>
+    </key>
+    <key name="kanji" type="b">
+      <default>true</default>
+    </key>
+    <key name="jouyou" type="b">
+      <default>true</default>
+    </key>
+    <key name="korean" type="b">
+      <default>true</default>
+    </key>
+    <key name="pinyin" type="b">
+      <default>true</default>
+    </key>
+    <key name="radical" type="b">
+      <default>true</default>
+    </key>
+    <key name="reading" type="b">
+      <default>true</default>
+    </key>
+    <key name="strokes" type="b">
+      <default>true</default>
+    </key>
+    <key name="bushu" type="b">
+      <default>false</default>
+    </key>
+    <key name="classic" type="b">
+      <default>false</default>
+    </key>
+    <key name="deroo" type="b">
+      <default>false</default>
+    </key>
+    <key name="skip" type="b">
+      <default>false</default>
+    </key>
+    <key name="fourc" type="b">
+      <default>false</default>
+    </key>
+    <key name="hindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="nindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="vindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="iindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="inindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="mnindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="mpindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="eindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="kindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="lindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="oindex" type="b">
+      <default>false</default>
+    </key>
+    <key name="cref" type="b">
+      <default>false</default>
+    </key>
+    <key name="missc" type="b">
+      <default>false</default>
+    </key>
+    <key name="unicode" type="b">
+      <default>false</default>
+    </key>
+    <key name="jisascii" type="b">
+      <default>false</default>
+    </key>
+    <key name="kanjipad" type="s">
+      <default>'/usr/bin/kanjipad'</default>
+    </key>
+    <key name="kanjidicfile" type="s">
+      <default>'/usr/share/gjiten/dics/kanjidic'</default>
+      <summary>Kanjidic dictionary file</summary>
+      <description>Kanjidic dictionary file</description>
+    </key>
+  </schema>
+</schemalist>

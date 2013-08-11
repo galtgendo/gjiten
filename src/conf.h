@@ -25,7 +25,6 @@
 #define __CONF_H__
 
 
-#include <gconf/gconf-client.h>
 #include <pango/pango-font.h>
 
 #include "kanjidic.h"
@@ -54,7 +53,7 @@ struct _GjitenConfig {
   gchar *word_to_lookup;
   gboolean clip_kanji_lookup;
   gboolean clip_word_lookup;
-  int maxwordmatches;
+  guint maxwordmatches;
   gchar *largefont;
   gchar *normalfont;
 	gboolean search_kata_on_hira;
@@ -69,11 +68,6 @@ struct _GjitenConfig {
   GjitenDicfile *selected_dic;
   GjitenDicfile *mmaped_dicfile;
   PangoFontDescription *normalfont_desc;
-
-	/* DEPRECATED */
-  char *dictpath;
-  int numofdics;
-
 };
 
 
