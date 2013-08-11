@@ -17,8 +17,8 @@ AC_PATH_PROG([GCONFTOOL], [gconftool-2])
 
 GNOME_DOC_INIT
 dnl GNOME_PLATFORM_GNOME_2(yes, force)
-PKG_CHECK_MODULES(GJITEN, gtk+-2.0 >= 2.24.0 gconf-2.0)
-AM_GCONF_SOURCE_2
+PKG_CHECK_MODULES(GJITEN, gtk+-2.0 >= 2.24.0)
+GLIB_GSETTINGS
 
 # Checks for header files.
 AC_CHECK_HEADERS([errno.h fcntl.h locale.h stdint.h stdlib.h string.h unistd.h])

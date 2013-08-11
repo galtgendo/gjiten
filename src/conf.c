@@ -35,23 +35,18 @@
 extern gchar *kanjidicstrg[];
 extern gchar *gnome_dialog_msg;
 GjitenConfig conf;
-GConfClient *gconf_client;
+GSettings *settings, *ksettings;
 
 GjitenConfig *conf_load() {
-  gchar *dicprefix = "/apps/gjiten/general/dic";
-  gchar *tmpstrg;
-  gchar historystr[31];
-  gchar *tmpptr, *endptr;
-  gchar *gnomekcfg = "/apps/gjiten/kanjidic/";
+  gchar *tmpstrg, *tmpptr;
   int i;
 	GjitenDicfile *dicfile;
-	GSList *gconf_diclist = NULL;
 	GSList *diclist;
 	GjitenConfig *conf;
 
 	conf = g_new0(GjitenConfig, 1);
 
-  conf->version = gconf_client_get_string(gconf_client, "/apps/gjiten/general/version", NULL);
+  //conf->version = g_settings_get_string(gconf_client, "/apps/gjiten/general/version", NULL);
 	/*
   if (conf->version == NULL) { // FIXME: gconf schema
     conf->kdiccfg[KANJI] = TRUE; 
@@ -76,40 +71,37 @@ GjitenConfig *conf_load() {
   }
 	*/
 
-  conf->autoadjust_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/autoadjust_enabled", NULL);
+  conf->autoadjust_enabled = g_settings_get_boolean(settings, "autoadjust-enabled");
 
-  conf->bigwords = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/bigwords", NULL);
-  conf->bigkanji = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/bigkanji", NULL);
-  conf->largefont = gconf_client_get_string(gconf_client, "/apps/gjiten/general/largefont", NULL);
-  conf->normalfont = gconf_client_get_string(gconf_client, "/apps/gjiten/general/normalfont", NULL);
+  conf->bigwords = g_settings_get_boolean(settings, "bigwords");
+  conf->bigkanji = g_settings_get_boolean(settings, "bigkanji");
+  conf->largefont = g_settings_get_string(settings, "largefont");
+  conf->normalfont = g_settings_get_string(settings, "normalfont");
 
-  conf->searchlimit_enabled = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/searchlimit_enabled", NULL);
-  conf->maxwordmatches = gconf_client_get_int(gconf_client, "/apps/gjiten/general/maxwordmatches", NULL);
+  conf->searchlimit_enabled = g_settings_get_boolean(settings, "searchlimit-enabled");
+  conf->maxwordmatches = g_settings_get_uint(settings, "maxwordmatches");
 	if (conf->maxwordmatches < 1) {
 		conf->searchlimit_enabled = FALSE;
 		conf->maxwordmatches = 100;
 	}
 
-  conf->dictpath = gconf_client_get_string(gconf_client, "/apps/gjiten/general/dictpath", NULL);
-  conf->menubar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/menubar", NULL);
-  conf->toolbar = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/toolbar", NULL);
+  conf->menubar = g_settings_get_boolean(settings, "menubar");
+  conf->toolbar = g_settings_get_boolean(settings, "toolbar");
 
-  conf->search_kata_on_hira = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/search_kata_on_hira", NULL);
-  conf->search_hira_on_kata = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/search_hira_on_kata", NULL);
-  conf->verb_deinflection = gconf_client_get_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", NULL);
+  conf->search_kata_on_hira = g_settings_get_boolean(settings, "search-kata-on-hira");
+  conf->search_hira_on_kata = g_settings_get_boolean(settings, "search-hira-on-kata");
+  conf->verb_deinflection = g_settings_get_boolean(settings, "deinflection-enabled");
 
   if (conf->kanjidic == NULL) conf->kanjidic = g_new0(GjitenDicfile, 1);
-  conf->kanjidic->path = gconf_client_get_string(gconf_client, "/apps/gjiten/kanjidic/kanjidicfile", NULL);
+  conf->kanjidic->path = g_settings_get_string(ksettings, "kanjidicfile");
 	if ((conf->kanjidic->path == NULL) || (strlen(conf->kanjidic->path)) == 0) {
 		conf->kanjidic->path = GJITEN_DICDIR"/kanjidic";
 	}
-  conf->unicode_radicals = gconf_client_get_bool(gconf_client, "/apps/gjiten/kanjidic/unicode_radicals", NULL);
+  conf->unicode_radicals = g_settings_get_boolean(ksettings, "unicode-radicals");
 	
 
-  conf->kanjipad = gconf_client_get_string(gconf_client, "/apps/gjiten/general/kanjipad", NULL);
+  conf->kanjipad = g_settings_get_string(ksettings, "kanjipad");
 	if (conf->kanjipad == NULL) conf->kanjipad = "";
-
-  conf->numofdics = gconf_client_get_int(gconf_client, "/apps/gjiten/general/numofdics", NULL);
 
 	if (conf->dicfile_list != NULL) {
 		dicutil_unload_dic();
@@ -117,166 +109,130 @@ GjitenConfig *conf_load() {
 		conf->dicfile_list = NULL;
 	}
 
-	if (conf->numofdics != 0) {
-		//Load dicfiles from old style config [compatibility with older versions]
-		for (i = 0; i < conf->numofdics; i++) {
-			//if (i == MAXDICFILES - 1) break;
-			tmpstrg = g_strdup_printf("%s%d", dicprefix, i); 
-			dicfile = g_new0(GjitenDicfile, 1);
-			dicfile->name = gconf_client_get_string(gconf_client, tmpstrg, NULL);
-			if (conf->dictpath[strlen(conf->dictpath - 1)] == '/') {
-				dicfile->path = g_strdup_printf("%s%s", conf->dictpath, dicfile->name);
-			}
-			else {
-				dicfile->path = g_strdup_printf("%s/%s", conf->dictpath, dicfile->name);
-			}
-			conf->dicfile_list = g_slist_append(conf->dicfile_list, dicfile);
-			g_free(tmpstrg);
-		}
-	}
-	else { //new config
-		gconf_diclist = gconf_client_get_list(gconf_client, GCONF_PATH_GENERAL"/dictionary_list", GCONF_VALUE_STRING, NULL);
-		diclist = gconf_diclist;
-		while (diclist != NULL) {
-			if (diclist->data == NULL) break;
-			tmpstrg = diclist->data;
+	{ //new config
+		GVariantIter iter;
+		GVariant *dictionaries;
+		dictionaries = g_settings_get_value(settings, "dictionaries");
+		g_variant_iter_init(&iter, dictionaries);
+		diclist = NULL;
+		while (g_variant_iter_next (&iter, "(&s&s)", &tmpstrg, &tmpptr)) {
 			if (tmpstrg != NULL) {
-				tmpptr = tmpstrg;
-				endptr = tmpptr + strlen(tmpstrg);
-				while ((tmpptr != endptr) && (*tmpptr != '\n')) tmpptr++;
-				if (*tmpptr == '\n') {
-					*tmpptr = 0;
-					tmpptr++;
-				}
 				dicfile = g_new0(GjitenDicfile, 1);
 				dicfile->path = g_strdup(tmpstrg);
 				dicfile->name = g_strdup(tmpptr);
 				//				printf("%s\n%s\n", tmpstrg, tmpptr);
 				conf->dicfile_list = g_slist_append(conf->dicfile_list, dicfile);
 			}
-			diclist = g_slist_next(diclist);
 		}
+		g_variant_unref(dictionaries);
 	}
 	if (conf->dicfile_list != NULL) conf->selected_dic = conf->dicfile_list->data;
 
   //Load kanji info settings
   for (i = 0; i < KCFGNUM; i++) { 
-		tmpptr = g_strdup_printf("%s%s", gnomekcfg, kanjidicstrg[i]);
-    if (gconf_client_get_bool(gconf_client, tmpptr, NULL)) {
-      conf->kdiccfg[i] = TRUE;
+    conf->kdiccfg[i] = g_settings_get_boolean(ksettings, kanjidicstrg[i]);
       /* printf("%s : %d\n",kanjidicstrg[i], conf->kdiccfg[i]); */
-    }
-    else conf->kdiccfg[i] = FALSE; 
-    g_free(tmpptr);
   }
  
-  //Load gjiten search history
-  for (i = 0; i <= 50; i++) {
-    snprintf(historystr, 31, "/apps/gjiten/history/history%d", i);
-    conf->history[i] = gconf_client_get_string(gconf_client, historystr, NULL);
-    if (conf->history[i] == NULL) break;
+  {
+    char ** history_list = g_settings_get_strv(settings, "history");
+    guint history_size = g_strv_length(history_list);
+    //Load gjiten search history
+    for (i = 0; i <= 50 && i < history_size; i++) {
+      conf->history[i] = g_strdup(history_list[i]);
+    }
+    g_strfreev(history_list);
   }
 
   return conf;
 }
 
 void conf_save(GjitenConfig *conf) {
-  gchar *gnomekcfg = "/apps/gjiten/kanjidic/";
   int i;
-  gchar *confpath, *tmpstrg;
-	GConfValue *gconfList;
-	GSList *gconf_diclist = NULL;
 	GSList *diclist;
 	GjitenDicfile *dicfile;
 
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/version", VERSION, NULL);
+  //gconf_client_set_string(gconf_client, "/apps/gjiten/general/version", VERSION, NULL);
   //Save kanjidic display options
   for (i = 0; i < KCFGNUM; i++) { 
-		confpath = g_strdup_printf("%s%s", gnomekcfg, kanjidicstrg[i]);
-    gconf_client_set_bool(gconf_client, confpath, conf->kdiccfg[i], NULL);
-    g_free(confpath);
+    g_settings_set_boolean(ksettings, kanjidicstrg[i], conf->kdiccfg[i]);
   }
   
   //gconf_client_set_bool(gconf_client, "/apps/gjiten/general/tooltips", conf->tooltips, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/menubar", conf->menubar, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/toolbar", conf->toolbar, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/dictpath", conf->dictpath == NULL ? "" : conf->dictpath, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/kanjidic/kanjidicfile", conf->kanjidic->path, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/kanjidic/unicode_radicals", conf->unicode_radicals, NULL);
+  g_settings_set_boolean(settings, "menubar", conf->menubar);
+  g_settings_set_boolean(settings, "toolbar", conf->toolbar);
+  g_settings_set_string(ksettings, "kanjidicfile", conf->kanjidic->path);
+  g_settings_set_boolean(ksettings, "unicode-radicals", conf->unicode_radicals);
 
 	if (conf->kanjipad == NULL) conf->kanjipad = "";
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/kanjipad", conf->kanjipad, NULL);
+  g_settings_set_string(ksettings, "kanjipad", conf->kanjipad);
 
-	//Deprecated dictionary file number, zero it out.
-	//gconf_client_set_int(gconf_client, "/apps/gjiten/general/numofdics", conf->numofdics, NULL);
-	gconf_client_set_int(gconf_client, "/apps/gjiten/general/numofdics", 0, NULL);
+  g_settings_set_boolean(settings, "bigwords", conf->bigwords);
+  g_settings_set_boolean(settings, "bigkanji", conf->bigkanji);
+  g_settings_set_string(settings, "largefont", conf->largefont == NULL ? "" : conf->largefont);
+  g_settings_set_string(settings, "normalfont", conf->normalfont == NULL ? "" : conf->normalfont);
 
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/bigwords", conf->bigwords, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/bigkanji", conf->bigkanji, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/largefont", conf->largefont == NULL ? "" : conf->largefont, NULL);
-  gconf_client_set_string(gconf_client, "/apps/gjiten/general/normalfont", conf->normalfont == NULL ? "" : conf->normalfont, NULL);
+  g_settings_set_boolean(settings, "search-kata-on-hira", conf->search_kata_on_hira);
+  g_settings_set_boolean(settings, "search-hira-on-kata", conf->search_hira_on_kata);
+  g_settings_set_boolean(settings, "deinflection-enabled", conf->verb_deinflection);
 
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_kata_on_hira", conf->search_kata_on_hira, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/search_hira_on_kata", conf->search_hira_on_kata, NULL);
-  gconf_client_set_bool(gconf_client, "/apps/gjiten/general/deinflection_enabled", conf->verb_deinflection, NULL);
-
+  {
   //Save dicfiles [path and name seperated with linebreak]
-	gconfList = gconf_value_new(GCONF_VALUE_LIST);
+	GVariantBuilder builder;
+
+	g_variant_builder_init(&builder, G_VARIANT_TYPE("a(ss)"));
 	diclist = conf->dicfile_list;
 	while (diclist != NULL) {
 		if (diclist->data == NULL) break;
 		dicfile = diclist->data;
-		tmpstrg = g_strdup_printf("%s\n%s", dicfile->path, dicfile->name);
-		gconf_diclist = g_slist_append(gconf_diclist, tmpstrg);
+		g_variant_builder_add(&builder, "(ss)", dicfile->path, dicfile->name);
 		diclist = g_slist_next(diclist);
 	}
-	gconf_value_set_list_type(gconfList, GCONF_VALUE_STRING);
-	gconf_client_set_list(gconf_client, GCONF_PATH_GENERAL"/dictionary_list", GCONF_VALUE_STRING, gconf_diclist, NULL);
+	g_settings_set_value(settings, "dictionaries", g_variant_builder_end(&builder));
+  }
 }
 
 void conf_save_history(GList *history, GjitenConfig *conf) {
-  char historystr[40];
+  GArray *array;
   int i;
+  array = g_array_new(TRUE, TRUE, sizeof(gchar *));
   if (history != NULL) {
     for (i = 0; i <= 50; i++) {
-      snprintf(historystr, 31, "/apps/gjiten/history/history%d", i);
-      gconf_client_set_string(gconf_client, historystr, history->data, NULL);
+      array = g_array_append_val(array, history->data);
       history = g_list_next(history);
       if (history == NULL) break;
     } 
+    g_settings_set_strv(settings, "history", (const gchar **)array->data);
   }
+  g_array_free(array, TRUE);
 }
 
 void conf_save_options(GjitenConfig *conf) {
-    gconf_client_set_bool(gconf_client, "/apps/gjiten/general/autoadjust_enabled", conf->autoadjust_enabled, NULL);
-    gconf_client_set_bool(gconf_client, "/apps/gjiten/general/searchlimit_enabled", conf->searchlimit_enabled, NULL);
-    gconf_client_set_int(gconf_client, "/apps/gjiten/general/maxwordmatches", conf->maxwordmatches, NULL);
+    g_settings_set_boolean(settings, "autoadjust-enabled", conf->autoadjust_enabled);
+    g_settings_set_boolean(settings, "searchlimit-enabled", conf->searchlimit_enabled);
+    g_settings_set_uint(settings, "maxwordmatches", conf->maxwordmatches);
 }
 
 gboolean conf_init_handler() {
-  GError *error;
-
-  if (gconf_init(0, NULL, &error) == FALSE) {
-    gjiten_abort_with_msg("GConf init failed: %s\n", error->message);
-	}
+#if !GLIB_CHECK_VERSION(2, 32, 0)
   g_type_init();
+#endif
 
-  if (gconf_client == NULL) {
-		gconf_client = gconf_client_get_default();
-	}
-
-  if (gconf_client == NULL) {
-    gjiten_print_error(_("Could not get gconf_client.\n"));
-    return FALSE;
+  if (settings == NULL) {
+    settings = g_settings_new("apps.gjiten.general");
+    ksettings = g_settings_new("apps.gjiten.kanjidic");
   }
-	return TRUE;
+
+  return TRUE;
 
 }
 
 void conf_close_handler() {
-	if (gconf_client != NULL) {
-		GJITEN_DEBUG("calling g_object_unref(G_OBJECT(gconf_client)) [%d]\n", (int) gconf_client);
-		g_object_unref(G_OBJECT(gconf_client));
-		gconf_client = NULL;
+	if (settings != NULL) {
+		GJITEN_DEBUG("calling g_object_unref(G_OBJECT(settings)) [%d]\n", (int) settings);
+		g_object_unref(G_OBJECT(settings));
+		g_object_unref(G_OBJECT(ksettings));
+		settings = NULL;
+		ksettings = NULL;
 	}
 }

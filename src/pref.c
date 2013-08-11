@@ -379,8 +379,6 @@ void preferences_response_cb(GtkDialog *dialog, gint response, gpointer user_dat
 	gjitenApp->conf->verb_deinflection = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_verb_deinflection")));
 	gjitenApp->conf->unicode_radicals = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(GETWIDGET("checkbutton_unicode_radicals")));
       
-  gjitenApp->conf->numofdics = 0;
-
 	dicutil_unload_dic();
 	dicfile_list_free(gjitenApp->conf->dicfile_list);
 	gjitenApp->conf->dicfile_list = NULL;
