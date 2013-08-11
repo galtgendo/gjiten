@@ -821,6 +821,7 @@ void worddic_update_dic_menu() {
 	}
 	*/
 
+	gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(wordDic->dicselection_menu));
 	dicfile_node = gjitenApp->conf->dicfile_list;
 	while (dicfile_node != NULL) {
 		if (dicfile_node->data != NULL) {
