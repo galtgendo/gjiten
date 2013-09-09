@@ -1,4 +1,4 @@
-AC_PREREQ(2.52)
+AC_PREREQ(2.60)
 
 AC_INIT([gjiten], [2.6])
 AC_CONFIG_SRCDIR(src/gjiten.c)
@@ -21,14 +21,14 @@ PKG_CHECK_MODULES(GJITEN, gtk+-2.0 >= 2.24.0)
 GLIB_GSETTINGS
 
 # Checks for header files.
-AC_CHECK_HEADERS([errno.h fcntl.h locale.h stdint.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS_ONCE([errno.h fcntl.h locale.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([getcwd putenv setlocale strerror strrchr strstr munmap])
+AC_CHECK_FUNCS_ONCE([getcwd putenv setlocale strerror strrchr strstr munmap])
 
 # Gettext stuff
 GETTEXT_PACKAGE=gjiten
