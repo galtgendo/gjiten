@@ -318,7 +318,7 @@ static void remove_dict(GtkWidget *button) {
 	treepath = gtk_tree_model_get_path(model, &iter);
 	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 	gtk_tree_selection_select_path(selection, treepath);
-	g_free(treepath);
+	gtk_tree_path_free(treepath);
 
 }
 
