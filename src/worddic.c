@@ -1158,7 +1158,7 @@ WordDic *worddic_create() {
   g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
 									 "activate", G_CALLBACK(on_text_entered), NULL);
   g_signal_connect(G_OBJECT(wordDic->window), "key_press_event",
-									 G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
+	G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
 
   if (wordDic->combo_entry_glist != NULL) {
 	GList *my_list;

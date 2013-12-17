@@ -1,5 +1,7 @@
 <!-- Install with the following command:
-GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults /usr/bin/gconftool - -makefile-install-rule /home/boti/gjiten.schema
+GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults
+/usr/bin/gconftool-2 - -makefile-install-rule ./gjiten.schema.in
+
 -->
 
 <gconfschemafile>
@@ -151,6 +153,30 @@ GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults /usr/bin/gconftool - -mak
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/namereading</key>
+      <applyto>/apps/gjiten/kanjidic/namereading</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gjiten/kanjidic/radname</key>
+      <applyto>/apps/gjiten/kanjidic/radname</applyto>
+      <owner>gjiten</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+       <short></short>
+       <long></long>
+      </locale>
+    </schema>
+    
     <schema>
       <key>/schemas/apps/gjiten/kanjidic/strokes</key>
       <applyto>/apps/gjiten/kanjidic/strokes</applyto>

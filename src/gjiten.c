@@ -53,7 +53,7 @@ GjitenApp *gjitenApp = NULL;
 gchar *clipboard_text = NULL;
 
 /* FIXME: GConfEnumPair also in kanjidic.h */
-gchar *kanjidicstrg[] = { "kanji", "radical", "strokes", "reading", "korean", 
+gchar *kanjidicstrg[] = { "kanji", "radical", "strokes", "reading", "namereading", "radname" ,"korean", 
 													"pinyin", "english", "bushu", "classic", "freq", "jouyou",
 													"deroo", "skip", "fourc", "hindex", "nindex", "vindex",
 													"iindex", "inindex", "mnindex", "mpindex", "eindex", "kindex", 
