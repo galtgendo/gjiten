@@ -79,6 +79,12 @@
     <key name="reading" type="b">
       <default>true</default>
     </key>
+    <key name="namereading" type="b">
+      <default>true</default>
+    </key>
+    <key name="radname" type="b">
+      <default>true</default>
+    </key>        
     <key name="strokes" type="b">
       <default>true</default>
     </key>
