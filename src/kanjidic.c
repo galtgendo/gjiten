@@ -141,7 +141,7 @@ void do_kdicline(gchar *kstr) {
     else switch (tmpstr[0]) {
 				case '-' : 
 					if (strlen(kdic_line + current_line * KBUFSIZE) != 0) {
-						cat_kdicline(kdic_line, current_line, ", ");
+						cat_kdicline(kdic_line, current_line, " | ");
 					}
 					cat_kdicline(kdic_line, current_line, tmpstr);
 					break;
@@ -1276,7 +1276,7 @@ KanjiDic *kanjidic_create() {
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(kanjiDic->scrolledwin_history), kanjiDic->vbox_history);
   gtk_grid_attach(GTK_GRID(hbox), kanjiDic->scrolledwin_history, 1, 0, 1, 1);
 
-  vpane = gtk_vpaned_new();
+  vpane = gtk_paned_new(GTK_ORIENTATION_VERTICAL);
   gtk_widget_show(vpane);
   gtk_paned_add1(GTK_PANED(vpane), frame_kresults);
   gtk_paned_add2(GTK_PANED(vpane), frame_kinfo);
