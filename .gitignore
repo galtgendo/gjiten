@@ -6,7 +6,6 @@ config.h.in
 config.log
 config.status
 config.sub
-configure
 compile
 COPYING
 depcomp
@@ -20,9 +19,7 @@ intltool-update
 intltool-update.in
 libtool
 ltmain.sh
-Makefile
 Makefile.in
 missing
 mkinstalldirs
 stamp*
-README
