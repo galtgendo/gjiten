@@ -19,6 +19,7 @@ intltool-update
 intltool-update.in
 libtool
 ltmain.sh
+m4
 Makefile.in
 missing
 mkinstalldirs
