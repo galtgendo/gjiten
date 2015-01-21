@@ -106,11 +106,14 @@ static const char *ui_description =
 "</menubar>"
 "</ui>";
 
+void cat_kdicline(gchar* kdic_line, const int current_line, const char *str){
+	strncat(kdic_line + current_line * KBUFSIZE, str, KBUFSIZE - strlen(kdic_line + current_line * KBUFSIZE) - 1);
+}
 
 /* ************************************************************ */
 void do_kdicline(gchar *kstr) {
   char tmpstr[KBUFSIZE];
-  int i, pos;
+  int i, pos, current_line;
 
   if (kdic_line == NULL) kdic_line = (gchar *)g_malloc(KCFGNUM * KBUFSIZE);
   if (kdic_line == NULL) gjiten_abort_with_msg("Couldn't allocate memory\n");
@@ -124,55 +127,44 @@ void do_kdicline(gchar *kstr) {
 
   get_word(kdic_line + JIS * KBUFSIZE, kstr, KBUFSIZE, 3);
   pos = 7;
+	current_line = READING;
 
   while (pos != 0) {
     pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
 
     if ((tmpstr[0] >> 7)) {       // jap char   //FIXME
-     	if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
-				strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+     	if (strlen(kdic_line + current_line * KBUFSIZE) != 0) {
+				cat_kdicline(kdic_line, current_line, " | ");
 			}
-			strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+			cat_kdicline(kdic_line, current_line, tmpstr);
     }
     else switch (tmpstr[0]) {
 				case '-' : 
-					if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
-						strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+					if (strlen(kdic_line + current_line * KBUFSIZE) != 0) {
+						cat_kdicline(kdic_line, current_line, " | ");
 					}
-					strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
+					cat_kdicline(kdic_line, current_line, tmpstr);
 					break;
 
         case 'T':
 					if (tmpstr[1] == '1') {
-						if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
-							strncat(kdic_line + READING * KBUFSIZE, ", ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-							strncat(kdic_line + READING * KBUFSIZE, _("Name readings:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						}
-						else {
-							strncat(kdic_line + READING * KBUFSIZE, _("Name readings:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						}
-						pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
-						strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						break;
+						current_line = NAMEREADING;
 					}
-					if (tmpstr[1] == '2') {
-						if (strlen(kdic_line + READING * KBUFSIZE) != 0) {
-							strncat(kdic_line + READING * KBUFSIZE, ", Radical Name: ", KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						}
-						else {
-							strncat(kdic_line + READING * KBUFSIZE, _("Radical name:"), KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						}
-						pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
-						strncat(kdic_line + READING * KBUFSIZE, tmpstr, KBUFSIZE - strlen(kdic_line + READING * KBUFSIZE) - 1);
-						break;
-					}
+					else if (tmpstr[1] == '2') {
+						current_line = RADNAME;
+					}				
+
+					pos = get_word(tmpstr, kstr, sizeof(tmpstr), pos);
+					cat_kdicline(kdic_line, current_line, tmpstr);
+					break;
 
 				case '{': // english meaning
 					if (strlen(kdic_line + ENGLISH * KBUFSIZE) != 0 ) {
-						strncat(kdic_line + ENGLISH * KBUFSIZE, " ", KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1);
+						cat_kdicline(kdic_line, ENGLISH, " ");
 					}
-					strncat(kdic_line + ENGLISH * KBUFSIZE, tmpstr + 1, KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1);
-					strncat(kdic_line + ENGLISH * KBUFSIZE, ";", KBUFSIZE - strlen(kdic_line + ENGLISH * KBUFSIZE) - 1); // put endmark: ;
+
+					cat_kdicline(kdic_line, ENGLISH, tmpstr + 1);
+					cat_kdicline(kdic_line, ENGLISH, ";");   //put endmark
 					break;
 				
 				case 'B':
@@ -216,8 +208,8 @@ void do_kdicline(gchar *kstr) {
 						strncpy(kdic_line + STROKES * KBUFSIZE, tmpstr + 1, KBUFSIZE);
 					}
 					else { 
-						strncat(kdic_line + STROKES * KBUFSIZE, _(", Common miscount: "), KBUFSIZE - strlen(kdic_line + STROKES * KBUFSIZE) - 1);
-						strncat(kdic_line + STROKES * KBUFSIZE, tmpstr + 1, KBUFSIZE - strlen(kdic_line + STROKES * KBUFSIZE) - 1);
+						cat_kdicline(kdic_line, STROKES,  _(", Common miscount: "));
+						cat_kdicline(kdic_line, STROKES, tmpstr + 1);
 					}
 					break;
 				
@@ -1284,7 +1276,7 @@ KanjiDic *kanjidic_create() {
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(kanjiDic->scrolledwin_history), kanjiDic->vbox_history);
   gtk_grid_attach(GTK_GRID(hbox), kanjiDic->scrolledwin_history, 1, 0, 1, 1);
 
-  vpane = gtk_vpaned_new();
+  vpane = gtk_paned_new(GTK_ORIENTATION_VERTICAL);
   gtk_widget_show(vpane);
   gtk_paned_add1(GTK_PANED(vpane), frame_kresults);
   gtk_paned_add2(GTK_PANED(vpane), frame_kinfo);

@@ -58,7 +58,9 @@ gchar *strginfo[] = { //FIXME: change this to EnumPair
 	N_("Kanji"),
 	N_("Radicals"),
 	N_("Stroke count"),
-	N_("Readings"),
+	N_("Readings"),	
+  N_("Name Readings"),
+	N_("Radical Name"),
 	N_("Romanized Korean reading"), 
 	N_("Romanized Pinyin reading"), 
 	N_("English meaning"), 
@@ -318,7 +320,7 @@ static void remove_dict(GtkWidget *button) {
 	treepath = gtk_tree_model_get_path(model, &iter);
 	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 	gtk_tree_selection_select_path(selection, treepath);
-	g_free(treepath);
+	gtk_tree_path_free(treepath);
 
 }
 

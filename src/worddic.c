@@ -79,7 +79,7 @@ static const GtkActionEntry entries[] = {
 {"EditMenu", NULL, N_("Edit")},
 {"ToolsMenu", NULL, N_("Tools")},
 {"HelpMenu", NULL, N_("Help")},
-{"Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Close Gjiten"), G_CALLBACK(worddic_destroy_window)},
+//{"Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Close Gjiten"), G_CALLBACK(worddic_destroy_window)},
 {"Kanjidic", "my-gjiten-icon", N_("Kanjidic"), NULL, N_("Launch KanjiDic"), G_CALLBACK(kanjidic_create)},
 {"Kanjipad", "my-kanjipad-icon", N_("Kanjipad"), NULL, N_("Launch KanjiPad"), G_CALLBACK(gjiten_start_kanjipad)},
 {"Copy", GTK_STOCK_COPY, NULL, NULL, NULL, G_CALLBACK(worddic_copy)},
@@ -87,10 +87,10 @@ static const GtkActionEntry entries[] = {
 {"Preferences", GTK_STOCK_PREFERENCES, NULL, NULL, NULL, G_CALLBACK(create_dialog_preferences)},
 {"About", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK(gjiten_create_about)},
 {"Help", GTK_STOCK_HELP, NULL, NULL, NULL, G_CALLBACK(gjiten_display_manual)},
-{"Back", GTK_STOCK_GO_BACK, NULL, NULL, N_("Previous search result"), G_CALLBACK(on_back_clicked)},
-{"Forward", GTK_STOCK_GO_FORWARD, NULL, NULL, N_("Next search result"), G_CALLBACK(on_forward_clicked)},
-{"Find", GTK_STOCK_FIND, NULL, NULL, N_("Search for entered expression"), G_CALLBACK(on_text_entered)},
-{"ShowHideOpts", NULL, N_("Hide/Show \nOptions"), NULL, N_("Show/Hide options"), G_CALLBACK(worddic_show_hide_options)},
+//{"Back", GTK_STOCK_GO_BACK, NULL, NULL, N_("Previous search result"), G_CALLBACK(on_back_clicked)},
+//{"Forward", GTK_STOCK_GO_FORWARD, NULL, NULL, N_("Next search result"), G_CALLBACK(on_forward_clicked)},
+//{"Find", GTK_STOCK_FIND, NULL, NULL, N_("Search for entered expression"), G_CALLBACK(on_text_entered)},
+//{"ShowHideOpts", NULL, N_("Hide/Show \nOptions"), NULL, N_("Show/Hide options"), G_CALLBACK(worddic_show_hide_options)},
 };
 
 static const char *ui_description =
@@ -660,6 +660,47 @@ static void worddic_search(gchar *srchstrg) {
   }
 }
 
+void insert_text_handler (GtkEntry    *entry,
+                          const gchar *text,
+                          gint         length,
+                          gint        *position,
+                          gpointer     data)
+{
+  GtkEditable *editable = GTK_EDITABLE(entry);
+
+  //unicode representation of special characters
+  char carriage_return[] = "\x0D";
+  char backspace[] = "\x08";
+  char delete[] = "\x7f";
+
+  if(!g_strcmp0(text, carriage_return)){
+    //unicode character #u0D (CARRIAGE RETURN) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the activate signal for the entry widget
+    g_signal_emit_by_name(editable, "activate");
+  }
+  else if(!g_strcmp0(text, backspace)){
+    //unicode character #u08 (BACKSPACE) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the backspace signal for the entry widget 
+    //and adjust the cursor position
+    g_signal_emit_by_name(editable, "backspace");
+    (*position)--;
+  }
+  else if(!g_strcmp0(text, delete)){
+    //unicode character #u7f (DELETE) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the delete signal of one character for the entry widget
+    g_signal_emit_by_name(editable, "delete-from-cursor", GTK_DELETE_CHARS, 1);
+  }
+}
+
 void on_text_entered() {
   static gchar *new_entry_text = NULL;
 
@@ -991,13 +1032,13 @@ WordDic *worddic_create() {
   gtk_window_add_accel_group (GTK_WINDOW (wordDic->window), accel_group);
 
   error = NULL;
-  if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
+	if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
   {
     g_message ("building menus failed: %s", error->message);
     g_error_free (error);
     exit (EXIT_FAILURE);
   }
-
+	
   menubar = gtk_ui_manager_get_widget (ui_manager, "/MenuBar");
 
 	wordDic->button_back = gtk_ui_manager_get_widget (ui_manager, "/ToolBar/Back");
@@ -1007,7 +1048,7 @@ WordDic *worddic_create() {
 	gtk_widget_set_sensitive(GTK_WIDGET(wordDic->button_forward), FALSE);
 
 	//gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
-
+	
   vbox_main = gtk_grid_new();
   gtk_widget_show(vbox_main);
   gtk_container_add(GTK_CONTAINER(wordDic->window), vbox_main);
@@ -1094,7 +1135,6 @@ WordDic *worddic_create() {
 													 G_CALLBACK(shade_worddic_widgets), NULL);
 
   // DICTFILE SELECTION MENU
-	
   wordDic->dicselection_menu = gtk_combo_box_text_new();
 	worddic_update_dic_menu();
   g_signal_connect(G_OBJECT(wordDic->dicselection_menu), "changed", G_CALLBACK(on_dicselection_clicked), NULL);
@@ -1116,26 +1156,32 @@ WordDic *worddic_create() {
 									 G_CALLBACK(shade_worddic_widgets), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), gjitenApp->conf->autoadjust_enabled);
 
-  
-  hbox_searchlimit = gtk_grid_new();
-  gtk_widget_show(hbox_searchlimit);
-  gtk_grid_attach(GTK_GRID(table_gopt), hbox_searchlimit, 0, 3, 2, 1);
-  wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
+	////////////////////////////////////////////////////////////////////////////////  
+	//search limit check button
+	/*  wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
   gtk_widget_show(wordDic->checkb_searchlimit);
-  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->checkb_searchlimit, 0, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->checkb_searchlimit, 0, 3, 1, 1);
   g_signal_connect(G_OBJECT(wordDic->checkb_searchlimit), "toggled", 
 									 G_CALLBACK(checkb_searchlimit_toggled), NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), gjitenApp->conf->searchlimit_enabled);
 
-	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
-  wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), 
+															 gjitenApp->conf->searchlimit_enabled);
+	
+	//search limit spin button
+	
+	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 
+																														 1, G_MAXFLOAT, 1, 2, 0);
+	wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
+
   gtk_widget_show(wordDic->spinb_searchlimit);
-  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->spinb_searchlimit, 1, 0, 1, 1);
-  gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
-  g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
-									 G_CALLBACK(get_searchlimit), NULL);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->spinb_searchlimit, 1, 3, 1, 1);
   
+	gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
+  g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
+	G_CALLBACK(get_searchlimit), NULL);*/
 
+	////////////////////////////////////////////////////////////////////////////
+	//main grid
   hbox_entry = gtk_grid_new();
   gtk_widget_show(hbox_entry);
   g_object_set(hbox_entry, "margin-top", 14, NULL);
@@ -1152,13 +1198,16 @@ WordDic *worddic_create() {
   gtk_misc_set_alignment(GTK_MISC(label_enter), 1, 0.5);
   gtk_misc_set_padding(GTK_MISC(label_enter), 7, 0);
 
+	//search words
   wordDic->combo_entry = gtk_combo_box_text_new_with_entry();
   gtk_widget_set_hexpand(wordDic->combo_entry, TRUE);
   gtk_grid_attach(GTK_GRID(hbox_entry), wordDic->combo_entry, 1, 0, 1, 1);
   g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
 									 "activate", G_CALLBACK(on_text_entered), NULL);
+  g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
+									 "insert_text", G_CALLBACK(insert_text_handler), NULL);
   g_signal_connect(G_OBJECT(wordDic->window), "key_press_event",
-									 G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
+	G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
 
   if (wordDic->combo_entry_glist != NULL) {
 	GList *my_list;
@@ -1227,7 +1276,7 @@ WordDic *worddic_create() {
 
   wordDic->appbar_mainwin = gtk_statusbar_new();
   gtk_widget_show(wordDic->appbar_mainwin);
-  gtk_grid_attach(GTK_GRID(vbox_results), wordDic->appbar_mainwin, 0, 1, 1, 1);
+	//  gtk_grid_attach(GTK_GRID(vbox_results), wordDic->appbar_mainwin, 0, 1, 1, 1);
  
   gtk_widget_show_all(wordDic->window);
 

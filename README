@@ -1,0 +1,10 @@
+sudo apt-get install gnome-doc-utils intltool scrollkeeper
+libtoolize
+gnome-doc-prepare
+autoheader
+aclocal
+autoconf
+automake --add-missing
+./configure 
+make
+sudo make install
