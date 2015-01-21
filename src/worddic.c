@@ -1032,7 +1032,7 @@ WordDic *worddic_create() {
   gtk_window_add_accel_group (GTK_WINDOW (wordDic->window), accel_group);
 
   error = NULL;
-  if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
+	/*  if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
   {
     g_message ("building menus failed: %s", error->message);
     g_error_free (error);
@@ -1048,7 +1048,7 @@ WordDic *worddic_create() {
 	gtk_widget_set_sensitive(GTK_WIDGET(wordDic->button_forward), FALSE);
 
 	//gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
-
+	*/
   vbox_main = gtk_grid_new();
   gtk_widget_show(vbox_main);
   gtk_container_add(GTK_CONTAINER(wordDic->window), vbox_main);
@@ -1135,7 +1135,6 @@ WordDic *worddic_create() {
 													 G_CALLBACK(shade_worddic_widgets), NULL);
 
   // DICTFILE SELECTION MENU
-	
   wordDic->dicselection_menu = gtk_combo_box_text_new();
 	worddic_update_dic_menu();
   g_signal_connect(G_OBJECT(wordDic->dicselection_menu), "changed", G_CALLBACK(on_dicselection_clicked), NULL);
@@ -1157,26 +1156,32 @@ WordDic *worddic_create() {
 									 G_CALLBACK(shade_worddic_widgets), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_autoadjust), gjitenApp->conf->autoadjust_enabled);
 
-  
-  hbox_searchlimit = gtk_grid_new();
-  gtk_widget_show(hbox_searchlimit);
-  gtk_grid_attach(GTK_GRID(table_gopt), hbox_searchlimit, 0, 3, 2, 1);
-  wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
+	////////////////////////////////////////////////////////////////////////////////  
+	//search limit check button
+	/*  wordDic->checkb_searchlimit = gtk_check_button_new_with_mnemonic(_("_Limit Results:"));
   gtk_widget_show(wordDic->checkb_searchlimit);
-  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->checkb_searchlimit, 0, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->checkb_searchlimit, 0, 3, 1, 1);
   g_signal_connect(G_OBJECT(wordDic->checkb_searchlimit), "toggled", 
 									 G_CALLBACK(checkb_searchlimit_toggled), NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), gjitenApp->conf->searchlimit_enabled);
 
-	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 1, G_MAXFLOAT, 1, 2, 0);
-  wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit), 
+															 gjitenApp->conf->searchlimit_enabled);
+	
+	//search limit spin button
+	
+	spinb_searchlimit_adj = (GtkAdjustment*)gtk_adjustment_new(gjitenApp->conf->maxwordmatches, 
+																														 1, G_MAXFLOAT, 1, 2, 0);
+	wordDic->spinb_searchlimit = gtk_spin_button_new(GTK_ADJUSTMENT(spinb_searchlimit_adj), 1, 0);
+
   gtk_widget_show(wordDic->spinb_searchlimit);
-  gtk_grid_attach(GTK_GRID(hbox_searchlimit), wordDic->spinb_searchlimit, 1, 0, 1, 1);
-  gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
-  g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
-									 G_CALLBACK(get_searchlimit), NULL);
+  gtk_grid_attach(GTK_GRID(table_gopt), wordDic->spinb_searchlimit, 1, 3, 1, 1);
   
+	gtk_widget_set_sensitive(wordDic->spinb_searchlimit, (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(wordDic->checkb_searchlimit))));
+  g_signal_connect(G_OBJECT(spinb_searchlimit_adj), "value_changed", 
+	G_CALLBACK(get_searchlimit), NULL);*/
 
+	////////////////////////////////////////////////////////////////////////////
+	//main grid
   hbox_entry = gtk_grid_new();
   gtk_widget_show(hbox_entry);
   g_object_set(hbox_entry, "margin-top", 14, NULL);
@@ -1271,7 +1276,7 @@ WordDic *worddic_create() {
 
   wordDic->appbar_mainwin = gtk_statusbar_new();
   gtk_widget_show(wordDic->appbar_mainwin);
-  gtk_grid_attach(GTK_GRID(vbox_results), wordDic->appbar_mainwin, 0, 1, 1, 1);
+	//  gtk_grid_attach(GTK_GRID(vbox_results), wordDic->appbar_mainwin, 0, 1, 1, 1);
  
   gtk_widget_show_all(wordDic->window);
 
