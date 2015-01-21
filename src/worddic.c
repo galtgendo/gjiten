@@ -79,7 +79,7 @@ static const GtkActionEntry entries[] = {
 {"EditMenu", NULL, N_("Edit")},
 {"ToolsMenu", NULL, N_("Tools")},
 {"HelpMenu", NULL, N_("Help")},
-{"Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Close Gjiten"), G_CALLBACK(worddic_destroy_window)},
+//{"Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Close Gjiten"), G_CALLBACK(worddic_destroy_window)},
 {"Kanjidic", "my-gjiten-icon", N_("Kanjidic"), NULL, N_("Launch KanjiDic"), G_CALLBACK(kanjidic_create)},
 {"Kanjipad", "my-kanjipad-icon", N_("Kanjipad"), NULL, N_("Launch KanjiPad"), G_CALLBACK(gjiten_start_kanjipad)},
 {"Copy", GTK_STOCK_COPY, NULL, NULL, NULL, G_CALLBACK(worddic_copy)},
@@ -87,10 +87,10 @@ static const GtkActionEntry entries[] = {
 {"Preferences", GTK_STOCK_PREFERENCES, NULL, NULL, NULL, G_CALLBACK(create_dialog_preferences)},
 {"About", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK(gjiten_create_about)},
 {"Help", GTK_STOCK_HELP, NULL, NULL, NULL, G_CALLBACK(gjiten_display_manual)},
-{"Back", GTK_STOCK_GO_BACK, NULL, NULL, N_("Previous search result"), G_CALLBACK(on_back_clicked)},
-{"Forward", GTK_STOCK_GO_FORWARD, NULL, NULL, N_("Next search result"), G_CALLBACK(on_forward_clicked)},
-{"Find", GTK_STOCK_FIND, NULL, NULL, N_("Search for entered expression"), G_CALLBACK(on_text_entered)},
-{"ShowHideOpts", NULL, N_("Hide/Show \nOptions"), NULL, N_("Show/Hide options"), G_CALLBACK(worddic_show_hide_options)},
+//{"Back", GTK_STOCK_GO_BACK, NULL, NULL, N_("Previous search result"), G_CALLBACK(on_back_clicked)},
+//{"Forward", GTK_STOCK_GO_FORWARD, NULL, NULL, N_("Next search result"), G_CALLBACK(on_forward_clicked)},
+//{"Find", GTK_STOCK_FIND, NULL, NULL, N_("Search for entered expression"), G_CALLBACK(on_text_entered)},
+//{"ShowHideOpts", NULL, N_("Hide/Show \nOptions"), NULL, N_("Show/Hide options"), G_CALLBACK(worddic_show_hide_options)},
 };
 
 static const char *ui_description =
@@ -1032,13 +1032,13 @@ WordDic *worddic_create() {
   gtk_window_add_accel_group (GTK_WINDOW (wordDic->window), accel_group);
 
   error = NULL;
-	/*  if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
+	if (!gtk_ui_manager_add_ui_from_string (ui_manager, ui_description, -1, &error))
   {
     g_message ("building menus failed: %s", error->message);
     g_error_free (error);
     exit (EXIT_FAILURE);
   }
-
+	
   menubar = gtk_ui_manager_get_widget (ui_manager, "/MenuBar");
 
 	wordDic->button_back = gtk_ui_manager_get_widget (ui_manager, "/ToolBar/Back");
@@ -1048,7 +1048,7 @@ WordDic *worddic_create() {
 	gtk_widget_set_sensitive(GTK_WIDGET(wordDic->button_forward), FALSE);
 
 	//gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_BOTH);
-	*/
+	
   vbox_main = gtk_grid_new();
   gtk_widget_show(vbox_main);
   gtk_container_add(GTK_CONTAINER(wordDic->window), vbox_main);
