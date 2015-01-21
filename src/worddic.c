@@ -660,6 +660,47 @@ static void worddic_search(gchar *srchstrg) {
   }
 }
 
+void insert_text_handler (GtkEntry    *entry,
+                          const gchar *text,
+                          gint         length,
+                          gint        *position,
+                          gpointer     data)
+{
+  GtkEditable *editable = GTK_EDITABLE(entry);
+
+  //unicode representation of special characters
+  char carriage_return[] = "\x0D";
+  char backspace[] = "\x08";
+  char delete[] = "\x7f";
+
+  if(!g_strcmp0(text, carriage_return)){
+    //unicode character #u0D (CARRIAGE RETURN) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the activate signal for the entry widget
+    g_signal_emit_by_name(editable, "activate");
+  }
+  else if(!g_strcmp0(text, backspace)){
+    //unicode character #u08 (BACKSPACE) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the backspace signal for the entry widget 
+    //and adjust the cursor position
+    g_signal_emit_by_name(editable, "backspace");
+    (*position)--;
+  }
+  else if(!g_strcmp0(text, delete)){
+    //unicode character #u7f (DELETE) detected
+    //do not display this character in the entry widget
+    g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
+    //emit the delete signal of one character for the entry widget
+    g_signal_emit_by_name(editable, "delete-from-cursor", GTK_DELETE_CHARS, 1);
+  }
+}
+
 void on_text_entered() {
   static gchar *new_entry_text = NULL;
 
@@ -1152,11 +1193,14 @@ WordDic *worddic_create() {
   gtk_misc_set_alignment(GTK_MISC(label_enter), 1, 0.5);
   gtk_misc_set_padding(GTK_MISC(label_enter), 7, 0);
 
+	//search words
   wordDic->combo_entry = gtk_combo_box_text_new_with_entry();
   gtk_widget_set_hexpand(wordDic->combo_entry, TRUE);
   gtk_grid_attach(GTK_GRID(hbox_entry), wordDic->combo_entry, 1, 0, 1, 1);
   g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
 									 "activate", G_CALLBACK(on_text_entered), NULL);
+  g_signal_connect(G_OBJECT(gtk_bin_get_child(GTK_BIN(wordDic->combo_entry))),
+									 "insert_text", G_CALLBACK(insert_text_handler), NULL);
   g_signal_connect(G_OBJECT(wordDic->window), "key_press_event",
 	G_CALLBACK(set_focus_on_entry), gtk_bin_get_child(GTK_BIN(wordDic->combo_entry)));
 
